@@ -1,0 +1,62 @@
+[
+    {
+        "locationType": "Hibrido",
+        "requiredSkills": [
+            {
+                "title": "Python",
+                "id": 1,
+                "proficiency": null
+            }
+        ],
+        "title": "Vaga 1",
+        "id": 1,
+        "salary": 1000.0,
+        "contractType": "Estagio",
+        "description": "Descri\u00e7\u00e3o 1"
+    },
+    {
+        "locationType": "Presencial",
+        "requiredSkills": [
+            {
+                "title": "C#",
+                "id": 1,
+                "proficiency": null
+            },
+            {
+                "title": "REST API",
+                "id": 1,
+                "proficiency": null
+            }
+        ],
+        "title": "Vaga 2",
+        "id": 2,
+        "salary": 2000.0,
+        "contractType": "Temporario",
+        "description": "Descri\u00e7\u00e3o 2"
+    },
+    {
+        "locationType": "Remoto",
+        "requiredSkills": [
+            {
+                "title": "Java",
+                "id": 1,
+                "proficiency": null
+            },
+            {
+                "title": "Groovy",
+                "id": 2,
+                "proficiency": null
+            },
+            {
+                "title": "SQL",
+                "id": 3,
+                "proficiency": null
+            }
+        ],
+        "title": "Vaga 3",
+        "id": 3,
+        "salary": 3000.0,
+        "contractType": "CLT",
+        "description": "Descri\u00e7\u00e3o 3"
+    }
+]
