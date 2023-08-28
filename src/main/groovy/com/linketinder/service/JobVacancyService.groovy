@@ -1,12 +1,12 @@
 package com.linketinder.service
 
 import com.linketinder.domain.jobvacancy.JobVacancy
-import com.linketinder.fileProcessor.JobVacanciesProcessor
-import com.linketinder.fileProcessor.Processor
+import com.linketinder.fileprocessor.JobVacanciesProcessor
+import com.linketinder.fileprocessor.Processor
 
-class JobVacancyService implements BaseService<JobVacancy> {
+class JobVacancyService implements IBaseService<JobVacancy> {
 
-    Processor<JobVacancy> processor = new JobVacanciesProcessor()
+    Processor processor = new JobVacanciesProcessor()
 
     List<JobVacancy> getAll() {
         return processor.readFile()

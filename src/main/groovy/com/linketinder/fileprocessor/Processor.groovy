@@ -1,4 +1,4 @@
-package com.linketinder.fileProcessor
+package com.linketinder.fileprocessor
 
 interface Processor<T> {
 

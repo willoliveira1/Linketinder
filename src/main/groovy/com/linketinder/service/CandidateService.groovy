@@ -1,12 +1,12 @@
 package com.linketinder.service
 
 import com.linketinder.domain.candidate.Candidate
-import com.linketinder.fileProcessor.CandidatesProcessor
-import com.linketinder.fileProcessor.Processor
+import com.linketinder.fileprocessor.CandidatesProcessor
+import com.linketinder.fileprocessor.Processor
 
-class CandidateService implements BaseService<Candidate> {
+class CandidateService implements IBaseService<Candidate> {
 
-    Processor<Candidate> processor = new CandidatesProcessor()
+    Processor processor = new CandidatesProcessor()
 
     List<Candidate> getAll() {
         return processor.readFile()
