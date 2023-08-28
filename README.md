@@ -12,6 +12,6 @@ O arquivo que tem o método main para a execução do projeto está em:
 * Pasta: src/main/groovy/com/linketinder
 * Arquivo: Main.groovy
 
-=======
-
+==================================================
 ### Feito por: Willian Henrique de Oliveira
+==================================================
