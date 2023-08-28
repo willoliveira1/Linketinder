@@ -1,4 +1,4 @@
-package com.linketinder.fileProcessor
+package com.linketinder.fileprocessor
 
 import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
@@ -35,15 +35,19 @@ class CandidatesProcessor implements Processor<Candidate> {
 
     void add(Candidate candidate) {
         List<Candidate> candidates = readFile()
-        candidates.add(candidate)
-        writeFile(candidates)
+        if (candidate != null) {
+            candidates.add(candidate)
+            writeFile(candidates)
+        }
     }
 
     void update(Integer id, Candidate updatedCandidate) {
         List<Candidate> candidates = readFile()
         Integer index = candidates.indexOf(candidates.find {it.id == id})
-        candidates.set(index, updatedCandidate)
-        writeFile(candidates)
+        if (index != null) {
+            candidates.set(index, updatedCandidate)
+            writeFile(candidates)
+        }
     }
 
     void delete(Integer id) {

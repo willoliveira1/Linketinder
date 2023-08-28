@@ -1,4 +1,4 @@
-package com.linketinder.fileProcessor
+package com.linketinder.fileprocessor
 
 import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper

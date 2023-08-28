@@ -12,11 +12,12 @@ import com.linketinder.domain.shared.Proficiency
 import com.linketinder.domain.shared.Skill
 import com.linketinder.domain.shared.State
 import com.linketinder.service.CandidateService
+import com.linketinder.service.IBaseService
 import com.linketinder.util.ObjectHandler
 
 class CandidatesView {
 
-    CandidateService service = new CandidateService()
+    IBaseService service = new CandidateService()
     BufferedReader reader = System.in.newReader()
 
     void getAllCandidates() {

@@ -1,6 +1,6 @@
 package com.linketinder.service
 
-interface BaseService<T> {
+interface IBaseService<T> {
 
     List<T> getAll()
     T getById(Integer id)
