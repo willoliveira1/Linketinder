@@ -37,7 +37,7 @@ class CompaniesView {
     void addCompany() {
         List<Company> companies = service.getAll()
         Integer id
-        if (companies.size() == 0) {
+        if (companies.isEmpty()) {
             id = 1
         } else {
             id = ObjectHandler.getNextId(companies)
@@ -111,7 +111,7 @@ class CompaniesView {
             println "id inválido."
             return
         }
-        Company company = service.getById(id)
+        service.getById(id)
 
         println "Qual o nome da empresa?"
         String name = reader.readLine()
@@ -178,4 +178,5 @@ class CompaniesView {
         }
         return benefits
     }
+
 }

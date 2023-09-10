@@ -24,7 +24,7 @@ class CompanyService implements IBaseService<Company> {
         processor.update(id, company)
     }
 
-    void delete(int id) {
+    void delete(Integer id) {
         processor.delete(id)
     }
 

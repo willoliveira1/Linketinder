@@ -24,7 +24,7 @@ class CandidateService implements IBaseService<Candidate> {
         processor.update(id, candidate)
     }
 
-    void delete(int id) {
+    void delete(Integer id) {
         processor.delete(id)
     }
 
