@@ -18,7 +18,7 @@ class Candidate extends Person {
     @Override
     String toString() {
         return super.toString() +
-                "cpf='" + cpf + '\'' +
+                "cpf=" + cpf +
                 ", academicExperiences=" + academicExperiences +
                 ", workExperiences=" + workExperiences +
                 ", languages=" + languages +

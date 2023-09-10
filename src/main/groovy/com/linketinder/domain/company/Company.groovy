@@ -14,7 +14,7 @@ class Company extends Person {
     @Override
     String toString() {
         return super.toString() +
-                "cnpj='" + cnpj + '\'' +
+                "cnpj=" + cnpj +
                 ", jobVacancies=" + jobVacancies +
                 ", benefits=" + benefits
     }

@@ -46,7 +46,7 @@ class CandidatesView {
     void addCandidate() {
         List<Candidate> candidates = service.getAll()
         Integer id
-        if (candidates.size() == 0) {
+        if (candidates.isEmpty()) {
             id = 1
         } else {
             id = ObjectHandler.getNextId(candidates)
@@ -146,6 +146,9 @@ class CandidatesView {
             return
         }
         Candidate candidate = service.getById(id)
+        if (candidate == null) {
+            return
+        }
 
         println "Qual o nome do candidato?"
         String name = reader.readLine()

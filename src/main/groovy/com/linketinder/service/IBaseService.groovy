@@ -6,6 +6,6 @@ interface IBaseService<T> {
     T getById(Integer id)
     void add(T t)
     void update(Integer id, T t)
-    void delete(int id)
+    void delete(Integer id)
 
 }

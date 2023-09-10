@@ -24,7 +24,7 @@ class JobVacancyService implements IBaseService<JobVacancy> {
         processor.update(id, jobVacancy)
     }
 
-    void delete(int id) {
+    void delete(Integer id) {
         processor.delete(id)
     }
 
