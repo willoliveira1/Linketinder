@@ -1,0 +1,234 @@
+body, p, h1, h2, input, textarea {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-family: 'Ubuntu', sans-serif;
+}
+
+body {
+    background-color: #BAC9E9;
+}
+
+
+
+/* Header */
+header {
+    color: #E5E5E5;
+    background-color: #394d79;
+    box-shadow: 2px 2px 5px black;
+    border-radius: 0 0 10px 10px;
+}
+
+#navbar {
+    background-color: #14213D;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 2px 2px 5px black;
+    position: relative;
+    border-radius: 0 0 10px 10px;
+}
+
+header p {
+    margin: 0 10px;
+    font-size: 2em;
+}
+
+header ul {
+    display: flex;
+    list-style-type: none;
+}
+
+header li {
+    margin: 0 25px 0 0;
+    font-size: 1.3em;
+}
+
+header li:hover {
+    color: #FCA311;
+}
+
+header li:hover, #linketinder {
+    cursor: pointer; 
+}
+
+.menu {
+    display: flex;
+    justify-content: flex-end;
+    border-radius: 0 0 10px 10px;
+    background-color: #394d79;
+}
+
+.menu ul {
+    margin: 0;
+    padding: 10px 0;
+}
+
+
+
+/* Main */
+main {
+    padding: 30px 0;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+#container {
+    width: max-content;
+    border-radius: 25px;
+    background-color: #E5E5E5;
+    box-shadow: 5px 5px 15px black;
+}
+
+#table {
+    border-collapse: collapse;
+    margin: 20px;
+}
+
+form {
+    flex-direction: column;
+    display: flex;
+}
+
+.form-field {
+    padding: 0 0 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-field label {
+    padding: 0;
+}
+
+.form-field input {
+    border: 1px solid #B4B4B4;
+    border-radius: 10px;
+    margin-top: 2px;
+    padding: 5px;
+    height: 17px;
+}
+
+.form-field select {
+    border: 1px solid #B4B4B4;
+    border-radius: 10px;
+    margin-top: 2px;
+    padding: 5px;
+}
+
+.form-text {
+    width: 550px;
+}
+
+.form-list {
+    margin-top: 2px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.form-list div {
+    width: 48%;
+}
+
+div .city {
+    width: 45%;
+}
+
+div .state {
+    width: 31%;
+}
+
+div .cep {
+    width: 20%;
+}
+
+.actual {
+    display: block;
+}
+
+.form-list button {
+    width: 20%;
+}
+
+#buttons {
+    display: flex;
+    justify-content: flex-end;
+}
+
+#buttons button {
+    margin-left: 15px;
+}
+
+.work {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.work-label {
+    margin-right: 5px;
+}
+
+.currently-work {
+    margin-top: 5px;
+}
+
+.work-btn {
+    cursor: pointer;
+    margin: -2px 0 0 3px;
+}
+
+#add-benefit-button, #add-academic-button, #add-work-button, #add-language-button, #add-skill-button, #add-certificate-button {
+    padding: 5px 15px;
+    border-radius: 20px;
+    background-color: #14213D;
+    font-size: 1.1em;
+    color: #FFF;
+    box-shadow: 1px 1px 5px rgb(49, 49, 49);
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+#add-benefit-button:hover, #add-academic-button:hover, #add-work-button:hover, #add-language-button:hover, #add-skill-button:hover, #add-certificate-button:hover {
+    color: #FCA311;
+}
+
+.delete-btn {
+    margin: 2.5px 0 0 5px;
+    padding: 0;
+    cursor: pointer;
+}
+
+.line {
+    display: flex;
+    flex-direction: row;
+
+}
+
+#chart {
+    margin: 15px 20px 20px;
+}
+
+#submit-input {
+    padding: 10px 20px;
+    border-radius: 20px;
+    background-color: #4141e2;
+    font-size: 1.2em;
+    color: #FFF;
+    box-shadow: inset 1px 1px 20px rgb(49, 49, 49);
+}
+
+#cancel-input {
+    padding: 10px 15px;
+    border-radius: 20px;
+    background-color: #EF4050;
+    font-size: 1.2em;
+    color: #FFF;
+    box-shadow: inset 1px 1px 20px rgb(49, 49, 49);
+}
+
+#submit-input:hover, #cancel-input:hover {
+    color: #FCA311;
+    cursor: pointer; 
+}

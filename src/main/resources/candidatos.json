@@ -72,7 +72,16 @@
             }
         ],
         "certificates": [
-            
+            {
+                "title": "Curso Certificado 1",
+                "id": 1,
+                "duration": "1 ano"
+            },
+            {
+                "title": "Curso Certificado 2",
+                "id": 2,
+                "duration": "2 meses"
+            }
         ],
         "languages": [
             {
@@ -89,7 +98,28 @@
         "id": 2,
         "cpf": "45678912312",
         "workExperiences": [
-            
+            {
+                "locationType": "Remoto",
+                "title": "Assistente Cont\u00e1bil",
+                "companyName": "Empresa Alfa",
+                "id": 1,
+                "currentlyWork": false,
+                "description": "Descri\u00e7\u00e3o 1",
+                "contractType": "Temporario",
+                "state": "PR",
+                "city": "Curitiba"
+            },
+            {
+                "locationType": "Presencial",
+                "title": "Desenvolvedora Web",
+                "companyName": "Empresa Neo",
+                "id": 1,
+                "currentlyWork": true,
+                "description": "Descri\u00e7\u00e3o 2",
+                "contractType": "PJ",
+                "state": "SP",
+                "city": "S\u00e3o Paulo"
+            }
         ],
         "country": "Brasil",
         "cep": "14900000",
@@ -118,6 +148,16 @@
     {
         "skills": [
             {
+                "title": "Java",
+                "id": 1,
+                "proficiency": "Avancado"
+            },
+            {
+                "title": "Groovy",
+                "id": 2,
+                "proficiency": "Intermediario"
+            },
+            {
                 "title": "Rust",
                 "id": 1,
                 "proficiency": "Intermediario"
@@ -129,16 +169,7 @@
             }
         ],
         "certificates": [
-            {
-                "title": "Curso Certificado 1",
-                "id": 1,
-                "duration": "1 ano"
-            },
-            {
-                "title": "Curso Certificado 2",
-                "id": 2,
-                "duration": "2 meses"
-            }
+            
         ],
         "languages": [
             {
@@ -224,17 +255,7 @@
         "id": 4,
         "cpf": "45615167904",
         "workExperiences": [
-            {
-                "locationType": "Remoto",
-                "title": "Assistente Cont\u00e1bil",
-                "companyName": "Empresa Alfa",
-                "id": 1,
-                "currentlyWork": false,
-                "description": "Descri\u00e7\u00e3o 1",
-                "contractType": "Temporario",
-                "state": "PR",
-                "city": "Curitiba"
-            }
+
         ],
         "country": "Brasil",
         "cep": "12300000",
@@ -264,6 +285,11 @@
                 "title": "JavaScript",
                 "id": 2,
                 "proficiency": "Intermediario"
+            },
+            {
+                "title": "Angular",
+                "id": 3,
+                "proficiency": "Basico"
             }
         ],
         "certificates": [
@@ -316,5 +342,281 @@
         ],
         "name": "Elaine Elalia",
         "city": "S\u00e3o Paulo"
+    },
+    {
+        "skills": [
+            {
+                "title": "Java",
+                "id": 1,
+                "proficiency": "Avancado"
+            },
+            {
+                "title": "Groovy",
+                "id": 2,
+                "proficiency": "Intermediario"
+            },
+            {
+                "title": "SQL",
+                "id": 3,
+                "proficiency": "Basico"
+            }
+        ],
+        "certificates": [
+            {
+                "title": "Curso Certificado 1",
+                "id": 1,
+                "duration": "1 ano"
+            },
+            {
+                "title": "Curso Certificado 2",
+                "id": 2,
+                "duration": "2 meses"
+            }
+        ],
+        "languages": [
+            {
+                "id": 1,
+                "proficiency": "Avancado",
+                "name": "Portugu\u00eas"
+            },
+            {
+                "id": 2,
+                "proficiency": "Basico",
+                "name": "Ingl\u00eas"
+            }
+        ],
+        "id": 6,
+        "cpf": "45678912312",
+        "workExperiences": [
+            {
+                "locationType": "Remoto",
+                "title": "Assistente Cont\u00e1bil",
+                "companyName": "Empresa Alfa",
+                "id": 1,
+                "currentlyWork": false,
+                "description": "Descri\u00e7\u00e3o 1",
+                "contractType": "Temporario",
+                "state": "PR",
+                "city": "Curitiba"
+            },
+            {
+                "locationType": "Presencial",
+                "title": "Desenvolvedora Web",
+                "companyName": "Empresa Neo",
+                "id": 1,
+                "currentlyWork": true,
+                "description": "Descri\u00e7\u00e3o 2",
+                "contractType": "PJ",
+                "state": "SP",
+                "city": "S\u00e3o Paulo"
+            }
+        ],
+        "country": "Brasil",
+        "cep": "14900000",
+        "description": "Sobre mim 2",
+        "state": "SP",
+        "email": "bb@gmail.com",
+        "academicExperiences": [
+            {
+                "status": "Concluido",
+                "fieldOfStudy": "An\u00e1lise e Desenvolvimento de Sistemas",
+                "degreeType": "Bacharel",
+                "id": 1,
+                "educationalInstitution": "FGV"
+            },
+            {
+                "status": "Cursando",
+                "fieldOfStudy": "Engenharia de Software",
+                "degreeType": "Mestrado",
+                "id": 2,
+                "educationalInstitution": "PUC"
+            }
+        ],
+        "name": "Breno Bernardo",
+        "city": "S\u00e3o Carlos"
+    },
+    {
+        "skills": [
+            {
+                "title": "Java",
+                "id": 1,
+                "proficiency": "Avancado"
+            },
+            {
+                "title": "Groovy",
+                "id": 2,
+                "proficiency": "Intermediario"
+            },
+            {
+                "title": "SQL",
+                "id": 3,
+                "proficiency": "Basico"
+            }
+        ],
+        "certificates": [
+            {
+                "title": "Curso Certificado 1",
+                "id": 1,
+                "duration": "1 ano"
+            },
+            {
+                "title": "Curso Certificado 2",
+                "id": 2,
+                "duration": "2 meses"
+            }
+        ],
+        "languages": [
+            {
+                "id": 1,
+                "proficiency": "Avancado",
+                "name": "Portugu\u00eas"
+            },
+            {
+                "id": 2,
+                "proficiency": "Basico",
+                "name": "Ingl\u00eas"
+            }
+        ],
+        "id": 7,
+        "cpf": "45678912312",
+        "workExperiences": [
+            {
+                "locationType": "Remoto",
+                "title": "Assistente Cont\u00e1bil",
+                "companyName": "Empresa Alfa",
+                "id": 1,
+                "currentlyWork": false,
+                "description": "Descri\u00e7\u00e3o 1",
+                "contractType": "Temporario",
+                "state": "PR",
+                "city": "Curitiba"
+            },
+            {
+                "locationType": "Presencial",
+                "title": "Desenvolvedora Web",
+                "companyName": "Empresa Neo",
+                "id": 1,
+                "currentlyWork": true,
+                "description": "Descri\u00e7\u00e3o 2",
+                "contractType": "PJ",
+                "state": "SP",
+                "city": "S\u00e3o Paulo"
+            }
+        ],
+        "country": "Brasil",
+        "cep": "14900000",
+        "description": "Sobre mim 2",
+        "state": "SP",
+        "email": "bb@gmail.com",
+        "academicExperiences": [
+            {
+                "status": "Concluido",
+                "fieldOfStudy": "An\u00e1lise e Desenvolvimento de Sistemas",
+                "degreeType": "Bacharel",
+                "id": 1,
+                "educationalInstitution": "FGV"
+            },
+            {
+                "status": "Cursando",
+                "fieldOfStudy": "Engenharia de Software",
+                "degreeType": "Mestrado",
+                "id": 2,
+                "educationalInstitution": "PUC"
+            }
+        ],
+        "name": "Breno Bernardo",
+        "city": "S\u00e3o Carlos"
+    },
+    {
+        "skills": [
+            {
+                "title": "Java",
+                "id": 1,
+                "proficiency": "Avancado"
+            },
+            {
+                "title": "Groovy",
+                "id": 2,
+                "proficiency": "Intermediario"
+            },
+            {
+                "title": "SQL",
+                "id": 3,
+                "proficiency": "Basico"
+            }
+        ],
+        "certificates": [
+            {
+                "title": "Curso Certificado 1",
+                "id": 1,
+                "duration": "1 ano"
+            },
+            {
+                "title": "Curso Certificado 2",
+                "id": 2,
+                "duration": "2 meses"
+            }
+        ],
+        "languages": [
+            {
+                "id": 1,
+                "proficiency": "Avancado",
+                "name": "Portugu\u00eas"
+            },
+            {
+                "id": 2,
+                "proficiency": "Basico",
+                "name": "Ingl\u00eas"
+            }
+        ],
+        "id": 8,
+        "cpf": "45678912312",
+        "workExperiences": [
+            {
+                "locationType": "Remoto",
+                "title": "Assistente Cont\u00e1bil",
+                "companyName": "Empresa Alfa",
+                "id": 1,
+                "currentlyWork": false,
+                "description": "Descri\u00e7\u00e3o 1",
+                "contractType": "Temporario",
+                "state": "PR",
+                "city": "Curitiba"
+            },
+            {
+                "locationType": "Presencial",
+                "title": "Desenvolvedora Web",
+                "companyName": "Empresa Neo",
+                "id": 1,
+                "currentlyWork": true,
+                "description": "Descri\u00e7\u00e3o 2",
+                "contractType": "PJ",
+                "state": "SP",
+                "city": "S\u00e3o Paulo"
+            }
+        ],
+        "country": "Brasil",
+        "cep": "14900000",
+        "description": "Sobre mim 2",
+        "state": "SP",
+        "email": "bb@gmail.com",
+        "academicExperiences": [
+            {
+                "status": "Concluido",
+                "fieldOfStudy": "An\u00e1lise e Desenvolvimento de Sistemas",
+                "degreeType": "Bacharel",
+                "id": 1,
+                "educationalInstitution": "FGV"
+            },
+            {
+                "status": "Cursando",
+                "fieldOfStudy": "Engenharia de Software",
+                "degreeType": "Mestrado",
+                "id": 2,
+                "educationalInstitution": "PUC"
+            }
+        ],
+        "name": "Breno Bernardo",
+        "city": "S\u00e3o Carlos"
     }
 ]
