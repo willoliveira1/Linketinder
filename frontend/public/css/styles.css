@@ -135,6 +135,14 @@ div .city {
     width: 45%;
 }
 
+.work-city {
+    width: 95.5%;
+}
+
+.work-state {
+    width: 100%;
+}
+
 div .state {
     width: 31%;
 }
@@ -203,6 +211,10 @@ div .cep {
 .line {
     display: flex;
     flex-direction: row;
+}
+
+.courseStatus {
+    width: 98%;
 }
 
 #chart {

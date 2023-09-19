@@ -133,10 +133,20 @@ form {
 
 div .city {
     width: 45%;
+    /* width: 100%; */
+}
+
+.work-city {
+    width: 95.5%;
+}
+
+.work-state {
+    width: 100%;
 }
 
 div .state {
     width: 31%;
+    /* width: 100%; */
 }
 
 div .cep {
@@ -203,6 +213,11 @@ div .cep {
 .line {
     display: flex;
     flex-direction: row;
+    /* width: 100%; */
+}
+
+.courseStatus {
+    width: 98%;
 }
 
 #chart {

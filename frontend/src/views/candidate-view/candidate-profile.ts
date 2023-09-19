@@ -194,11 +194,11 @@ export default class CandidateProfile {
                     <div class="form-list form-text">
                         <div class="form-field">
                             <label>Cidade:</label>
-                            <input type="text" class="city">
+                            <input type="text" class="work-city">
                         </div>
                         <div class="form-field">
                             <label>Estado:</label>
-                            <select class="state">
+                            <select class="work-state">
                                 ${self.generateStates()}
                             </select>
                         </div>
@@ -599,11 +599,11 @@ export default class CandidateProfile {
                     <div class="form-list form-text">
                         <div class="form-field">
                             <label>Cidade:</label>
-                            <input type="text" class="city" value="${work.city}">
+                            <input type="text" class="work-city" value="${work.city}">
                         </div>
                         <div class="form-field">
                             <label>Estado:</label>
-                            <select class="state">
+                            <select class="work-state">
                                 ${self.populateState(work.state)}
                             </select>
                         </div>
