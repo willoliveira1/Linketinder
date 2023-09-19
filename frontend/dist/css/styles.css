@@ -83,8 +83,8 @@ main {
 }
 
 #table {
-    border-collapse: collapse;
     margin: 20px;
+    width: max-content;
 }
 
 form {
@@ -203,7 +203,6 @@ div .cep {
 .line {
     display: flex;
     flex-direction: row;
-
 }
 
 #chart {
@@ -232,3 +231,100 @@ div .cep {
     color: #FCA311;
     cursor: pointer; 
 }
+
+#job-vacancies-table, #candidates-table {
+    margin: 20px;
+    border-collapse: collapse;
+}
+
+#job-vacancies-table th, td {
+    padding: 10px;
+}
+
+#candidates-table th, td {
+    padding: 10px;
+}
+
+#job-vacancies-table tbody {
+    font-size: 1.12em;
+}
+
+#candidates-table tbody {
+    font-size: 1.12em;
+}
+
+#job-vacancies-table td {
+    text-align: center;
+}
+
+#candidates-table td {
+    text-align: center;
+}
+
+#job-vacancies-table thead {
+    background-color: #04AA6D;
+    color: white;
+}
+
+#candidates-table thead {
+    background-color: #04AA6D;
+    color: white;
+}
+
+#job-vacancies-table ul {
+    display: flex;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#candidates-table ul {
+    display: flex;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+/*  */
+.row {
+    border-bottom: 1px solid #ddd;
+}
+
+.hidden-row {
+    display: table-row;
+    background-color: #d3cece;
+}
+
+.job-required-skills {
+    display: grid;
+    padding-right: 15px;
+}
+
+.job-required-skill, .candidate-skill, .candidate-language {
+    display: flex;
+    justify-content: center;
+}
+
+.job-required-skill li {
+    text-align: center;
+    padding-right: 5px;
+}
+
+.candidate li {
+    list-style-type: none;
+    padding-right: 5px;
+}
+
+.candidate-academicExperience {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0 15px;
+}
+
+/* .candidate-academicExperience ul {
+    display: block;
+} */
+
+/* .academicExperience {
+    display: block;
+} */
+

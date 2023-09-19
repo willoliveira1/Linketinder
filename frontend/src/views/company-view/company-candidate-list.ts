@@ -39,19 +39,13 @@ export default class CompanyCandidateList {
                 <tr class="row">
                     <td class="candidate candidate-id">${candidate.id}</td>
                     <td class="candidate candidate-skills">
-                        <ul>
-                            ${this.populateSkills(candidate)}
-                        </ul>
+                        ${this.populateSkills(candidate)}
                     </td>
                     <td class="candidate candidate-academicExperiences">
-                        <ul>
-                            ${this.populateAcademicExperiences(candidate)}
-                        </ul>
+                        ${this.populateAcademicExperiences(candidate)}
                     </td>
                     <td class="candidate candidate-languages">
-                        <ul>
-                            ${this.populateLanguages(candidate)}
-                        </ul>
+                        ${this.populateLanguages(candidate)}
                     </td>
                 </tr>
             `);
@@ -61,12 +55,13 @@ export default class CompanyCandidateList {
     populateSkills(candidate: CandidateReadDto): string {
         let skills: string = "";
         Object.values(candidate.skills).forEach(skill => {
-            skills +=  `<li class="candidate-skill">
-                            <ul>
-                                <li>${skill.title}</li>
-                                <li>${skill.proficiency}</li>
-                            </ul>
-                        </li>`
+            skills +=  `
+                <li class="candidate-skill">
+                    <ul>
+                        <li>${skill.title}:</li>
+                        <li>${skill.proficiency}</li>
+                    </ul>
+                </li>`
         });
         return skills;
     }
@@ -74,14 +69,15 @@ export default class CompanyCandidateList {
     populateAcademicExperiences(candidate: CandidateReadDto): string {
         let academicExperiences: string = "";
         Object.values(candidate.academicExperiences).forEach(experience => {
-            academicExperiences +=  `<li class="candidate-academicExperience">
-                            <ul>
-                                <li>${experience.educationalInstitution}</li>
-                                <li>${experience.degreeType}</li>
-                                <li>${experience.fieldOfStudy}</li>
-                                <li>${experience.status}</li>
-                            </ul>
-                        </li>`
+            academicExperiences +=  `
+            <div class="candidate-academicExperience">
+                <ul class="academicExperience" style="display: block;">
+                    <li>Instituição: ${experience.educationalInstitution}</li>
+                    <li>Tipo: ${experience.degreeType}</li>
+                    <li>Curso: ${experience.fieldOfStudy}</li>
+                    <li>Status: ${experience.status}</li>
+                </ul>
+            </div>`
         });
         return academicExperiences;
     }
@@ -89,12 +85,13 @@ export default class CompanyCandidateList {
     populateLanguages(candidate: CandidateReadDto): string {
         let languages: string = "";
         Object.values(candidate.languages).forEach(language => {
-            languages +=  `<li class="candidate-language">
-                            <ul>
-                                <li>${language.name}</li>
-                                <li>${language.proficiency}</li>
-                            </ul>
-                        </li>`
+            languages +=  `
+                <li class="candidate-language">
+                    <ul>
+                        <li>${language.name}:</li>
+                        <li>${language.proficiency}</li>
+                    </ul>
+                </li>`
         });
         return languages;
     }

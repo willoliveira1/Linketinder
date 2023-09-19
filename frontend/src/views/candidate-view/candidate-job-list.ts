@@ -35,19 +35,17 @@ export default class CandidateJobList {
         
         jobVacancies.forEach(vacancy => {
             $("tbody").append(`
-                <tr class="row" id="row-${vacancy.id}">
+                <tr class="row visible" id="row-${vacancy.id}">
                     <td class="job-id">${vacancy.id}</td>
                     <td class="job-title">${vacancy.title}</td>
                     <td class="job-contract-type">${vacancy.contractType}</td>
                     <td class="job-location-type">${vacancy.locationType}</td>
-                    <td class="job-salary">${vacancy.salary}</td>
+                    <td class="job-salary">R$ ${vacancy.salary.toLocaleString("pt-br", {minimumFractionDigits: 2})}</td>
                 </tr>
                 <tr id="hidden-row-${vacancy.id}" class="hidden-row" style="display: none;">
-                    <td class="job-description">${vacancy.description}</td>
-                    <td class="job-required-skills">
-                        <ul>
-                            ${this.populateSkills(vacancy)}
-                        </ul>
+                    <td class="job-description" colspan="4">${vacancy.description}</td>
+                    <td class="job-required-skills" colspan="2">
+                        ${this.populateSkills(vacancy)}
                     </td>
                 </tr>
             `);
@@ -63,7 +61,7 @@ export default class CandidateJobList {
         Object.values(jobVacancy.requiredSkills).forEach(skill => {
             skills +=  `<li class="job-required-skill">
                             <ul>
-                                <li>${skill.title}</li>
+                                <li>${skill.title}:</li>
                                 <li>${skill.proficiency}</li>
                             </ul>
                         </li>`

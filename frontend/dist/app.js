@@ -26264,19 +26264,17 @@ class CandidateJobList {
         jobVacancies.forEach(vacancy => {
             var _a;
             (0, jquery_1.default)("tbody").append(`
-                <tr class="row" id="row-${vacancy.id}">
+                <tr class="row visible" id="row-${vacancy.id}">
                     <td class="job-id">${vacancy.id}</td>
                     <td class="job-title">${vacancy.title}</td>
                     <td class="job-contract-type">${vacancy.contractType}</td>
                     <td class="job-location-type">${vacancy.locationType}</td>
-                    <td class="job-salary">${vacancy.salary}</td>
+                    <td class="job-salary">R$ ${vacancy.salary.toLocaleString("pt-br", { minimumFractionDigits: 2 })}</td>
                 </tr>
                 <tr id="hidden-row-${vacancy.id}" class="hidden-row" style="display: none;">
-                    <td class="job-description">${vacancy.description}</td>
-                    <td class="job-required-skills">
-                        <ul>
-                            ${this.populateSkills(vacancy)}
-                        </ul>
+                    <td class="job-description" colspan="4">${vacancy.description}</td>
+                    <td class="job-required-skills" colspan="2">
+                        ${this.populateSkills(vacancy)}
                     </td>
                 </tr>
             `);
@@ -26290,7 +26288,7 @@ class CandidateJobList {
         Object.values(jobVacancy.requiredSkills).forEach(skill => {
             skills += `<li class="job-required-skill">
                             <ul>
-                                <li>${skill.title}</li>
+                                <li>${skill.title}:</li>
                                 <li>${skill.proficiency}</li>
                             </ul>
                         </li>`;
@@ -27048,28 +27046,71 @@ class CompanyCandidateList {
                 </table>
             </div>
         `);
+        // $("main").append(`
+        //     <div id="container">
+        //         <table id="candidates-table">
+        //             <thead>
+        //                 <tr>
+        //                     <th>Id</th>
+        //                     <th>Habilidades</th>
+        //                     <th>Idiomas</th>
+        //                 </tr>
+        //             </thead>
+        //             <tbody></tbody>
+        //         </table>
+        //     </div>
+        // `);
         this.populateTable();
     }
     populateTable() {
         let candidates = this.candidateService.populateCandidates();
+        // candidates.forEach(candidate => {
+        //     $("tbody").append(`
+        //         <tr class="row">
+        //             <td class="candidate candidate-id">${candidate.id}</td>
+        //             <td class="candidate candidate-skills">
+        //                 <ul>
+        //                     ${this.populateSkills(candidate)}
+        //                 </ul>
+        //             </td>
+        //             <td class="candidate candidate-academicExperiences">
+        //                 <ul>
+        //                     ${this.populateAcademicExperiences(candidate)}
+        //                 </ul>
+        //             </td>
+        //             <td class="candidate candidate-languages">
+        //                 <ul>
+        //                     ${this.populateLanguages(candidate)}
+        //                 </ul>
+        //             </td>
+        //         </tr>
+        //     `);
+        // });
+        // candidates.forEach(candidate => {
+        //     $("tbody").append(`
+        //         <tr class="row">
+        //             <td class="candidate candidate-id">${candidate.id}</td>
+        //             <td class="candidate candidate-skills">
+        //                 ${this.populateSkills(candidate)}
+        //             </td>
+        //             <td class="candidate candidate-languages">
+        //                 ${this.populateLanguages(candidate)}
+        //             </td>
+        //         </tr>
+        //     `);
+        // });
         candidates.forEach(candidate => {
             (0, jquery_1.default)("tbody").append(`
                 <tr class="row">
                     <td class="candidate candidate-id">${candidate.id}</td>
                     <td class="candidate candidate-skills">
-                        <ul>
-                            ${this.populateSkills(candidate)}
-                        </ul>
+                        ${this.populateSkills(candidate)}
                     </td>
                     <td class="candidate candidate-academicExperiences">
-                        <ul>
-                            ${this.populateAcademicExperiences(candidate)}
-                        </ul>
+                        ${this.populateAcademicExperiences(candidate)}
                     </td>
                     <td class="candidate candidate-languages">
-                        <ul>
-                            ${this.populateLanguages(candidate)}
-                        </ul>
+                        ${this.populateLanguages(candidate)}
                     </td>
                 </tr>
             `);
@@ -27078,38 +27119,52 @@ class CompanyCandidateList {
     populateSkills(candidate) {
         let skills = "";
         Object.values(candidate.skills).forEach(skill => {
-            skills += `<li class="candidate-skill">
-                            <ul>
-                                <li>${skill.title}</li>
-                                <li>${skill.proficiency}</li>
-                            </ul>
-                        </li>`;
+            skills += `
+                <li class="candidate-skill">
+                    <ul>
+                        <li>${skill.title}:</li>
+                        <li>${skill.proficiency}</li>
+                    </ul>
+                </li>`;
         });
         return skills;
     }
     populateAcademicExperiences(candidate) {
         let academicExperiences = "";
         Object.values(candidate.academicExperiences).forEach(experience => {
-            academicExperiences += `<li class="candidate-academicExperience">
-                            <ul>
-                                <li>${experience.educationalInstitution}</li>
-                                <li>${experience.degreeType}</li>
-                                <li>${experience.fieldOfStudy}</li>
-                                <li>${experience.status}</li>
-                            </ul>
-                        </li>`;
+            academicExperiences += `
+            <div class="candidate-academicExperience">
+                <ul class="academicExperience" style="display: block;">
+                    <li>Instituição: ${experience.educationalInstitution}</li>
+                    <li>Tipo: ${experience.degreeType}</li>
+                    <li>Curso: ${experience.fieldOfStudy}</li>
+                    <li>Status: ${experience.status}</li>
+                </ul>
+            </div>`;
         });
+        // Object.values(candidate.academicExperiences).forEach(experience => {
+        //     academicExperiences +=  `
+        //     <li class="candidate-academicExperience">
+        //         <ul>
+        //             <li>Instituição: ${experience.educationalInstitution}</li>
+        //             <li>Tipo: ${experience.degreeType}</li>
+        //             <li>Curso: ${experience.fieldOfStudy}</li>
+        //             <li>Status: ${experience.status}</li>
+        //         </ul>
+        //     </li>`
+        // });
         return academicExperiences;
     }
     populateLanguages(candidate) {
         let languages = "";
         Object.values(candidate.languages).forEach(language => {
-            languages += `<li class="candidate-language">
-                            <ul>
-                                <li>${language.name}</li>
-                                <li>${language.proficiency}</li>
-                            </ul>
-                        </li>`;
+            languages += `
+                <li class="candidate-language">
+                    <ul>
+                        <li>${language.name}:</li>
+                        <li>${language.proficiency}</li>
+                    </ul>
+                </li>`;
         });
         return languages;
     }
