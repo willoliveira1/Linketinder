@@ -27042,63 +27042,14 @@ class CompanyCandidateList {
                             <th>Idiomas</th>
                         </tr>
                     </thead>
-                    <tbody></tbody>
+                    <tbody id="candidate-body"></tbody>
                 </table>
             </div>
         `);
-        // $("main").append(`
-        //     <div id="container">
-        //         <table id="candidates-table">
-        //             <thead>
-        //                 <tr>
-        //                     <th>Id</th>
-        //                     <th>Habilidades</th>
-        //                     <th>Idiomas</th>
-        //                 </tr>
-        //             </thead>
-        //             <tbody></tbody>
-        //         </table>
-        //     </div>
-        // `);
         this.populateTable();
     }
     populateTable() {
         let candidates = this.candidateService.populateCandidates();
-        // candidates.forEach(candidate => {
-        //     $("tbody").append(`
-        //         <tr class="row">
-        //             <td class="candidate candidate-id">${candidate.id}</td>
-        //             <td class="candidate candidate-skills">
-        //                 <ul>
-        //                     ${this.populateSkills(candidate)}
-        //                 </ul>
-        //             </td>
-        //             <td class="candidate candidate-academicExperiences">
-        //                 <ul>
-        //                     ${this.populateAcademicExperiences(candidate)}
-        //                 </ul>
-        //             </td>
-        //             <td class="candidate candidate-languages">
-        //                 <ul>
-        //                     ${this.populateLanguages(candidate)}
-        //                 </ul>
-        //             </td>
-        //         </tr>
-        //     `);
-        // });
-        // candidates.forEach(candidate => {
-        //     $("tbody").append(`
-        //         <tr class="row">
-        //             <td class="candidate candidate-id">${candidate.id}</td>
-        //             <td class="candidate candidate-skills">
-        //                 ${this.populateSkills(candidate)}
-        //             </td>
-        //             <td class="candidate candidate-languages">
-        //                 ${this.populateLanguages(candidate)}
-        //             </td>
-        //         </tr>
-        //     `);
-        // });
         candidates.forEach(candidate => {
             (0, jquery_1.default)("tbody").append(`
                 <tr class="row">
@@ -27142,17 +27093,6 @@ class CompanyCandidateList {
                 </ul>
             </div>`;
         });
-        // Object.values(candidate.academicExperiences).forEach(experience => {
-        //     academicExperiences +=  `
-        //     <li class="candidate-academicExperience">
-        //         <ul>
-        //             <li>Instituição: ${experience.educationalInstitution}</li>
-        //             <li>Tipo: ${experience.degreeType}</li>
-        //             <li>Curso: ${experience.fieldOfStudy}</li>
-        //             <li>Status: ${experience.status}</li>
-        //         </ul>
-        //     </li>`
-        // });
         return academicExperiences;
     }
     populateLanguages(candidate) {

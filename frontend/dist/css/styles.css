@@ -6,21 +6,21 @@ body, p, h1, h2, input, textarea {
 }
 
 body {
-    background-color: #BAC9E9;
+    background-color: #FDF0D5;
 }
 
 
 
 /* Header */
 header {
-    color: #E5E5E5;
-    background-color: #394d79;
+    color: #FDFFFC;
+    background-color: #5F8D4E;
     box-shadow: 2px 2px 5px black;
     border-radius: 0 0 10px 10px;
 }
 
 #navbar {
-    background-color: #14213D;
+    background-color: #285430;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -56,7 +56,7 @@ header li:hover, #linketinder {
     display: flex;
     justify-content: flex-end;
     border-radius: 0 0 10px 10px;
-    background-color: #394d79;
+    background-color: #5F8D4E;
 }
 
 .menu ul {
@@ -68,7 +68,7 @@ header li:hover, #linketinder {
 
 /* Main */
 main {
-    padding: 30px 0;
+    padding: 50px 0;
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -78,7 +78,7 @@ main {
 #container {
     width: max-content;
     border-radius: 25px;
-    background-color: #E5E5E5;
+    background-color: #F8F9FA;
     box-shadow: 5px 5px 15px black;
 }
 
@@ -262,13 +262,13 @@ div .cep {
 }
 
 #job-vacancies-table thead {
-    background-color: #04AA6D;
-    color: white;
+    background-color: #588157;
+    color: #FDFFFC;
 }
 
 #candidates-table thead {
-    background-color: #04AA6D;
-    color: white;
+    background-color: #588157;
+    color: #FDFFFC;
 }
 
 #job-vacancies-table ul {
@@ -284,14 +284,15 @@ div .cep {
     padding: 0;
     margin: 0;
 }
-/*  */
+
 .row {
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #DDD;
 }
 
 .hidden-row {
     display: table-row;
-    background-color: #d3cece;
+    border-bottom: 1px solid #DDD;
+    background-color: #EDEDE9;
 }
 
 .job-required-skills {
@@ -320,11 +321,10 @@ div .cep {
     margin: 10px 0 15px;
 }
 
-/* .candidate-academicExperience ul {
-    display: block;
-} */
+#candidate-body tr:nth-child(odd) {
+    background-color: #F8F9FA;
+}
 
-/* .academicExperience {
-    display: block;
-} */
-
+#candidate-body tr:nth-child(even) {
+    background-color: #EDEDE9;
+}

@@ -23,7 +23,7 @@ export default class CompanyCandidateList {
                             <th>Idiomas</th>
                         </tr>
                     </thead>
-                    <tbody></tbody>
+                    <tbody id="candidate-body"></tbody>
                 </table>
             </div>
         `);
