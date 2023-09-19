@@ -15,10 +15,12 @@ var candidate = candidateService.generateCandidate();
 var companyService: CompanyService = new CompanyService();
 var company = companyService.generateCompany();
 
+var view: AdminGraph = new AdminGraph();
+view.generateGraph();
+
 document.getElementById("linketinder")?.addEventListener("click", function(): void {
     document.querySelector(".menu")?.remove();
 
-    let view: AdminGraph = new AdminGraph();
     view.generateGraph();
 });
 

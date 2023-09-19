@@ -25732,10 +25732,11 @@ var candidateService = new candidate_service_1.default();
 var candidate = candidateService.generateCandidate();
 var companyService = new company_service_1.default();
 var company = companyService.generateCompany();
+var view = new admin_graph_1.default();
+view.generateGraph();
 (_a = document.getElementById("linketinder")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", function () {
     var _a;
     (_a = document.querySelector(".menu")) === null || _a === void 0 ? void 0 : _a.remove();
-    let view = new admin_graph_1.default();
     view.generateGraph();
 });
 let candidateMenu = document.getElementById("candidate-menu");
@@ -26487,11 +26488,11 @@ class CandidateProfile {
                     <div class="form-list form-text">
                         <div class="form-field">
                             <label>Cidade:</label>
-                            <input type="text" class="city">
+                            <input type="text" class="work-city">
                         </div>
                         <div class="form-field">
                             <label>Estado:</label>
-                            <select class="state">
+                            <select class="work-state">
                                 ${self.generateStates()}
                             </select>
                         </div>
@@ -26855,11 +26856,11 @@ class CandidateProfile {
                     <div class="form-list form-text">
                         <div class="form-field">
                             <label>Cidade:</label>
-                            <input type="text" class="city" value="${work.city}">
+                            <input type="text" class="work-city" value="${work.city}">
                         </div>
                         <div class="form-field">
                             <label>Estado:</label>
-                            <select class="state">
+                            <select class="work-state">
                                 ${self.populateState(work.state)}
                             </select>
                         </div>
