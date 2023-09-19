@@ -6,21 +6,21 @@ body, p, h1, h2, input, textarea {
 }
 
 body {
-    background-color: #BAC9E9;
+    background-color: #FDF0D5;
 }
 
 
 
 /* Header */
 header {
-    color: #E5E5E5;
-    background-color: #394d79;
+    color: #FDFFFC;
+    background-color: #5F8D4E;
     box-shadow: 2px 2px 5px black;
     border-radius: 0 0 10px 10px;
 }
 
 #navbar {
-    background-color: #14213D;
+    background-color: #285430;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -56,7 +56,7 @@ header li:hover, #linketinder {
     display: flex;
     justify-content: flex-end;
     border-radius: 0 0 10px 10px;
-    background-color: #394d79;
+    background-color: #5F8D4E;
 }
 
 .menu ul {
@@ -68,7 +68,7 @@ header li:hover, #linketinder {
 
 /* Main */
 main {
-    padding: 30px 0;
+    padding: 50px 0;
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -78,13 +78,13 @@ main {
 #container {
     width: max-content;
     border-radius: 25px;
-    background-color: #E5E5E5;
+    background-color: #F8F9FA;
     box-shadow: 5px 5px 15px black;
 }
 
 #table {
-    border-collapse: collapse;
     margin: 20px;
+    width: max-content;
 }
 
 form {
@@ -203,7 +203,6 @@ div .cep {
 .line {
     display: flex;
     flex-direction: row;
-
 }
 
 #chart {
@@ -231,4 +230,101 @@ div .cep {
 #submit-input:hover, #cancel-input:hover {
     color: #FCA311;
     cursor: pointer; 
+}
+
+#job-vacancies-table, #candidates-table {
+    margin: 20px;
+    border-collapse: collapse;
+}
+
+#job-vacancies-table th, td {
+    padding: 10px;
+}
+
+#candidates-table th, td {
+    padding: 10px;
+}
+
+#job-vacancies-table tbody {
+    font-size: 1.12em;
+}
+
+#candidates-table tbody {
+    font-size: 1.12em;
+}
+
+#job-vacancies-table td {
+    text-align: center;
+}
+
+#candidates-table td {
+    text-align: center;
+}
+
+#job-vacancies-table thead {
+    background-color: #588157;
+    color: #FDFFFC;
+}
+
+#candidates-table thead {
+    background-color: #588157;
+    color: #FDFFFC;
+}
+
+#job-vacancies-table ul {
+    display: flex;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#candidates-table ul {
+    display: flex;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.row {
+    border-bottom: 1px solid #DDD;
+}
+
+.hidden-row {
+    display: table-row;
+    border-bottom: 1px solid #DDD;
+    background-color: #EDEDE9;
+}
+
+.job-required-skills {
+    display: grid;
+    padding-right: 15px;
+}
+
+.job-required-skill, .candidate-skill, .candidate-language {
+    display: flex;
+    justify-content: center;
+}
+
+.job-required-skill li {
+    text-align: center;
+    padding-right: 5px;
+}
+
+.candidate li {
+    list-style-type: none;
+    padding-right: 5px;
+}
+
+.candidate-academicExperience {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0 15px;
+}
+
+#candidate-body tr:nth-child(odd) {
+    background-color: #F8F9FA;
+}
+
+#candidate-body tr:nth-child(even) {
+    background-color: #EDEDE9;
 }
