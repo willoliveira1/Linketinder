@@ -12,6 +12,7 @@ import WorkExperience from "../../models/candidate/work-experience";
 import Language from "../../models/shared/language";
 import Skill from "../../models/shared/skill";
 import Certificate from "../../models/candidate/certificate";
+import Validations from "../../utils/validations";
 
 export default class CandidateProfile {
 
@@ -72,6 +73,8 @@ export default class CandidateProfile {
                 </div>
             </div>
         `);
+
+        Validations.validateBasicCandidateData();
     }
 
     generateAcademicInformation(): void {
@@ -127,17 +130,17 @@ export default class CandidateProfile {
                     <div class="form-list form-text">
                         <div class="form-field">
                             <label>Instituição:</label>
-                            <input type="text" class="educationalInstitution">
+                            <input type="text" class="educationalInstitution error">
                         </div>
                         <div class="form-field">
                             <label>Diploma:</label>
-                            <input type="text" class="degreeType">
+                            <input type="text" class="degreeType error">
                         </div>
                     </div>
                     <div class="form-list form-text">
                         <div class="form-field">
                             <label>Curso:</label>
-                            <input type="text" class="fieldOfStudy">
+                            <input type="text" class="fieldOfStudy error">
                         </div>
                         <div class="form-field">
                             <label>Status:</label>
@@ -151,6 +154,8 @@ export default class CandidateProfile {
                     </div>
                 </div>
             `);
+
+            Validations.validateAcademicInfos();
         });
 
         document.querySelectorAll(".academic-information").forEach(academic => {
@@ -170,11 +175,11 @@ export default class CandidateProfile {
                     <div class="form-list form-text">
                         <div class="form-field">
                             <label>Cargo:</label>
-                            <input type="text" class="title">
+                            <input type="text" class="title error">
                         </div>
                         <div class="form-field">
                             <label>Empresa:</label>
-                            <input type="text" class="companyName">
+                            <input type="text" class="companyName error">
                         </div>
                     </div>
                     <div class="form-list form-text">
@@ -194,7 +199,7 @@ export default class CandidateProfile {
                     <div class="form-list form-text">
                         <div class="form-field">
                             <label>Cidade:</label>
-                            <input type="text" class="work-city">
+                            <input type="text" class="work-city error">
                         </div>
                         <div class="form-field">
                             <label>Estado:</label>
@@ -205,19 +210,21 @@ export default class CandidateProfile {
                     </div>
                     <div class="form-field">
                         <label>Sobre:</label>
-                        <input type="text" class="description">
+                        <input type="text" class="description error">
                     </div>
                     <div class="form-field line">
                         <label class="work-label">Trabalho Atual:</label>
                         <input type="checkbox" class="currently-work">
-                        <span class="material-symbols-outlined work-btn">delete</span>
+                        <span class="material-symbols-outlined work-delete-btn">delete</span>
                     </div>
                 </div>
             `);
+
+            Validations.validateWorkInfos();
         });
 
         document.querySelectorAll(".work-information").forEach(work => {
-            work.querySelectorAll(".delete-btn").forEach(btn => {
+            work.querySelectorAll(".work-delete-btn").forEach(btn => {
                 btn.addEventListener("click", () => {
                     work.remove();
                 });
@@ -233,7 +240,7 @@ export default class CandidateProfile {
                     <div class="form-list form-text">
                         <div class="form-field">
                             <label>Idioma:</label>
-                            <input type="text" class="language-name">
+                            <input type="text" class="language-name error">
                         </div>
                         <div class="form-field">
                             <label>Tipo de contrato:</label>
@@ -246,7 +253,9 @@ export default class CandidateProfile {
                         </div>
                     </div>
                 </div>
-            `); 
+            `);
+
+            Validations.validateLanguageInfos();
         });
 
         document.querySelectorAll(".language-information").forEach(language => {
@@ -266,7 +275,7 @@ export default class CandidateProfile {
                     <div class="form-list form-text">
                         <div class="form-field">
                             <label>Habilidade:</label>
-                            <input type="text" class="skill-name">
+                            <input type="text" class="skill-name error">
                         </div>
                         <div class="form-field">
                             <label>Tipo de contrato:</label>
@@ -280,6 +289,8 @@ export default class CandidateProfile {
                     </div>
                 </div>
             `);
+
+            Validations.validateSkillInfos();
         });
 
         document.querySelectorAll(".skill-information").forEach(skill => {
@@ -298,18 +309,20 @@ export default class CandidateProfile {
                     <div class="form-list">
                         <div class="form-field">
                             <label>Certificação:</label>
-                            <input type="text" class="certificate-name">
+                            <input type="text" class="certificate-name error">
                         </div>
                         <div class="form-field">
                             <label>Duração:</label>
                             <div class="line">
-                                <input type="text" class="duration">
+                                <input type="text" class="duration error">
                                 <span class="material-symbols-outlined delete-btn">delete</span>
                             </div>
                         </div>
                     </div>
                 </div>
             `);
+
+            Validations.validateCertificateInfos();
         });
 
         document.querySelectorAll(".certification-information").forEach(certification => {
@@ -330,85 +343,91 @@ export default class CandidateProfile {
         `);
 
         document.getElementById("submit-input")?.addEventListener("click", function(): void {
-            let candidateService: CandidateService = new CandidateService();
-            let candidate = candidateService.generateCandidate();
+            const hasError = document.getElementsByClassName("error");
 
-            candidate.name = <string> $("#name").val();
-            candidate.email = <string> $("#email").val();
-            candidate.city = <string> $("#city").val();
-            candidate.state = <State> $("#states :selected").val();
-            candidate.cep = <string> $("#cep").val();
-            candidate.description = <string> $("#description").val();            
-            candidate.cpf = <string> $("#cpf").val();
-
-            let academicExperiences: AcademicExperience[] = [];
-            let academicId: number = 1;
-            let academicInfos = Array.from(document.querySelectorAll(".academic-information"));
-            academicInfos.forEach(function(info) {
-                let educationalInstitution = (info.querySelector(".educationalInstitution") as HTMLInputElement).value;
-                let degreeType = (info.querySelector(".degreeType") as HTMLInputElement).value;
-                let fieldOfStudy = (info.querySelector(".fieldOfStudy") as HTMLInputElement).value;
-                let status = (info.querySelector(".courseStatus") as HTMLSelectElement).value as CourseStatus;
-
-                academicExperiences.push(new AcademicExperience(academicId++, educationalInstitution, degreeType, 
-                    fieldOfStudy, status));
-            });
-            candidate.academicExperiences = academicExperiences;
-
-            let workExperiences: WorkExperience[] = [];
-            let workId: number = 1;
-            let workInfos = Array.from(document.querySelectorAll(".work-information"));
-            workInfos.forEach(function(info) {
-                let title = (info.querySelector(".title") as HTMLInputElement).value;
-                let companyName = (info.querySelector(".companyName") as HTMLInputElement).value;
-                let contractType = (info.querySelector(".contractType") as HTMLSelectElement).value as ContractType;
-                let locationType = (info.querySelector(".locationType") as HTMLSelectElement).value as LocationType;
-                let city = (info.querySelector(".city") as HTMLInputElement).value;
-                let state = (info.querySelector(".state") as HTMLSelectElement).value as State;
-                let currentlyWork = (info.querySelector(".currently-work") as HTMLInputElement).checked;
-                let description = (info.querySelector(".description") as HTMLInputElement).value;
-
-                workExperiences.push(new WorkExperience(workId++, title, companyName, contractType, locationType, city, 
-                    state, currentlyWork, description));
-            });
-            candidate.workExperiences = workExperiences;
-
-            let languages: Language[] = [];
-            let languagesId: number = 1;
-            let languageInfos = Array.from(document.querySelectorAll(".language-information"));
-            languageInfos.forEach(function(info) {
-                let name = (info.querySelector(".language-name") as HTMLInputElement).value;
-                let proficiency = (info.querySelector(".language-proficiency") as HTMLSelectElement).value as Proficiency;
-
-                languages.push(new Language(languagesId++, name, proficiency));
-            });
-            candidate.languages = languages;
-
-            let skills: Skill[] = [];
-            let skillsId: number = 1;
-            let skillInfos = Array.from(document.querySelectorAll(".skill-information"));
-            skillInfos.forEach(function(info) {
-                let title = (info.querySelector(".skill-name") as HTMLInputElement).value;
-                let proficiency = (info.querySelector(".skill-proficiency") as HTMLSelectElement).value as Proficiency;
-
-                skills.push(new Skill(skillsId++, title, proficiency));
-            });
-            candidate.skills = skills;
-
-            let certificates: Certificate[] = [];
-            let certificatesId: number = 1;
-            let certificateInfos = Array.from(document.querySelectorAll(".certification-information"));
-            certificateInfos.forEach(function(info) {
-                let title = (info.querySelector(".certificate-name") as HTMLInputElement).value;
-                let duration = (info.querySelector(".duration") as HTMLSelectElement).value as Proficiency;
-
-                certificates.push(new Certificate(certificatesId++, title, duration));
-            });
-            candidate.certificates = certificates;
-
-            candidateService.updateCandidate(candidate);
-
-            window.location.href = "http://localhost:5502/dist/";
+            if (!hasError.length) {
+                let candidateService: CandidateService = new CandidateService();
+                let candidate = candidateService.generateCandidate();
+    
+                candidate.name = <string> $("#name").val();
+                candidate.email = <string> $("#email").val();
+                candidate.city = <string> $("#city").val();
+                candidate.state = <State> $("#states :selected").val();
+                candidate.cep = <string> $("#cep").val();
+                candidate.description = <string> $("#description").val();            
+                candidate.cpf = <string> $("#cpf").val();
+    
+                let academicExperiences: AcademicExperience[] = [];
+                let academicId: number = 1;
+                let academicInfos = Array.from(document.querySelectorAll(".academic-information"));
+                academicInfos.forEach(function(info) {
+                    let educationalInstitution = (info.querySelector(".educationalInstitution") as HTMLInputElement).value;
+                    let degreeType = (info.querySelector(".degreeType") as HTMLInputElement).value;
+                    let fieldOfStudy = (info.querySelector(".fieldOfStudy") as HTMLInputElement).value;
+                    let status = (info.querySelector(".courseStatus") as HTMLSelectElement).value as CourseStatus;
+    
+                    academicExperiences.push(new AcademicExperience(academicId++, educationalInstitution, degreeType, 
+                        fieldOfStudy, status));
+                });
+                candidate.academicExperiences = academicExperiences;
+    
+                let workExperiences: WorkExperience[] = [];
+                let workId: number = 1;
+                let workInfos = Array.from(document.querySelectorAll(".work-information"));
+                workInfos.forEach(function(info) {
+                    let title = (info.querySelector(".title") as HTMLInputElement).value;
+                    let companyName = (info.querySelector(".companyName") as HTMLInputElement).value;
+                    let contractType = (info.querySelector(".contractType") as HTMLSelectElement).value as ContractType;
+                    let locationType = (info.querySelector(".locationType") as HTMLSelectElement).value as LocationType;
+                    let city = (info.querySelector(".work-city") as HTMLInputElement).value;
+                    let state = (info.querySelector(".work-state") as HTMLSelectElement).value as State;
+                    let currentlyWork = (info.querySelector(".currently-work") as HTMLInputElement).checked;
+                    let description = (info.querySelector(".description") as HTMLInputElement).value;
+    
+                    workExperiences.push(new WorkExperience(workId++, title, companyName, contractType, locationType, city, 
+                        state, currentlyWork, description));
+                });
+                candidate.workExperiences = workExperiences;
+    
+                let languages: Language[] = [];
+                let languagesId: number = 1;
+                let languageInfos = Array.from(document.querySelectorAll(".language-information"));
+                languageInfos.forEach(function(info) {
+                    let name = (info.querySelector(".language-name") as HTMLInputElement).value;
+                    let proficiency = (info.querySelector(".language-proficiency") as HTMLSelectElement).value as Proficiency;
+    
+                    languages.push(new Language(languagesId++, name, proficiency));
+                });
+                candidate.languages = languages;
+    
+                let skills: Skill[] = [];
+                let skillsId: number = 1;
+                let skillInfos = Array.from(document.querySelectorAll(".skill-information"));
+                skillInfos.forEach(function(info) {
+                    let title = (info.querySelector(".skill-name") as HTMLInputElement).value;
+                    let proficiency = (info.querySelector(".skill-proficiency") as HTMLSelectElement).value as Proficiency;
+    
+                    skills.push(new Skill(skillsId++, title, proficiency));
+                });
+                candidate.skills = skills;
+    
+                let certificates: Certificate[] = [];
+                let certificatesId: number = 1;
+                let certificateInfos = Array.from(document.querySelectorAll(".certification-information"));
+                certificateInfos.forEach(function(info) {
+                    let title = (info.querySelector(".certificate-name") as HTMLInputElement).value;
+                    let duration = (info.querySelector(".duration") as HTMLInputElement).value;
+    
+                    certificates.push(new Certificate(certificatesId++, title, duration));
+                });
+                candidate.certificates = certificates;
+    
+                candidateService.updateCandidate(candidate);
+    
+                window.location.href = "http://localhost:5502/dist/";
+            } else {
+                alert("Cadastro não pode ser salvo, corriga os campos em vermelho.");
+            }
         });
 
         document.getElementById("cancel-input")?.addEventListener("click", function(): void {
@@ -514,6 +533,8 @@ export default class CandidateProfile {
                 </div>
             </div>
         `);
+
+        Validations.validateBasicCandidateData();
     }
 
     populateAcademicInformation(candidate: Candidate): void {
@@ -557,6 +578,7 @@ export default class CandidateProfile {
             `);
         });
 
+        Validations.validateAcademicInfos();
         this.generateAcademicButton();
     }
 
@@ -615,12 +637,13 @@ export default class CandidateProfile {
                     <div class="form-field line">
                         <label class="work-label">Trabalho Atual:</label>
                         <input type="checkbox" class="currently-work" ${work.currentlyWork ? "checked" : ""}>
-                        <span class="material-symbols-outlined work-btn">delete</span>
+                        <span class="material-symbols-outlined work-delete-btn">delete</span>
                     </div>
                 </div>
             `);
         });
 
+        Validations.validateWorkInfos();
         this.generateWorkButton();
     }
 
@@ -655,6 +678,7 @@ export default class CandidateProfile {
             `); 
         });
         
+        Validations.validateLanguageInfos();
         this.generateLanguageButton();
     }
 
@@ -689,6 +713,7 @@ export default class CandidateProfile {
             `);
         });
 
+        Validations.validateSkillInfos();
         this.generateSkillButton();
     }
 
@@ -721,6 +746,7 @@ export default class CandidateProfile {
             `);
         });
 
+        Validations.validateCertificateInfos();
         this.generateCertificateButton();
     }
     

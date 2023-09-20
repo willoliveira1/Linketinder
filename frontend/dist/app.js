@@ -25791,7 +25791,7 @@ companyMenu === null || companyMenu === void 0 ? void 0 : companyMenu.addEventLi
     });
 });
 
-},{"./services/candidate-service":19,"./services/company-service":20,"./views/adm-view/admin-graph":22,"./views/candidate-view/candidate-job-list":23,"./views/candidate-view/candidate-profile":24,"./views/company-view/company-candidate-list":25,"./views/company-view/company-graph":26,"./views/company-view/company-profile":27,"jquery":4}],6:[function(require,module,exports){
+},{"./services/candidate-service":19,"./services/company-service":20,"./views/adm-view/admin-graph":24,"./views/candidate-view/candidate-job-list":25,"./views/candidate-view/candidate-profile":26,"./views/company-view/company-candidate-list":27,"./views/company-view/company-graph":28,"./views/company-view/company-profile":29,"jquery":4}],6:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const course_status_1 = require("../enums/course-status");
@@ -26072,7 +26072,7 @@ class CandidateService {
 }
 exports.default = CandidateService;
 
-},{"../../../src/main/resources/candidatos.json":28,"../models/candidate/candidate":7}],20:[function(require,module,exports){
+},{"../../../src/main/resources/candidatos.json":30,"../models/candidate/candidate":7}],20:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -26117,7 +26117,7 @@ class CompanyService {
 }
 exports.default = CompanyService;
 
-},{"../../../src/main/resources/empresas.json":29,"../models/company/company":11}],21:[function(require,module,exports){
+},{"../../../src/main/resources/empresas.json":31,"../models/company/company":11}],21:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -26134,7 +26134,295 @@ class JobVacancyService {
 }
 exports.default = JobVacancyService;
 
-},{"../../../src/main/resources/vagas.json":30}],22:[function(require,module,exports){
+},{"../../../src/main/resources/vagas.json":32}],22:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.regexDescription = exports.regexCep = exports.regexCity = exports.regexCpf = exports.regexCnpj = exports.regexEmail = exports.regexText = void 0;
+exports.regexText = /^(?!^\s+)[A-Za-zÀ-ú0-9\.&,\s-]{1,50}$/;
+exports.regexEmail = /^[\w\.-]{2,}@\w{3,}\.\w{2,6}(\.\w{2,3})?$/i;
+exports.regexCnpj = /^\d{2}(\.)?\d{3}(\.)?\d{3}(\/)?\d{4}(-)?\d{2}$/;
+exports.regexCpf = /^\d{3}(\.)?\d{3}(\.)?\d{3}(-)?\d{2}$/;
+exports.regexCity = /^(?!^\s+)([A-Za-zÀ-ú\s]{1,16})*$/i;
+exports.regexCep = /^\d{2}(\.)?\d{3}(-)?\d{3}$/;
+exports.regexDescription = /^(?!^\s+)(\w|\s|\.|,|&)+$/;
+
+},{}],23:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const regex_1 = require("./regex");
+class Validations {
+    static validateBasicCandidateData() {
+        const nameInput = document.getElementById("name");
+        nameInput.addEventListener("input", () => {
+            if (regex_1.regexText.test(nameInput.value)) {
+                nameInput.classList.remove("error");
+            }
+            else {
+                nameInput.classList.add("error");
+            }
+        });
+        const emailInput = document.getElementById("email");
+        emailInput.addEventListener("input", () => {
+            if (regex_1.regexEmail.test(emailInput.value)) {
+                emailInput.classList.remove("error");
+            }
+            else {
+                emailInput.classList.add("error");
+            }
+        });
+        const cpfInput = document.getElementById("cpf");
+        cpfInput.addEventListener("input", () => {
+            if (regex_1.regexCpf.test(cpfInput.value)) {
+                cpfInput.classList.remove("error");
+            }
+            else {
+                cpfInput.classList.add("error");
+            }
+        });
+        const cityInput = document.getElementById("city");
+        cityInput.addEventListener("input", () => {
+            if (regex_1.regexText.test(cityInput.value)) {
+                cityInput.classList.remove("error");
+            }
+            else {
+                cityInput.classList.add("error");
+            }
+        });
+        const cepInput = document.getElementById("cep");
+        cepInput.addEventListener("input", () => {
+            if (regex_1.regexCep.test(cepInput.value)) {
+                cepInput.classList.remove("error");
+            }
+            else {
+                cepInput.classList.add("error");
+            }
+        });
+        const descriptionInput = document.getElementById("description");
+        descriptionInput.addEventListener("input", () => {
+            if (regex_1.regexDescription.test(descriptionInput.value)) {
+                descriptionInput.classList.remove("error");
+            }
+            else {
+                descriptionInput.classList.add("error");
+            }
+        });
+    }
+    static validateAcademicInfos() {
+        const educationalInstitutionInputs = document.querySelectorAll(".educationalInstitution");
+        educationalInstitutionInputs.forEach(educationalInstitutionInput => {
+            educationalInstitutionInput.addEventListener("input", () => {
+                const input = educationalInstitutionInput;
+                if (regex_1.regexText.test(input.value)) {
+                    educationalInstitutionInput.classList.remove("error");
+                }
+                else {
+                    educationalInstitutionInput.classList.add("error");
+                }
+            });
+        });
+        const degreeTypeInputs = document.querySelectorAll(".degreeType");
+        degreeTypeInputs.forEach(degreeTypeInput => {
+            degreeTypeInput.addEventListener("input", () => {
+                const input = degreeTypeInput;
+                if (regex_1.regexText.test(input.value)) {
+                    degreeTypeInput.classList.remove("error");
+                }
+                else {
+                    degreeTypeInput.classList.add("error");
+                }
+            });
+        });
+        const fieldOfStudyInputs = document.querySelectorAll(".fieldOfStudy");
+        fieldOfStudyInputs.forEach(fieldOfStudyInput => {
+            fieldOfStudyInput.addEventListener("input", () => {
+                const input = fieldOfStudyInput;
+                if (regex_1.regexText.test(input.value)) {
+                    fieldOfStudyInput.classList.remove("error");
+                }
+                else {
+                    fieldOfStudyInput.classList.add("error");
+                }
+            });
+        });
+    }
+    static validateWorkInfos() {
+        const titleInputs = document.querySelectorAll(".title");
+        titleInputs.forEach(titleInput => {
+            titleInput.addEventListener("input", () => {
+                const input = titleInput;
+                if (regex_1.regexText.test(input.value)) {
+                    titleInput.classList.remove("error");
+                }
+                else {
+                    titleInput.classList.add("error");
+                }
+            });
+        });
+        const companyNameInputs = document.querySelectorAll(".companyName");
+        companyNameInputs.forEach(companyNameInput => {
+            companyNameInput.addEventListener("input", () => {
+                const input = companyNameInput;
+                if (regex_1.regexText.test(input.value)) {
+                    companyNameInput.classList.remove("error");
+                }
+                else {
+                    companyNameInput.classList.add("error");
+                }
+            });
+        });
+        const cityInputs = document.querySelectorAll(".work-city");
+        cityInputs.forEach(cityInput => {
+            cityInput.addEventListener("input", () => {
+                const input = cityInput;
+                if (regex_1.regexText.test(input.value)) {
+                    cityInput.classList.remove("error");
+                }
+                else {
+                    cityInput.classList.add("error");
+                }
+            });
+        });
+        const descriptionInputs = document.querySelectorAll(".description");
+        descriptionInputs.forEach(descriptionInput => {
+            descriptionInput.addEventListener("input", () => {
+                const input = descriptionInput;
+                if (regex_1.regexText.test(input.value)) {
+                    descriptionInput.classList.remove("error");
+                }
+                else {
+                    descriptionInput.classList.add("error");
+                }
+            });
+        });
+    }
+    static validateLanguageInfos() {
+        const nameInputs = document.querySelectorAll(".language-name");
+        nameInputs.forEach(nameInput => {
+            nameInput.addEventListener("input", () => {
+                const input = nameInput;
+                if (regex_1.regexText.test(input.value)) {
+                    nameInput.classList.remove("error");
+                }
+                else {
+                    nameInput.classList.add("error");
+                }
+            });
+        });
+    }
+    static validateSkillInfos() {
+        const skillInputs = document.querySelectorAll(".skill-name");
+        skillInputs.forEach(skillInput => {
+            skillInput.addEventListener("input", () => {
+                const input = skillInput;
+                if (regex_1.regexText.test(input.value)) {
+                    skillInput.classList.remove("error");
+                }
+                else {
+                    skillInput.classList.add("error");
+                }
+            });
+        });
+    }
+    static validateCertificateInfos() {
+        const titleInputs = document.querySelectorAll(".certificate-name");
+        titleInputs.forEach(titleInput => {
+            titleInput.addEventListener("input", () => {
+                const input = titleInput;
+                if (regex_1.regexText.test(input.value)) {
+                    titleInput.classList.remove("error");
+                }
+                else {
+                    titleInput.classList.add("error");
+                }
+            });
+        });
+        const durationInputs = document.querySelectorAll(".duration");
+        durationInputs.forEach(durationInput => {
+            durationInput.addEventListener("input", () => {
+                const input = durationInput;
+                if (regex_1.regexText.test(input.value)) {
+                    durationInput.classList.remove("error");
+                }
+                else {
+                    durationInput.classList.add("error");
+                }
+            });
+        });
+    }
+    static validateBasicCompanyData() {
+        const nameInput = document.getElementById("name");
+        nameInput.addEventListener("input", () => {
+            if (regex_1.regexText.test(nameInput.value)) {
+                nameInput.classList.remove("error");
+            }
+            else {
+                nameInput.classList.add("error");
+            }
+        });
+        const emailInput = document.getElementById("email");
+        emailInput.addEventListener("input", () => {
+            if (regex_1.regexEmail.test(emailInput.value)) {
+                emailInput.classList.remove("error");
+            }
+            else {
+                emailInput.classList.add("error");
+            }
+        });
+        const cnpjInput = document.getElementById("cnpj");
+        cnpjInput.addEventListener("input", () => {
+            if (regex_1.regexCnpj.test(cnpjInput.value)) {
+                cnpjInput.classList.remove("error");
+            }
+            else {
+                cnpjInput.classList.add("error");
+            }
+        });
+        const cityInput = document.getElementById("city");
+        cityInput.addEventListener("input", () => {
+            if (regex_1.regexCity.test(cityInput.value)) {
+                cityInput.classList.remove("error");
+            }
+            else {
+                cityInput.classList.add("error");
+            }
+        });
+        const cepInput = document.getElementById("cep");
+        cepInput.addEventListener("input", () => {
+            if (regex_1.regexCep.test(cepInput.value)) {
+                cepInput.classList.remove("error");
+            }
+            else {
+                cepInput.classList.add("error");
+            }
+        });
+        const descriptionInput = document.getElementById("description");
+        descriptionInput.addEventListener("input", () => {
+            if (regex_1.regexDescription.test(descriptionInput.value)) {
+                descriptionInput.classList.remove("error");
+            }
+            else {
+                descriptionInput.classList.add("error");
+            }
+        });
+    }
+    static validateBenefits() {
+        const benefitInputs = document.querySelectorAll(".benefit-name");
+        benefitInputs.forEach(benefitInput => {
+            benefitInput.addEventListener("input", () => {
+                const input = benefitInput;
+                if (regex_1.regexText.test(input.value)) {
+                    benefitInput.classList.remove("error");
+                }
+                else {
+                    benefitInput.classList.add("error");
+                }
+            });
+        });
+    }
+}
+exports.default = Validations;
+
+},{"./regex":22}],24:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -26227,7 +26515,7 @@ class AdminGraph {
 }
 exports.default = AdminGraph;
 
-},{"../../../../src/main/resources/candidatos.json":28,"../../../../src/main/resources/empresas.json":29,"../../../../src/main/resources/vagas.json":30,"../../services/candidate-service":19,"../../services/company-service":20,"../../services/job-vacancy-service":21,"chart.js":2,"jquery":4}],23:[function(require,module,exports){
+},{"../../../../src/main/resources/candidatos.json":30,"../../../../src/main/resources/empresas.json":31,"../../../../src/main/resources/vagas.json":32,"../../services/candidate-service":19,"../../services/company-service":20,"../../services/job-vacancy-service":21,"chart.js":2,"jquery":4}],25:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -26299,7 +26587,7 @@ class CandidateJobList {
 }
 exports.default = CandidateJobList;
 
-},{"../../services/job-vacancy-service":21,"jquery":4}],24:[function(require,module,exports){
+},{"../../services/job-vacancy-service":21,"jquery":4}],26:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -26317,6 +26605,7 @@ const work_experience_1 = __importDefault(require("../../models/candidate/work-e
 const language_1 = __importDefault(require("../../models/shared/language"));
 const skill_1 = __importDefault(require("../../models/shared/skill"));
 const certificate_1 = __importDefault(require("../../models/candidate/certificate"));
+const validations_1 = __importDefault(require("../../utils/validations"));
 class CandidateProfile {
     generateForm() {
         var _a;
@@ -26373,6 +26662,7 @@ class CandidateProfile {
                 </div>
             </div>
         `);
+        validations_1.default.validateBasicCandidateData();
     }
     generateAcademicInformation() {
         (0, jquery_1.default)("#table").append(`
@@ -26422,17 +26712,17 @@ class CandidateProfile {
                     <div class="form-list form-text">
                         <div class="form-field">
                             <label>Instituição:</label>
-                            <input type="text" class="educationalInstitution">
+                            <input type="text" class="educationalInstitution error">
                         </div>
                         <div class="form-field">
                             <label>Diploma:</label>
-                            <input type="text" class="degreeType">
+                            <input type="text" class="degreeType error">
                         </div>
                     </div>
                     <div class="form-list form-text">
                         <div class="form-field">
                             <label>Curso:</label>
-                            <input type="text" class="fieldOfStudy">
+                            <input type="text" class="fieldOfStudy error">
                         </div>
                         <div class="form-field">
                             <label>Status:</label>
@@ -26446,6 +26736,7 @@ class CandidateProfile {
                     </div>
                 </div>
             `);
+            validations_1.default.validateAcademicInfos();
         });
         document.querySelectorAll(".academic-information").forEach(academic => {
             academic.querySelectorAll(".delete-btn").forEach(btn => {
@@ -26464,11 +26755,11 @@ class CandidateProfile {
                     <div class="form-list form-text">
                         <div class="form-field">
                             <label>Cargo:</label>
-                            <input type="text" class="title">
+                            <input type="text" class="title error">
                         </div>
                         <div class="form-field">
                             <label>Empresa:</label>
-                            <input type="text" class="companyName">
+                            <input type="text" class="companyName error">
                         </div>
                     </div>
                     <div class="form-list form-text">
@@ -26488,7 +26779,7 @@ class CandidateProfile {
                     <div class="form-list form-text">
                         <div class="form-field">
                             <label>Cidade:</label>
-                            <input type="text" class="work-city">
+                            <input type="text" class="work-city error">
                         </div>
                         <div class="form-field">
                             <label>Estado:</label>
@@ -26499,18 +26790,19 @@ class CandidateProfile {
                     </div>
                     <div class="form-field">
                         <label>Sobre:</label>
-                        <input type="text" class="description">
+                        <input type="text" class="description error">
                     </div>
                     <div class="form-field line">
                         <label class="work-label">Trabalho Atual:</label>
                         <input type="checkbox" class="currently-work">
-                        <span class="material-symbols-outlined work-btn">delete</span>
+                        <span class="material-symbols-outlined work-delete-btn">delete</span>
                     </div>
                 </div>
             `);
+            validations_1.default.validateWorkInfos();
         });
         document.querySelectorAll(".work-information").forEach(work => {
-            work.querySelectorAll(".delete-btn").forEach(btn => {
+            work.querySelectorAll(".work-delete-btn").forEach(btn => {
                 btn.addEventListener("click", () => {
                     work.remove();
                 });
@@ -26526,7 +26818,7 @@ class CandidateProfile {
                     <div class="form-list form-text">
                         <div class="form-field">
                             <label>Idioma:</label>
-                            <input type="text" class="language-name">
+                            <input type="text" class="language-name error">
                         </div>
                         <div class="form-field">
                             <label>Tipo de contrato:</label>
@@ -26540,6 +26832,7 @@ class CandidateProfile {
                     </div>
                 </div>
             `);
+            validations_1.default.validateLanguageInfos();
         });
         document.querySelectorAll(".language-information").forEach(language => {
             language.querySelectorAll(".delete-btn").forEach(btn => {
@@ -26558,7 +26851,7 @@ class CandidateProfile {
                     <div class="form-list form-text">
                         <div class="form-field">
                             <label>Habilidade:</label>
-                            <input type="text" class="skill-name">
+                            <input type="text" class="skill-name error">
                         </div>
                         <div class="form-field">
                             <label>Tipo de contrato:</label>
@@ -26572,6 +26865,7 @@ class CandidateProfile {
                     </div>
                 </div>
             `);
+            validations_1.default.validateSkillInfos();
         });
         document.querySelectorAll(".skill-information").forEach(skill => {
             skill.querySelectorAll(".delete-btn").forEach(btn => {
@@ -26589,18 +26883,19 @@ class CandidateProfile {
                     <div class="form-list">
                         <div class="form-field">
                             <label>Certificação:</label>
-                            <input type="text" class="certificate-name">
+                            <input type="text" class="certificate-name error">
                         </div>
                         <div class="form-field">
                             <label>Duração:</label>
                             <div class="line">
-                                <input type="text" class="duration">
+                                <input type="text" class="duration error">
                                 <span class="material-symbols-outlined delete-btn">delete</span>
                             </div>
                         </div>
                     </div>
                 </div>
             `);
+            validations_1.default.validateCertificateInfos();
         });
         document.querySelectorAll(".certification-information").forEach(certification => {
             certification.querySelectorAll(".delete-btn").forEach(btn => {
@@ -26619,70 +26914,76 @@ class CandidateProfile {
             </div>
         `);
         (_a = document.getElementById("submit-input")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", function () {
-            let candidateService = new candidate_service_1.default();
-            let candidate = candidateService.generateCandidate();
-            candidate.name = (0, jquery_1.default)("#name").val();
-            candidate.email = (0, jquery_1.default)("#email").val();
-            candidate.city = (0, jquery_1.default)("#city").val();
-            candidate.state = (0, jquery_1.default)("#states :selected").val();
-            candidate.cep = (0, jquery_1.default)("#cep").val();
-            candidate.description = (0, jquery_1.default)("#description").val();
-            candidate.cpf = (0, jquery_1.default)("#cpf").val();
-            let academicExperiences = [];
-            let academicId = 1;
-            let academicInfos = Array.from(document.querySelectorAll(".academic-information"));
-            academicInfos.forEach(function (info) {
-                let educationalInstitution = info.querySelector(".educationalInstitution").value;
-                let degreeType = info.querySelector(".degreeType").value;
-                let fieldOfStudy = info.querySelector(".fieldOfStudy").value;
-                let status = info.querySelector(".courseStatus").value;
-                academicExperiences.push(new academic_experience_1.default(academicId++, educationalInstitution, degreeType, fieldOfStudy, status));
-            });
-            candidate.academicExperiences = academicExperiences;
-            let workExperiences = [];
-            let workId = 1;
-            let workInfos = Array.from(document.querySelectorAll(".work-information"));
-            workInfos.forEach(function (info) {
-                let title = info.querySelector(".title").value;
-                let companyName = info.querySelector(".companyName").value;
-                let contractType = info.querySelector(".contractType").value;
-                let locationType = info.querySelector(".locationType").value;
-                let city = info.querySelector(".city").value;
-                let state = info.querySelector(".state").value;
-                let currentlyWork = info.querySelector(".currently-work").checked;
-                let description = info.querySelector(".description").value;
-                workExperiences.push(new work_experience_1.default(workId++, title, companyName, contractType, locationType, city, state, currentlyWork, description));
-            });
-            candidate.workExperiences = workExperiences;
-            let languages = [];
-            let languagesId = 1;
-            let languageInfos = Array.from(document.querySelectorAll(".language-information"));
-            languageInfos.forEach(function (info) {
-                let name = info.querySelector(".language-name").value;
-                let proficiency = info.querySelector(".language-proficiency").value;
-                languages.push(new language_1.default(languagesId++, name, proficiency));
-            });
-            candidate.languages = languages;
-            let skills = [];
-            let skillsId = 1;
-            let skillInfos = Array.from(document.querySelectorAll(".skill-information"));
-            skillInfos.forEach(function (info) {
-                let title = info.querySelector(".skill-name").value;
-                let proficiency = info.querySelector(".skill-proficiency").value;
-                skills.push(new skill_1.default(skillsId++, title, proficiency));
-            });
-            candidate.skills = skills;
-            let certificates = [];
-            let certificatesId = 1;
-            let certificateInfos = Array.from(document.querySelectorAll(".certification-information"));
-            certificateInfos.forEach(function (info) {
-                let title = info.querySelector(".certificate-name").value;
-                let duration = info.querySelector(".duration").value;
-                certificates.push(new certificate_1.default(certificatesId++, title, duration));
-            });
-            candidate.certificates = certificates;
-            candidateService.updateCandidate(candidate);
-            window.location.href = "http://localhost:5502/dist/";
+            const hasError = document.getElementsByClassName("error");
+            if (!hasError.length) {
+                let candidateService = new candidate_service_1.default();
+                let candidate = candidateService.generateCandidate();
+                candidate.name = (0, jquery_1.default)("#name").val();
+                candidate.email = (0, jquery_1.default)("#email").val();
+                candidate.city = (0, jquery_1.default)("#city").val();
+                candidate.state = (0, jquery_1.default)("#states :selected").val();
+                candidate.cep = (0, jquery_1.default)("#cep").val();
+                candidate.description = (0, jquery_1.default)("#description").val();
+                candidate.cpf = (0, jquery_1.default)("#cpf").val();
+                let academicExperiences = [];
+                let academicId = 1;
+                let academicInfos = Array.from(document.querySelectorAll(".academic-information"));
+                academicInfos.forEach(function (info) {
+                    let educationalInstitution = info.querySelector(".educationalInstitution").value;
+                    let degreeType = info.querySelector(".degreeType").value;
+                    let fieldOfStudy = info.querySelector(".fieldOfStudy").value;
+                    let status = info.querySelector(".courseStatus").value;
+                    academicExperiences.push(new academic_experience_1.default(academicId++, educationalInstitution, degreeType, fieldOfStudy, status));
+                });
+                candidate.academicExperiences = academicExperiences;
+                let workExperiences = [];
+                let workId = 1;
+                let workInfos = Array.from(document.querySelectorAll(".work-information"));
+                workInfos.forEach(function (info) {
+                    let title = info.querySelector(".title").value;
+                    let companyName = info.querySelector(".companyName").value;
+                    let contractType = info.querySelector(".contractType").value;
+                    let locationType = info.querySelector(".locationType").value;
+                    let city = info.querySelector(".work-city").value;
+                    let state = info.querySelector(".work-state").value;
+                    let currentlyWork = info.querySelector(".currently-work").checked;
+                    let description = info.querySelector(".description").value;
+                    workExperiences.push(new work_experience_1.default(workId++, title, companyName, contractType, locationType, city, state, currentlyWork, description));
+                });
+                candidate.workExperiences = workExperiences;
+                let languages = [];
+                let languagesId = 1;
+                let languageInfos = Array.from(document.querySelectorAll(".language-information"));
+                languageInfos.forEach(function (info) {
+                    let name = info.querySelector(".language-name").value;
+                    let proficiency = info.querySelector(".language-proficiency").value;
+                    languages.push(new language_1.default(languagesId++, name, proficiency));
+                });
+                candidate.languages = languages;
+                let skills = [];
+                let skillsId = 1;
+                let skillInfos = Array.from(document.querySelectorAll(".skill-information"));
+                skillInfos.forEach(function (info) {
+                    let title = info.querySelector(".skill-name").value;
+                    let proficiency = info.querySelector(".skill-proficiency").value;
+                    skills.push(new skill_1.default(skillsId++, title, proficiency));
+                });
+                candidate.skills = skills;
+                let certificates = [];
+                let certificatesId = 1;
+                let certificateInfos = Array.from(document.querySelectorAll(".certification-information"));
+                certificateInfos.forEach(function (info) {
+                    let title = info.querySelector(".certificate-name").value;
+                    let duration = info.querySelector(".duration").value;
+                    certificates.push(new certificate_1.default(certificatesId++, title, duration));
+                });
+                candidate.certificates = certificates;
+                candidateService.updateCandidate(candidate);
+                window.location.href = "http://localhost:5502/dist/";
+            }
+            else {
+                alert("Cadastro não pode ser salvo, corriga os campos em vermelho.");
+            }
         });
         (_b = document.getElementById("cancel-input")) === null || _b === void 0 ? void 0 : _b.addEventListener("click", function () {
             window.location.href = "http://localhost:5502/dist/";
@@ -26779,6 +27080,7 @@ class CandidateProfile {
                 </div>
             </div>
         `);
+        validations_1.default.validateBasicCandidateData();
     }
     populateAcademicInformation(candidate) {
         const self = this;
@@ -26817,6 +27119,7 @@ class CandidateProfile {
                 </div>
             `);
         });
+        validations_1.default.validateAcademicInfos();
         this.generateAcademicButton();
     }
     populateWorkInformation(candidate) {
@@ -26872,11 +27175,12 @@ class CandidateProfile {
                     <div class="form-field line">
                         <label class="work-label">Trabalho Atual:</label>
                         <input type="checkbox" class="currently-work" ${work.currentlyWork ? "checked" : ""}>
-                        <span class="material-symbols-outlined work-btn">delete</span>
+                        <span class="material-symbols-outlined work-delete-btn">delete</span>
                     </div>
                 </div>
             `);
         });
+        validations_1.default.validateWorkInfos();
         this.generateWorkButton();
     }
     populateLanguageInformation(candidate) {
@@ -26907,6 +27211,7 @@ class CandidateProfile {
                 </div>
             `);
         });
+        validations_1.default.validateLanguageInfos();
         this.generateLanguageButton();
     }
     populateSkillInformation(candidate) {
@@ -26937,6 +27242,7 @@ class CandidateProfile {
                 </div>
             `);
         });
+        validations_1.default.validateSkillInfos();
         this.generateSkillButton();
     }
     populateCertificateInformation(candidate) {
@@ -26965,6 +27271,7 @@ class CandidateProfile {
                 </div>
             `);
         });
+        validations_1.default.validateCertificateInfos();
         this.generateCertificateButton();
     }
     populateState(selectedState) {
@@ -27015,7 +27322,7 @@ class CandidateProfile {
 }
 exports.default = CandidateProfile;
 
-},{"../../models/candidate/academic-experience":6,"../../models/candidate/certificate":8,"../../models/candidate/work-experience":9,"../../models/enums/contract-type":12,"../../models/enums/course-status":13,"../../models/enums/location-type":14,"../../models/enums/proficiency":15,"../../models/enums/state":16,"../../models/shared/language":17,"../../models/shared/skill":18,"../../services/candidate-service":19,"jquery":4}],25:[function(require,module,exports){
+},{"../../models/candidate/academic-experience":6,"../../models/candidate/certificate":8,"../../models/candidate/work-experience":9,"../../models/enums/contract-type":12,"../../models/enums/course-status":13,"../../models/enums/location-type":14,"../../models/enums/proficiency":15,"../../models/enums/state":16,"../../models/shared/language":17,"../../models/shared/skill":18,"../../services/candidate-service":19,"../../utils/validations":23,"jquery":4}],27:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -27112,7 +27419,7 @@ class CompanyCandidateList {
 }
 exports.default = CompanyCandidateList;
 
-},{"../../services/candidate-service":19,"../../services/company-service":20,"jquery":4}],26:[function(require,module,exports){
+},{"../../services/candidate-service":19,"../../services/company-service":20,"jquery":4}],28:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -27205,7 +27512,7 @@ class CompanyGraph {
 }
 exports.default = CompanyGraph;
 
-},{"../../../../src/main/resources/candidatos.json":28,"../../services/candidate-service":19,"chart.js":2,"jquery":4}],27:[function(require,module,exports){
+},{"../../../../src/main/resources/candidatos.json":30,"../../services/candidate-service":19,"chart.js":2,"jquery":4}],29:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -27215,6 +27522,7 @@ const jquery_1 = __importDefault(require("jquery"));
 const state_1 = require("../../models/enums/state");
 const company_service_1 = __importDefault(require("../../services/company-service"));
 const benefit_1 = __importDefault(require("../../models/company/benefit"));
+const validations_1 = __importDefault(require("../../utils/validations"));
 class CompanyProfile {
     generateForm() {
         var _a;
@@ -27267,6 +27575,7 @@ class CompanyProfile {
                 </div>
             </div>
         `);
+        validations_1.default.validateBasicCandidateData();
     }
     generateBenefit() {
         (0, jquery_1.default)("#table").append(`
@@ -27285,13 +27594,14 @@ class CompanyProfile {
                         <div class="form-field">
                             <label>Benefício:</label>
                             <div class="line">
-                                <input type="text" class="benefit-name">
+                                <input type="text" class="benefit-name error">
                                 <span class="material-symbols-outlined delete-btn">delete</span>
                             </div>
                         </div>
                     </div>
                 </div>
             `);
+            validations_1.default.validateBenefits();
         });
         document.querySelectorAll(".benefit-information").forEach(benefit => {
             benefit.querySelectorAll(".delete-btn").forEach(btn => {
@@ -27310,25 +27620,31 @@ class CompanyProfile {
             </div>
         `);
         (_a = document.getElementById("submit-input")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", function () {
-            let companyService = new company_service_1.default();
-            let company = companyService.generateCompany();
-            company.name = (0, jquery_1.default)("#name").val();
-            company.email = (0, jquery_1.default)("#email").val();
-            company.cnpj = (0, jquery_1.default)("#cnpj").val();
-            company.city = (0, jquery_1.default)("#city").val();
-            company.state = (0, jquery_1.default)("#states :selected").val();
-            company.cep = (0, jquery_1.default)("#cep").val();
-            company.description = (0, jquery_1.default)("#description").val();
-            let benefits = [];
-            let benefitId = 1;
-            let benefitInfos = Array.from(document.querySelectorAll(".benefit-information"));
-            benefitInfos.forEach(function (info) {
-                let title = info.querySelector(".benefit-name").value;
-                benefits.push(new benefit_1.default(benefitId++, title));
-            });
-            company.benefits = benefits;
-            companyService.updateCompany(company);
-            window.location.href = "http://localhost:5502/dist/";
+            const hasError = document.getElementsByClassName("error");
+            if (!hasError.length) {
+                let companyService = new company_service_1.default();
+                let company = companyService.generateCompany();
+                company.name = (0, jquery_1.default)("#name").val().trim();
+                company.email = (0, jquery_1.default)("#email").val().trim();
+                company.cnpj = (0, jquery_1.default)("#cnpj").val().trim();
+                company.city = (0, jquery_1.default)("#city").val().trim();
+                company.state = (0, jquery_1.default)("#states :selected").val();
+                company.cep = (0, jquery_1.default)("#cep").val().trim();
+                company.description = (0, jquery_1.default)("#description").val().trim();
+                let benefits = [];
+                let benefitId = 1;
+                let benefitInfos = Array.from(document.querySelectorAll(".benefit-information"));
+                benefitInfos.forEach(function (info) {
+                    let title = info.querySelector(".benefit-name").value;
+                    benefits.push(new benefit_1.default(benefitId++, title));
+                });
+                company.benefits = benefits;
+                companyService.updateCompany(company);
+                window.location.href = "http://localhost:5502/dist/";
+            }
+            else {
+                alert("Cadastro não pode ser salvo, corriga os campos em vermelho.");
+            }
         });
         (_b = document.getElementById("cancel-input")) === null || _b === void 0 ? void 0 : _b.addEventListener("click", function () {
             window.location.href = "http://localhost:5502/dist/";
@@ -27393,6 +27709,7 @@ class CompanyProfile {
                 </div>
             </div>
         `);
+        validations_1.default.validateBasicCompanyData();
     }
     populateBenefit(company) {
         (0, jquery_1.default)("#table").append(`
@@ -27415,6 +27732,7 @@ class CompanyProfile {
                 </div>
             `);
         });
+        validations_1.default.validateBenefits();
         this.generateBenefitButton();
     }
     populateState(selectedState) {
@@ -27429,7 +27747,7 @@ class CompanyProfile {
 }
 exports.default = CompanyProfile;
 
-},{"../../models/company/benefit":10,"../../models/enums/state":16,"../../services/company-service":20,"jquery":4}],28:[function(require,module,exports){
+},{"../../models/company/benefit":10,"../../models/enums/state":16,"../../services/company-service":20,"../../utils/validations":23,"jquery":4}],30:[function(require,module,exports){
 module.exports=[
     {
         "skills": [
@@ -28052,7 +28370,7 @@ module.exports=[
         "city": "S\u00e3o Carlos"
     }
 ]
-},{}],29:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 module.exports=[
     {
         "jobVacancies": [
@@ -28185,7 +28503,7 @@ module.exports=[
         "city": "Curitiba"
     }
 ]
-},{}],30:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 module.exports=[
     {
         "locationType": "Hibrido",
