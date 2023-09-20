@@ -133,7 +133,6 @@ form {
 
 div .city {
     width: 45%;
-    /* width: 100%; */
 }
 
 .work-city {
@@ -146,7 +145,6 @@ div .city {
 
 div .state {
     width: 31%;
-    /* width: 100%; */
 }
 
 div .cep {
@@ -184,7 +182,7 @@ div .cep {
     margin-top: 5px;
 }
 
-.work-btn {
+.work-delete-btn {
     cursor: pointer;
     margin: -2px 0 0 3px;
 }
@@ -213,7 +211,6 @@ div .cep {
 .line {
     display: flex;
     flex-direction: row;
-    /* width: 100%; */
 }
 
 .courseStatus {
@@ -342,4 +339,8 @@ div .cep {
 
 #candidate-body tr:nth-child(even) {
     background-color: #EDEDE9;
+}
+
+.form-field .error {
+    border: 1px solid #EF4050;
 }

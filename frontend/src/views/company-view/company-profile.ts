@@ -4,6 +4,7 @@ import { State } from "../../models/enums/state";
 import Company from "../../models/company/company";
 import CompanyService from "../../services/company-service";
 import Benefit from "../../models/company/benefit";
+import Validations from "../../utils/validations";
 
 export default class CompanyProfile {
 
@@ -60,6 +61,8 @@ export default class CompanyProfile {
                 </div>
             </div>
         `);
+
+        Validations.validateBasicCandidateData();
     }
 
     generateBenefit(): void {
@@ -80,13 +83,15 @@ export default class CompanyProfile {
                         <div class="form-field">
                             <label>Benefício:</label>
                             <div class="line">
-                                <input type="text" class="benefit-name">
+                                <input type="text" class="benefit-name error">
                                 <span class="material-symbols-outlined delete-btn">delete</span>
                             </div>
                         </div>
                     </div>
                 </div>
             `);
+
+            Validations.validateBenefits();
         });
 
         document.querySelectorAll(".benefit-information").forEach(benefit => {
@@ -107,29 +112,35 @@ export default class CompanyProfile {
         `);
 
         document.getElementById("submit-input")?.addEventListener("click", function(): void {
-            let companyService: CompanyService = new CompanyService();
-            let company = companyService.generateCompany();
+            const hasError = document.getElementsByClassName("error");
 
-            company.name = <string> $("#name").val();
-            company.email = <string> $("#email").val();
-            company.cnpj = <string> $("#cnpj").val();
-            company.city = <string> $("#city").val();
-            company.state = <State> $("#states :selected").val();
-            company.cep = <string> $("#cep").val();
-            company.description = <string> $("#description").val();            
-
-            let benefits: Benefit[] = [];
-            let benefitId: number = 1;
-            let benefitInfos = Array.from(document.querySelectorAll(".benefit-information"));
-            benefitInfos.forEach(function(info) {
-                let title = (info.querySelector(".benefit-name") as HTMLInputElement).value;
-                benefits.push(new Benefit(benefitId++, title));
-            });
-            company.benefits = benefits;
-
-            companyService.updateCompany(company);
-            
-            window.location.href = "http://localhost:5502/dist/";
+            if (!hasError.length) {
+                let companyService: CompanyService = new CompanyService();
+                let company = companyService.generateCompany();
+    
+                company.name = ($("#name").val() as string).trim();
+                company.email = ($("#email").val() as string).trim();
+                company.cnpj = ($("#cnpj").val() as string).trim();
+                company.city = ($("#city").val() as string).trim();
+                company.state = <State> $("#states :selected").val();
+                company.cep = ($("#cep").val() as string).trim();
+                company.description = ($("#description").val() as string).trim();            
+    
+                let benefits: Benefit[] = [];
+                let benefitId: number = 1;
+                let benefitInfos = Array.from(document.querySelectorAll(".benefit-information"));
+                benefitInfos.forEach(function(info) {
+                    let title = (info.querySelector(".benefit-name") as HTMLInputElement).value;
+                    benefits.push(new Benefit(benefitId++, title));
+                });
+                company.benefits = benefits;
+                
+                companyService.updateCompany(company);
+                
+                window.location.href = "http://localhost:5502/dist/";
+            } else {
+                alert("Cadastro não pode ser salvo, corriga os campos em vermelho.");
+            }
         });
 
         document.getElementById("cancel-input")?.addEventListener("click", function(): void {
@@ -199,6 +210,8 @@ export default class CompanyProfile {
                 </div>
             </div>
         `);
+
+        Validations.validateBasicCompanyData();
     }
 
     populateBenefit(company: Company): void {
@@ -223,7 +236,8 @@ export default class CompanyProfile {
                 </div>
             `); 
         });
-        
+
+        Validations.validateBenefits();
         this.generateBenefitButton();
     }
 
