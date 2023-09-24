@@ -7,7 +7,8 @@ Projeto para desenvolver uma aplicação chamada Linketinder.
 * CRUD de Candidatos e Empresas
 * Criado persistência em .json para manter os Candidatos e Empresas salvas e facilitar o uso.
 * Criado frontend em Typescript, HTML e CSS.
-* Feito a modelagem do Banco de Dados.
+* Feito a modelagem do Banco de Dados, gerado no dbDesigner (https://www.dbdesigner.net/).
+* https://erd.dbdesigner.net/designer/schema/1695472689-untitled
 * Criado Banco de Dados PostgreSQL
 
 ## MER
