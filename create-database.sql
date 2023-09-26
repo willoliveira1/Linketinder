@@ -154,6 +154,18 @@ CREATE TABLE job_vacancy_skills (
   skill_id INTEGER NOT NULL REFERENCES skills(id)
 );
 
+CREATE TABLE candidate_matches (
+    id SERIAL PRIMARY KEY,
+    candidate_id INT REFERENCES candidates(id),
+    company_job_vacancy_id INT REFERENCES company_job_vacancies(id)
+);
+
+CREATE TABLE company_matches (
+    id SERIAL PRIMARY KEY,
+    company_job_vacancy_id INT REFERENCES company_job_vacancies(id),
+    candidate_match_id INT REFERENCES candidate_matches(id)
+);
+
 
 
 -- Data Inserts
@@ -392,3 +404,29 @@ INSERT INTO candidate_skills (candidate_id, skill_id, proficiency_id) VALUES
 (5, 11, 2),
 (5, 8, 1),
 (5, 12, 3);
+
+INSERT INTO candidate_matches (candidate_id, company_job_vacancy_id) VALUES
+(1, 1),
+(1, 2),
+(1, 6),
+(2, 3),
+(4, 5),
+(4, 1),
+(3, 3),
+(3, 4),
+(5, 1),
+(5, 6),
+(5, 4),
+(3, 1);
+
+INSERT INTO company_matches (company_job_vacancy_id, candidate_match_id) VALUES
+(1, 1),
+(1, 2),
+(1, 3),
+(2, 2),
+(3, 4),
+(4, 1),
+(4, 5),
+(6, 1),
+(6, 3),
+(6, 4);
