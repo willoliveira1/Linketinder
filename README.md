@@ -11,8 +11,7 @@ Projeto para desenvolver uma aplicação chamada Linketinder.
 * Criado Banco de Dados PostgreSQL.
 * Adicionado tabelas ao BD referentes a funcionalidade de Match, a lógica aplicada é dividida em etapas:
    * Candidato ve a lista de vagas e curte as que lhe despertaram o interesse.
-   * A empresa acessa uma de suas vagas e ve parcialmente as informações dos candidatos que curtiram a vaga.
-   * A empresa curte os candidatos que ela achou aderente a vaga.
+   * A empresa acessa a lista de candidatos e curte os candidatos que lhe interessam.
    * Nesse momento o match é concretizado, aqui a empresa consegue visualizar todas as informações do candidato e podem seguir para as próximas etapas do processo seletivo.
 
 ## MER
