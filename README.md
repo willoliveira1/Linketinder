@@ -8,7 +8,7 @@ Projeto para desenvolver uma aplicação chamada Linketinder.
 * Criado persistência em .json para manter os Candidatos e Empresas salvas e facilitar o uso.
 * Criado frontend em Typescript, HTML e CSS.
 * Feito a modelagem do Banco de Dados, gerado no dbDesigner (https://www.dbdesigner.net/).
-* Criado Banco de Dados PostgreSQL.
+* Criado Banco de Dados PostgreSQL, estrutura esta no create-and-populate-database.sql.
 * Adicionado tabelas ao BD referentes a funcionalidade de Match, a lógica aplicada é dividida em etapas:
    * Candidato ve a lista de vagas e curte as que lhe despertaram o interesse.
    * A empresa acessa a lista de candidatos e curte os candidatos que lhe interessam.
