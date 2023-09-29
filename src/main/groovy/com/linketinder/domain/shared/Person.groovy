@@ -17,14 +17,7 @@ abstract class Person {
 
     @Override
     String toString() {
-        return "id=" + id +
-                ", name='" + name +
-                ", email='" + email +
-                ", city='" + city +
-                ", state=" + state +
-                ", country='" + country +
-                ", cep='" + cep +
-                ", description='" + description +
-                ", "
+        return """id=${id}, name=${name}, email=${email}, city=${city}, state=${state}, 
+            country=${country}, cep=${cep}, description=${description}, """
     }
 }

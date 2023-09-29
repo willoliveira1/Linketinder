@@ -3,7 +3,7 @@ package com.linketinder.domain.candidate
 enum CourseStatus {
 
     Cursando,
-    Concluido,
+    Concluído,
     Trancado
 
 }

@@ -13,10 +13,7 @@ class Company extends Person {
 
     @Override
     String toString() {
-        return super.toString() +
-                "cnpj=" + cnpj +
-                ", jobVacancies=" + jobVacancies +
-                ", benefits=" + benefits
+        return "${super.toString()}cnpj=${cnpj}, jobVacancies=${jobVacancies}, benefits=${benefits}"
     }
 
 }
