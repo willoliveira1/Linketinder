@@ -4,8 +4,8 @@ enum ContractType {
 
     CLT,
     PJ,
-    Temporario,
-    Estagio,
+    Temporário,
+    Estágio,
     Aprendiz
 
 }
