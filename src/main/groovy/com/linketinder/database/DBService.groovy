@@ -16,6 +16,7 @@ class DBService {
         while (result.next()) {
             return result.getInt("id")
         }
+        return -1
     }
 
 

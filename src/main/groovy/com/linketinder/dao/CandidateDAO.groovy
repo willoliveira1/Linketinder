@@ -331,11 +331,11 @@ class CandidateDAO {
         return candidate
     }
 
-    boolean insertCandidate(Candidate candidate) {
+    void insertCandidate(Candidate candidate) {
         try {
-            String insertCandidateQuery = "INSERT INTO candidates (name, email, city, state_id, country, cep, " +
+            String insertCandidate = "INSERT INTO candidates (name, email, city, state_id, country, cep, " +
                     "description, cpf) VALUES (?,?,?,?,?,?,?,?)"
-            PreparedStatement stmt = sql.connection.prepareStatement(insertCandidateQuery,
+            PreparedStatement stmt = sql.connection.prepareStatement(insertCandidate,
                     Statement.RETURN_GENERATED_KEYS)
             stmt.setString(1, candidate.name)
             stmt.setString(2, candidate.getEmail())
@@ -344,7 +344,6 @@ class CandidateDAO {
             stmt.setString(6, candidate.getCep())
             stmt.setString(7, candidate.getDescription())
             stmt.setString(8, candidate.getCpf())
-
 
 
 
@@ -364,9 +363,9 @@ class CandidateDAO {
 
 
             if (candidateId != -1) {
-                String insertCertificatesQuery = "INSERT INTO certificates (candidate_id, title, duration) " +
+                String insertCertificates = "INSERT INTO certificates (candidate_id, title, duration) " +
                         "VALUES (?,?,?)"
-                PreparedStatement certificationsStmt = sql.connection.prepareStatement(insertCertificatesQuery,
+                PreparedStatement certificationsStmt = sql.connection.prepareStatement(insertCertificates,
                         Statement.RETURN_GENERATED_KEYS)
                 for (Certificate certificate in candidate.certificates) {
                     certificationsStmt.setInt(1, candidateId)
@@ -377,11 +376,10 @@ class CandidateDAO {
 
 
 
-
-                String insertAcademicExperiencesQuery = "INSERT INTO academic_experiences (candidate_id, " +
+                String insertAcademicExperiences = "INSERT INTO academic_experiences (candidate_id, " +
                         "educational_institution, degree_type, field_of_study, course_status_id) VALUES (?,?,?,?,?)"
-                PreparedStatement academicExperiencesStmt = sql.connection.prepareStatement(
-                        insertAcademicExperiencesQuery, Statement.RETURN_GENERATED_KEYS)
+                PreparedStatement academicExperiencesStmt = sql.connection.prepareStatement(insertAcademicExperiences,
+                        Statement.RETURN_GENERATED_KEYS)
                 for (AcademicExperience academicExperience in candidate.academicExperiences) {
                     academicExperiencesStmt.setInt(1, candidateId)
                     academicExperiencesStmt.setString(2, academicExperience.educationalInstitution)
@@ -397,11 +395,10 @@ class CandidateDAO {
 
 
 
-
-                String insertLanguagesQuery = "INSERT INTO candidate_languages (candidate_id, language_id, " +
+                String insertLanguages = "INSERT INTO candidate_languages (candidate_id, language_id, " +
                         "proficiency_id) VALUES (?,?,?)"
-                PreparedStatement languagesStmt = sql.connection.prepareStatement(
-                        insertLanguagesQuery, Statement.RETURN_GENERATED_KEYS)
+                PreparedStatement languagesStmt = sql.connection.prepareStatement(insertLanguages,
+                        Statement.RETURN_GENERATED_KEYS)
                 for (Language language in candidate.languages) {
                     languagesStmt.setInt(1, candidateId)
 
@@ -417,18 +414,18 @@ class CandidateDAO {
 
 
 
-
-                String insertSkillsQuery = "INSERT INTO candidate_skills (candidate_id, skill_id, " +
+                String insertSkills = "INSERT INTO candidate_skills (candidate_id, skill_id, " +
                         "proficiency_id) VALUES (?,?,?)"
-                PreparedStatement skillsStmt = sql.connection.prepareStatement(
-                        insertSkillsQuery, Statement.RETURN_GENERATED_KEYS)
+                PreparedStatement skillsStmt = sql.connection.prepareStatement(insertSkills,
+                        Statement.RETURN_GENERATED_KEYS)
                 for (Skill skill in candidate.skills) {
                     skillsStmt.setInt(1, candidateId)
 
                     int skillId = dbService.idFinder("skills", "title", skill.getTitle())
                     skillsStmt.setInt(2, skillId)
 
-                    int proficiencyId = dbService.idFinder("proficiences", "title", skill.getProficiency().toString())
+                    int proficiencyId = dbService.idFinder("proficiences", "title",
+                            skill.getProficiency().toString())
                     skillsStmt.setInt(3, proficiencyId)
 
                     skillsStmt.executeUpdate()
@@ -436,58 +433,160 @@ class CandidateDAO {
 
 
 
-
-                String insertWorkExperiencesQuery = "INSERT INTO work_experiences (candidate_id, title, company_name," +
+                String insertWorkExperiences = "INSERT INTO work_experiences (candidate_id, title, company_name," +
                         " city, currently_work, description, state_id, contract_type_id, location_id) VALUES " +
                         "(?,?,?,?,?,?,?,?,?)"
-                PreparedStatement workExperiencesStmt = sql.connection.prepareStatement(
-                        insertWorkExperiencesQuery, Statement.RETURN_GENERATED_KEYS)
+                PreparedStatement workExperiencesStmt = sql.connection.prepareStatement(insertWorkExperiences,
+                        Statement.RETURN_GENERATED_KEYS)
                 for (WorkExperience workExperience in candidate.workExperiences) {
                     workExperiencesStmt.setInt(1, candidateId)
+                    workExperiencesStmt.setString(2, workExperience.title)
+                    workExperiencesStmt.setString(3, workExperience.companyName)
+                    workExperiencesStmt.setString(4, workExperience.city)
+                    workExperiencesStmt.setBoolean(5, workExperience.currentlyWork)
 
-                    int workExperienceId = dbService.idFinder("work_experiences", "title", workExperience.getTitle())
-                    workExperiencesStmt.setInt(2, workExperienceId)
+                    workExperiencesStmt.setString(6, workExperience.description)
 
+                    int workStateId = dbService.idFinder("states", "acronym", workExperience.getState().toString())
+                    workExperiencesStmt.setInt(7, workStateId)
 
+                    int contractTypeId = dbService.idFinder("contract_types", "title", workExperience.getContractType().toString())
+                    workExperiencesStmt.setInt(8, contractTypeId)
 
-
-
+                    int locationTypeId = dbService.idFinder("location_types", "title", workExperience.getLocationType().toString())
+                    workExperiencesStmt.setInt(9, locationTypeId)
 
                     workExperiencesStmt.executeUpdate()
                 }
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, null, e)
+        }
+    }
+
+    void updateCandidate(int id, Candidate candidate) {
+        try {
+            String updateCandidate = """
+                UPDATE candidates
+                    SET name=?, email=?, city=?, state_id=?, country=?, cep=?, description=?, cpf=?
+                    WHERE id=${id}
+            """
+            PreparedStatement stmt = sql.connection.prepareStatement(updateCandidate)
+            stmt.setString(1, candidate.name)
+            stmt.setString(2, candidate.getEmail())
+            stmt.setString(3, candidate.getCity())
+            stmt.setString(5, candidate.getCountry())
+            stmt.setString(6, candidate.getCep())
+            stmt.setString(7, candidate.getDescription())
+            stmt.setString(8, candidate.getCpf())
+
+            int stateId = dbService.idFinder("states", "acronym", candidate.getState().toString())
+            stmt.setInt(4, stateId)
+
+            stmt.executeUpdate()
 
 
 
+            for (Certificate certificate in candidate.certificates) {
+                String updateCertificate = """
+                    UPDATE certificates 
+                        SET candidate_id=${id}, title=?, duration=?
+                        WHERE id=${certificate.id}
+                """
+                PreparedStatement certificationsStmt = sql.connection.prepareStatement(updateCertificate)
+                certificationsStmt.setString(1, certificate.title)
+                certificationsStmt.setString(2, certificate.duration)
 
-
-
-
+                certificationsStmt.executeUpdate()
             }
 
 
 
+            for (AcademicExperience academicExperience in candidate.academicExperiences) {
+                String updateAcademicExperience = """
+                    UPDATE academic_experiences 
+                        SET candidate_id=${id}, educational_institution=?, degree_type=?, field_of_study=?, 
+                            course_status_id=?
+                        WHERE id=${academicExperience.id}
+                """
+                PreparedStatement academicExperiencesStmt = sql.connection.prepareStatement(
+                    updateAcademicExperience)
+                academicExperiencesStmt.setString(1, academicExperience.educationalInstitution)
+                academicExperiencesStmt.setString(2, academicExperience.degreeType)
+                academicExperiencesStmt.setString(3, academicExperience.fieldOfStudy)
+
+                int courseStatusId = dbService.idFinder("course_status", "title",
+                        academicExperience.getStatus().toString())
+                academicExperiencesStmt.setInt(4, courseStatusId)
+
+                academicExperiencesStmt.executeUpdate()
+            }
 
 
+            for (Language language in candidate.languages) {
+                String updateLanguage = """
+                    UPDATE candidate_languages 
+                        SET candidate_id=${id}, language_id=?, proficiency_id=?
+                        WHERE id=${language.id}
+                """
+                PreparedStatement languagesStmt = sql.connection.prepareStatement(updateLanguage)
+                int languageId = dbService.idFinder("languages", "name", language.getName())
+                languagesStmt.setInt(1, languageId)
+
+                int proficiencyId = dbService.idFinder("proficiences", "title",
+                        language.getProficiency().toString())
+                languagesStmt.setInt(2, proficiencyId)
+
+                languagesStmt.executeUpdate()
+            }
 
 
+            for (Skill skill in candidate.skills) {
+                String updateSkills = """
+                    UPDATE candidate_skills 
+                        SET candidate_id=${id}, skill_id=?, proficiency_id=?
+                        WHERE id=${skill.id}
+                """
+                PreparedStatement skillsStmt = sql.connection.prepareStatement(updateSkills)
+                int skillId = dbService.idFinder("skills", "title", skill.getTitle())
+                skillsStmt.setInt(1, skillId)
+
+                int proficiencyId = dbService.idFinder("proficiences", "title", skill.getProficiency().toString())
+                skillsStmt.setInt(2, proficiencyId)
+
+                skillsStmt.executeUpdate()
+            }
 
 
+            for (WorkExperience workExperience in candidate.workExperiences) {
+                String updateWorkExperiences = """
+                    UPDATE work_experiences
+                        SET candidate_id=${id}, title=?, company_name=?, city=?, currently_work=?, description=?, 
+                            state_id=?, contract_type_id=?, location_id=?
+                        WHERE id=${workExperience.id}
+                """
+                PreparedStatement workExperiencesStmt = sql.connection.prepareStatement(updateWorkExperiences)
+                workExperiencesStmt.setString(1, workExperience.title)
+                workExperiencesStmt.setString(2, workExperience.companyName)
+                workExperiencesStmt.setString(3, workExperience.city)
+                workExperiencesStmt.setBoolean(4, workExperience.currentlyWork)
 
+                workExperiencesStmt.setString(5, workExperience.description)
 
+                int workStateId = dbService.idFinder("states", "acronym", workExperience.getState().toString())
+                workExperiencesStmt.setInt(6, workStateId)
 
+                int contractTypeId = dbService.idFinder("contract_types", "title", workExperience.getContractType().toString())
+                workExperiencesStmt.setInt(7, contractTypeId)
 
-//            stmt.executeUpdate()
+                int locationTypeId = dbService.idFinder("location_types", "title", workExperience.getLocationType().toString())
+                workExperiencesStmt.setInt(8, locationTypeId)
+
+                workExperiencesStmt.executeUpdate()
+            }
         } catch (SQLException e) {
             Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, null, e)
         }
-
-
-
-        return true
-    }
-
-    void updateCandidate(int id, Candidate candidate) {
-
     }
 
     void deleteCandidateById(int id) {
