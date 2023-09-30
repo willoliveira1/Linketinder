@@ -1,10 +1,9 @@
 package com.linketinder.dao
 
-import com.linketinder.database.DBService
 import com.linketinder.database.DatabaseFactory
 import com.linketinder.domain.candidate.Certificate
-import groovy.sql.Sql
 
+import groovy.sql.Sql
 import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.SQLException
@@ -15,7 +14,6 @@ import java.util.logging.Logger
 class CertificateDAO {
 
     Sql sql = DatabaseFactory.instance()
-    DBService dbService = new DBService()
 
     List<Certificate> getAllCertificates() {
         List<Certificate> certificates = new ArrayList<>()
@@ -29,11 +27,7 @@ class CertificateDAO {
             PreparedStatement stmt = sql.connection.prepareStatement(query)
             ResultSet result = stmt.executeQuery()
             while (result.next()) {
-                Certificate certificate = new Certificate()
-                certificate.setId(result.getInt("id"))
-                certificate.setTitle(result.getString("title"))
-                certificate.setDuration(result.getString("duration"))
-
+                Certificate certificate = populateCertificate(result)
                 certificates.add(certificate)
             }
         } catch (SQLException e) {
@@ -56,11 +50,7 @@ class CertificateDAO {
             PreparedStatement stmt = sql.connection.prepareStatement(query)
             ResultSet result = stmt.executeQuery()
             while (result.next()) {
-                Certificate certificate = new Certificate()
-                certificate.setId(result.getInt("id"))
-                certificate.setTitle(result.getString("title"))
-                certificate.setDuration(result.getString("duration"))
-
+                Certificate certificate = populateCertificate(result)
                 certificates.add(certificate)
             }
         } catch (SQLException e) {
@@ -82,9 +72,7 @@ class CertificateDAO {
             PreparedStatement stmt = sql.connection.prepareStatement(query)
             ResultSet result = stmt.executeQuery()
             while (result.next()) {
-                certificate.setId(result.getInt("id"))
-                certificate.setTitle(result.getString("title"))
-                certificate.setDuration(result.getString("duration"))
+                certificate = populateCertificate(result)
             }
         } catch (SQLException e) {
             Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, null, e)
@@ -127,7 +115,6 @@ class CertificateDAO {
 
     void deleteCertificate(int id) {
         Certificate certificate = new Certificate()
-
         try {
             String query = "SELECT * FROM certificates WHERE id = ${id};"
             PreparedStatement stmt = sql.connection.prepareStatement(query)
@@ -146,6 +133,15 @@ class CertificateDAO {
         } catch (SQLException e) {
             Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, null, e)
         }
+    }
+
+    Certificate populateCertificate(ResultSet result) {
+        Certificate certificate = new Certificate()
+        certificate.setId(result.getInt("id"))
+        certificate.setTitle(result.getString("title"))
+        certificate.setDuration(result.getString("duration"))
+
+        return certificate
     }
 
 }
