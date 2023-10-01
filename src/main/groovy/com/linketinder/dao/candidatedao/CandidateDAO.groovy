@@ -1,4 +1,5 @@
-package com.linketinder.dao
+package com.linketinder.dao.candidatedao
+
 
 import com.linketinder.database.DatabaseFactory
 import com.linketinder.database.DBService
@@ -25,7 +26,7 @@ class CandidateDAO {
     DBService dbService = new DBService()
     CertificateDAO certificateDAO = new CertificateDAO()
     LanguageDAO languageDAO = new LanguageDAO()
-    SkillDAO skillDAO = new SkillDAO()
+    CandidateSkillDAO skillDAO = new CandidateSkillDAO()
     AcademicExperienceDAO academicExperienceDAO = new AcademicExperienceDAO()
     WorkExperienceDAO workExperienceDAO = new WorkExperienceDAO()
 

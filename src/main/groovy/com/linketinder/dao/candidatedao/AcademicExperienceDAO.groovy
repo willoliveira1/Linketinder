@@ -1,4 +1,4 @@
-package com.linketinder.dao
+package com.linketinder.dao.candidatedao
 
 import com.linketinder.database.DBService
 import com.linketinder.database.DatabaseFactory

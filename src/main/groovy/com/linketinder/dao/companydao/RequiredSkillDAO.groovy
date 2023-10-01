@@ -1,11 +1,10 @@
-package com.linketinder.dao
+package com.linketinder.dao.companydao
 
 import com.linketinder.database.DBService
 import com.linketinder.database.DatabaseFactory
-import com.linketinder.domain.shared.Proficiency
 import com.linketinder.domain.shared.Skill
-
 import groovy.sql.Sql
+
 import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.SQLException
@@ -13,7 +12,7 @@ import java.sql.Statement
 import java.util.logging.Level
 import java.util.logging.Logger
 
-class SkillDAO {
+class RequiredSkillDAO {
 
     Sql sql = DatabaseFactory.instance()
     DBService dbService = new DBService()
@@ -22,14 +21,10 @@ class SkillDAO {
         List<Skill> skills = new ArrayList<>()
         try {
             String query = """
-                SELECT cs.id, s.title, p.title AS proficiency_title
-                    FROM candidates AS c,
-                         candidate_skills AS cs,
-                         skills AS s,
-                         proficiences AS p
-                    WHERE c.id = cs.candidate_id
-                    AND s.id = cs.skill_id
-                    AND p.id = cs.proficiency_id
+                SELECT jbs.id, jbs.job_vacancy_id, s.title
+                    FROM job_vacancy_skills AS jbs,
+                         skills AS s
+                    WHERE jbs.skill_id = s.id
             """
             PreparedStatement stmt = sql.connection.prepareStatement(query)
             ResultSet result = stmt.executeQuery()
@@ -44,19 +39,17 @@ class SkillDAO {
         return skills
     }
 
-    List<Skill> getSkillsByCandidateId(int candidateId) {
+    List<Skill> getSkillsByJobVacancyId(int jobVacancyId) {
         List<Skill> skills = new ArrayList<>()
         try {
             String query = """
-                SELECT cs.id, s.title, p.title AS proficiency_title
-                    FROM candidates AS c,
-                         candidate_skills AS cs,
+                SELECT jbs.id, jbs.job_vacancy_id, s.title
+                    FROM job_vacancy_skills AS jbs,
                          skills AS s,
-                         proficiences AS p
-                    WHERE c.id = cs.candidate_id
-                    AND s.id = cs.skill_id
-                    AND p.id = cs.proficiency_id
-                    AND c.id = ${candidateId}
+                         job_vacancies AS jb
+                    WHERE jbs.skill_id = s.id
+                    AND jb.id = jbs.job_vacancy_id
+                    AND jb.id = ${jobVacancyId}
             """
             PreparedStatement stmt = sql.connection.prepareStatement(query)
             ResultSet result = stmt.executeQuery()
@@ -75,15 +68,13 @@ class SkillDAO {
         Skill skill = new Skill()
         try {
             String query = """
-                SELECT cs.id, s.title, p.title AS proficiency_title
-                    FROM candidates AS c,
-                         candidate_skills AS cs,
+                SELECT jbs.id, jbs.job_vacancy_id, s.title
+                    FROM job_vacancy_skills AS jbs,
                          skills AS s,
-                         proficiences AS p
-                    WHERE c.id = cs.candidate_id
-                    AND s.id = cs.skill_id
-                    AND p.id = cs.proficiency_id
-                    AND cs.id = ${id}
+                         job_vacancies AS jb
+                    WHERE jbs.skill_id = s.id
+                    AND jb.id = jbs.job_vacancy_id
+                    AND jbs.id = ${id}
             """
             PreparedStatement stmt = sql.connection.prepareStatement(query)
             ResultSet result = stmt.executeQuery()
@@ -97,17 +88,14 @@ class SkillDAO {
         return skill
     }
 
-    void insertSkill(Skill skill, int candidateId) {
+    void insertSkill(Skill skill, int jobVacancyId) {
         try {
-            String insertSkill = "INSERT INTO candidate_skills (candidate_id, skill_id, proficiency_id) VALUES (?,?,?)"
+            String insertSkill = "INSERT INTO job_vacancy_skills (job_vacancy_id, skill_id) VALUES (?,?)"
             PreparedStatement stmt = sql.connection.prepareStatement(insertSkill, Statement.RETURN_GENERATED_KEYS)
-            stmt.setInt(1, candidateId)
+            stmt.setInt(1, jobVacancyId)
 
             int skillId = dbService.idFinder("skills", "title", skill.getTitle())
             stmt.setInt(2, skillId)
-
-            int proficiencyId = dbService.idFinder("proficiences", "title", skill.getProficiency().toString())
-            stmt.setInt(3, proficiencyId)
 
             stmt.executeUpdate()
         } catch (SQLException e) {
@@ -115,19 +103,16 @@ class SkillDAO {
         }
     }
 
-    void updateSkill(Skill skill, int candidateId) {
+    void updateSkill(Skill skill, int jobVacancyId) {
         try {
             String updateLanguage = """
-                UPDATE candidate_skills 
-                    SET candidate_id=${candidateId}, skill_id=?, proficiency_id=?
+                UPDATE job_vacancy_skills
+                    SET job_vacancy_id=${jobVacancyId}, skill_id=?
                     WHERE id=${skill.id}
             """
             PreparedStatement stmt = sql.connection.prepareStatement(updateLanguage)
             int skillId = dbService.idFinder("skills", "title", skill.getTitle())
             stmt.setInt(1, skillId)
-
-            int proficiencyId = dbService.idFinder("proficiences", "title", skill.getProficiency().toString())
-            stmt.setInt(2, proficiencyId)
 
             stmt.executeUpdate()
         } catch (SQLException e) {
@@ -138,7 +123,7 @@ class SkillDAO {
     void deleteSkill(int id) {
         Skill skill = new Skill()
         try {
-            String query = "SELECT * FROM candidate_skills WHERE id = ${id};"
+            String query = "SELECT * FROM job_vacancy_skills WHERE id = ${id};"
             PreparedStatement stmt = sql.connection.prepareStatement(query)
             ResultSet result = stmt.executeQuery()
             while (result.next()) {
@@ -146,7 +131,7 @@ class SkillDAO {
             }
 
             if (skill.id != null) {
-                query = "DELETE FROM candidate_skills WHERE id = ${id};"
+                query = "DELETE FROM job_vacancy_skills WHERE id = ${id};"
                 stmt = sql.connection.prepareStatement(query)
                 stmt.executeUpdate()
             } else {
@@ -161,7 +146,6 @@ class SkillDAO {
         Skill skill = new Skill()
         skill.setId(result.getInt("id"))
         skill.setTitle(result.getString("title"))
-        skill.setProficiency(Proficiency.valueOf(result.getString("proficiency_title")))
 
         return skill
     }
