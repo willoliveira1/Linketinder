@@ -3,7 +3,6 @@ package com.linketinder.dao.companydao
 
 import com.linketinder.database.DBService
 import com.linketinder.database.DatabaseFactory
-import com.linketinder.domain.candidate.AcademicExperience
 import com.linketinder.domain.jobvacancy.JobVacancy
 import com.linketinder.domain.shared.ContractType
 import com.linketinder.domain.shared.LocationType
@@ -192,21 +191,21 @@ class JobVacancyDAO {
     }
 
     void deleteJobVacancy(int id) {
-        AcademicExperience academicExperience = new AcademicExperience()
+        JobVacancy jobVacancy = new JobVacancy()
         try {
-            String query = "SELECT * FROM academic_experiences WHERE id = ${id};"
+            String query = "SELECT * FROM job_vacancies WHERE id = ${id};"
             PreparedStatement stmt = sql.connection.prepareStatement(query)
             ResultSet result = stmt.executeQuery()
             while (result.next()) {
-                academicExperience.setId(result.getInt("id"))
+                jobVacancy.setId(result.getInt("id"))
             }
 
-            if (academicExperience.id != null) {
-                query = "DELETE FROM academic_experiences WHERE id = ${id};"
+            if (jobVacancy.id != null) {
+                query = "DELETE FROM job_vacancies WHERE id = ${id};"
                 stmt = sql.connection.prepareStatement(query)
                 stmt.executeUpdate()
             } else {
-                println "[Exclusão] Experiência acadêmica não encontrada."
+                println "[Exclusão] Experiência profissional não encontrada."
             }
         } catch (SQLException e) {
             Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, null, e)
@@ -231,6 +230,6 @@ class JobVacancyDAO {
                 requiredSkillDAO.insertSkill(skill, id)
             }
         }
-
     }
+
 }

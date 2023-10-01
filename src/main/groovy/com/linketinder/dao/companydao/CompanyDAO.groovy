@@ -82,6 +82,7 @@ class CompanyDAO {
                 company.setDescription(result.getString("description"))
                 company.setCnpj(result.getString("cnpj"))
 
+                company.setBenefits(benefitDAO.getBenefitsByCompanyId(id))
                 company.setJobVacancies(jobVacancyDAO.getJobVacancyByCompanyId(id))
             }
         } catch (SQLException e) {
