@@ -9,4 +9,8 @@ class Skill {
     String title
     Proficiency proficiency
 
+    @Override
+    String toString() {
+        return "id=${id}, title=${title}, proficiency=${proficiency}"
+    }
 }

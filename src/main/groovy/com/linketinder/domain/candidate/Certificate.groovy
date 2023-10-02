@@ -9,4 +9,8 @@ class Certificate {
     String title
     String duration
 
+    @Override
+    String toString() {
+        return "id=${id}, title=${title}, duration=${duration}"
+    }
 }

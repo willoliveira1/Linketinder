@@ -4,6 +4,7 @@ class ApplicationView {
 
     CandidatesView candidatesView = new CandidatesView()
     CompaniesView companiesView = new CompaniesView()
+    JobVacanciesView jobVacanciesView = new JobVacanciesView()
 
     BufferedReader reader = System.in.newReader()
 
@@ -20,6 +21,7 @@ class ApplicationView {
 Digite a opção desejada:
 1) Candidatos
 2) Empresas
+3) Vagas
 0) Sair
 """
         println text
@@ -59,6 +61,24 @@ Digite a opção desejada:
         println text
     }
 
+    private void jobVacanciesText() {
+        String text = """##############################
+##                          ##
+##           Vagas          ##
+##                          ##
+##############################
+Digite a opção desejada:
+1) Listar Vagas
+2) Listar Vagas de Empresa Específica
+3) Listar Vaga Especifica
+4) Adicionar Nova Vaga
+5) Remover Vaga
+6) Atualizar Vaga
+0) Voltar
+"""
+        println text
+    }
+
     private void initialScreen() {
         clearConsole()
         applicationText()
@@ -78,6 +98,10 @@ Digite a opção desejada:
             case 2:
                 clearConsole()
                 companiesScreen()
+                break
+            case 3:
+                clearConsole()
+                jobVacanciesScreen()
                 break
             case 0:
                 System.exit(0)
@@ -163,6 +187,54 @@ Digite a opção desejada:
             case 5:
                 clearConsole()
                 companiesView.updateCompany()
+                backToInitialScreen()
+                break
+            case 0:
+                initialScreen()
+                break
+            default:
+                invalidOption()
+        }
+    }
+
+    private void jobVacanciesScreen() {
+        jobVacanciesText()
+        Integer selectedOption
+        try {
+            selectedOption = reader.readLine() as Integer
+        } catch (IllegalArgumentException e) {
+            invalidOption()
+        }
+
+        switch (selectedOption) {
+            case 1:
+                clearConsole()
+                jobVacanciesView.getAllJobVacancies()
+                backToInitialScreen()
+                break
+            case 2:
+                clearConsole()
+                jobVacanciesView.getAllJobVacanciesByCompanyId()
+                backToInitialScreen()
+                break
+            case 3:
+                clearConsole()
+                jobVacanciesView.getJobVacancyById()
+                backToInitialScreen()
+                break
+            case 4:
+                clearConsole()
+                jobVacanciesView.addJobVacancy()
+                backToInitialScreen()
+                break
+            case 5:
+                clearConsole()
+                jobVacanciesView.removeJobVacancy()
+                backToInitialScreen()
+                break
+            case 6:
+                clearConsole()
+                jobVacanciesView.updateJobVacancy()
                 backToInitialScreen()
                 break
             case 0:

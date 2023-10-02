@@ -1,7 +1,6 @@
 package com.linketinder.domain.candidate
 
 import groovy.transform.TupleConstructor
-import com.linketinder.domain.shared.Language
 import com.linketinder.domain.shared.Person
 import com.linketinder.domain.shared.Skill
 

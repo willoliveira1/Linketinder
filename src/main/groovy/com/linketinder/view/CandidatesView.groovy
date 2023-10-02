@@ -5,15 +5,14 @@ import com.linketinder.domain.candidate.Candidate
 import com.linketinder.domain.candidate.Certificate
 import com.linketinder.domain.candidate.CourseStatus
 import com.linketinder.domain.candidate.WorkExperience
-import com.linketinder.domain.shared.ContractType
-import com.linketinder.domain.shared.Language
-import com.linketinder.domain.shared.LocationType
+import com.linketinder.domain.jobvacancy.ContractType
+import com.linketinder.domain.candidate.Language
+import com.linketinder.domain.jobvacancy.LocationType
 import com.linketinder.domain.shared.Proficiency
 import com.linketinder.domain.shared.Skill
 import com.linketinder.domain.shared.State
 import com.linketinder.service.CandidateService
 import com.linketinder.service.IBaseService
-import com.linketinder.util.ObjectHandler
 
 class CandidatesView {
 
@@ -44,13 +43,6 @@ class CandidatesView {
     }
 
     void addCandidate() {
-        List<Candidate> candidates = service.getAll()
-        Integer id
-        if (candidates.isEmpty()) {
-            id = 1
-        } else {
-            id = ObjectHandler.getNextId(candidates)
-        }
         println "Qual o nome do candidato?"
         String name = reader.readLine()
         println "Qual o email do candidato?"
@@ -113,7 +105,7 @@ class CandidatesView {
             certificates = addCertificates()
         }
 
-        Candidate candidate = new Candidate(id, name, email, city, state, country, cep, description,
+        Candidate candidate = new Candidate(null, name, email, city, state, country, cep, description,
                 cpf, academicExperiences, workExperiences, languages, skills, certificates)
         service.add(candidate)
     }
@@ -234,7 +226,7 @@ class CandidatesView {
             String degreeType = reader.readLine()
             println "Qual o curso?"
             String fieldOfStudy = reader.readLine()
-            println "Qual o status atual do curso? (Cursando/Concluido/Trancado)"
+            println "Qual o status atual do curso? (Cursando/Concluído/Trancado)"
             String input = reader.readLine()
             CourseStatus status
             try {
@@ -269,7 +261,7 @@ class CandidatesView {
             String title = reader.readLine()
             println "Qual a empresa?"
             String companyName = reader.readLine()
-            println "Qual o tipo de contrato? (CLT/PJ/Temporario/Estagio/Aprendiz)"
+            println "Qual o tipo de contrato? (CLT/PJ/Temporário/Estágio/Aprendiz)"
             ContractType contractType
             String input = reader.readLine()
             try {
@@ -278,7 +270,7 @@ class CandidatesView {
                 println "Argumento inválido."
                 addWorkExperiences()
             }
-            println "Qual o regime de trabalho? (Presencial/Hibrido/Remoto)"
+            println "Qual o regime de trabalho? (Presencial/Híbrido/Remoto)"
             LocationType locationType
             input = reader.readLine()
             try {
@@ -325,11 +317,10 @@ class CandidatesView {
         Integer addMore = 1
 
         while (addMore) {
-            Integer id
             languages.size() == 0 ? 1 : (languages.size() + 1)
             println "Qual o idioma?"
             String name = reader.readLine()
-            println "Qual nível de proficiência? (Basico/Intermediario/Avancado)"
+            println "Qual nível de proficiência? (Básico/Intermediário/Avançado)"
             String input = reader.readLine()
             Proficiency proficiency
             try {
@@ -339,7 +330,7 @@ class CandidatesView {
                 addLanguages()
             }
 
-            Language language = new Language(id, name, proficiency)
+            Language language = new Language(null, name, proficiency)
             languages.add(language)
 
             println "Deseja adicionar mais idiomas? (S/N)"
@@ -358,11 +349,10 @@ class CandidatesView {
         Integer addMore = 1
 
         while (addMore) {
-            Integer id
             skills.size() == 0 ? 1 : (skills.size() + 1)
             println "Qual a competência?"
             String title = reader.readLine()
-            println "Qual nível de proficiência? (Basico/Intermediario/Avancado)"
+            println "Qual nível de proficiência? (Básico/Intermediário/Avançado)"
             String input = reader.readLine()
             Proficiency proficiency
             try {
@@ -372,7 +362,7 @@ class CandidatesView {
                 addSkills()
             }
 
-            Skill skill = new Skill(id, title, proficiency)
+            Skill skill = new Skill(null, title, proficiency)
             skills.add(skill)
 
             println "Deseja adicionar mais competências? (S/N)"
@@ -391,14 +381,13 @@ class CandidatesView {
         Integer addMore = 1
 
         while (addMore) {
-            Integer id
             certificates.size() == 0 ? 1 : (certificates.size() + 1)
             println "Qual o título do certificado?"
             String title = reader.readLine()
             println "Qual a duração?"
             String duration = reader.readLine()
 
-            Certificate certificate = new Certificate(id, title, duration)
+            Certificate certificate = new Certificate(null, title, duration)
             certificates.add(certificate)
 
             println "Deseja adicionar mais certificações? (S/N)"

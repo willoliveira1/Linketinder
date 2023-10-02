@@ -1,7 +1,6 @@
 package com.linketinder.database
 
 import groovy.sql.Sql
-
 import java.sql.PreparedStatement
 import java.sql.ResultSet
 
@@ -16,6 +15,7 @@ class DBService {
         while (result.next()) {
             return result.getInt("id")
         }
+        return -1
     }
 
 

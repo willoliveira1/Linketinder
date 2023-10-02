@@ -1,31 +1,30 @@
 package com.linketinder.service
 
+import com.linketinder.dao.companydao.CompanyDAO
 import com.linketinder.domain.company.Company
-import com.linketinder.fileprocessor.CompaniesProcessor
-import com.linketinder.fileprocessor.Processor
 
 class CompanyService implements IBaseService<Company> {
 
-    Processor processor = new CompaniesProcessor()
+    CompanyDAO companyDAO = new CompanyDAO()
 
     List<Company> getAll() {
-        return processor.readFile()
+        return companyDAO.getAllCompany()
     }
 
     Company getById(Integer id) {
-        return processor.readById(id)
+        return companyDAO.getCompanyById(id)
     }
 
     void add(Company company) {
-        processor.add(company)
+        companyDAO.insertCompany(company)
     }
 
     void update(Integer id, Company company) {
-        processor.update(id, company)
+        companyDAO.insertCompany(company)
     }
 
     void delete(Integer id) {
-        processor.delete(id)
+        companyDAO.deleteCompanyById(id)
     }
 
 }

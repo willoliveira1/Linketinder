@@ -1,9 +1,9 @@
 package com.linketinder.database
 
-import java.sql.SQLException
 import groovy.sql.Sql
 import java.util.logging.Level
 import java.util.logging.Logger
+import java.sql.SQLException
 
 class DatabaseFactory {
 
