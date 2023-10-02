@@ -1,5 +1,6 @@
-package com.linketinder.domain.shared
+package com.linketinder.domain.candidate
 
+import com.linketinder.domain.shared.Proficiency
 import groovy.transform.TupleConstructor
 
 @TupleConstructor

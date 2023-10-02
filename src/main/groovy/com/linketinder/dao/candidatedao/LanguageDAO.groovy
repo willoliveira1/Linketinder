@@ -2,7 +2,7 @@ package com.linketinder.dao.candidatedao
 
 import com.linketinder.database.DBService
 import com.linketinder.database.DatabaseFactory
-import com.linketinder.domain.shared.Language
+import com.linketinder.domain.candidate.Language
 import com.linketinder.domain.shared.Proficiency
 
 import groovy.sql.Sql

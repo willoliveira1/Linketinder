@@ -1,8 +1,8 @@
 package com.linketinder.domain.candidate
 
 import groovy.transform.TupleConstructor
-import com.linketinder.domain.shared.ContractType
-import com.linketinder.domain.shared.LocationType
+import com.linketinder.domain.jobvacancy.ContractType
+import com.linketinder.domain.jobvacancy.LocationType
 import com.linketinder.domain.shared.State
 
 @TupleConstructor

@@ -3,7 +3,7 @@ package com.linketinder.service
 import com.linketinder.dao.companydao.JobVacancyDAO
 import com.linketinder.domain.jobvacancy.JobVacancy
 
-class JobVacancyService implements IBaseService<JobVacancy> {
+class JobVacancyService {
 
     JobVacancyDAO jobVacancyDAO = new JobVacancyDAO()
 
@@ -11,15 +11,18 @@ class JobVacancyService implements IBaseService<JobVacancy> {
         return jobVacancyDAO.getAllJobVacancies()
     }
 
+    List<JobVacancy> getAllByCompanyId(int id) {
+        return jobVacancyDAO.getJobVacancyByCompanyId(id)
+    }
+
     JobVacancy getById(Integer id) {
         return jobVacancyDAO.getJobVacancyById(id)
     }
 
-    void add(JobVacancy jobVacancy) {}
-
     void add(Integer id, JobVacancy jobVacancy) {
         jobVacancyDAO.insertJobVacancy(jobVacancy, id)
     }
+
 
     void update(Integer id, JobVacancy jobVacancy) {
         jobVacancyDAO.updateJobVacancy(jobVacancy, id)

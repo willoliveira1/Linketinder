@@ -3,8 +3,8 @@ package com.linketinder.dao.candidatedao
 import com.linketinder.database.DBService
 import com.linketinder.database.DatabaseFactory
 import com.linketinder.domain.candidate.WorkExperience
-import com.linketinder.domain.shared.ContractType
-import com.linketinder.domain.shared.LocationType
+import com.linketinder.domain.jobvacancy.ContractType
+import com.linketinder.domain.jobvacancy.LocationType
 import com.linketinder.domain.shared.State
 
 import groovy.sql.Sql

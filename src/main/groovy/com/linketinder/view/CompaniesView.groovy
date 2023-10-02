@@ -4,10 +4,11 @@ import com.linketinder.domain.company.Benefit
 import com.linketinder.domain.company.Company
 import com.linketinder.domain.shared.State
 import com.linketinder.service.CompanyService
+import com.linketinder.service.IBaseService
 
 class CompaniesView {
 
-    CompanyService service = new CompanyService()
+    IBaseService service = new CompanyService()
     BufferedReader reader = System.in.newReader()
 
     void getAllCompanies() {
@@ -34,13 +35,6 @@ class CompaniesView {
     }
 
     void addCompany() {
-        List<Company> companies = service.getAll()
-        Integer id
-        if (companies.isEmpty()) {
-            id = 1
-        } else {
-            id = ObjectHandler.getNextId(companies)
-        }
         println "Qual o nome da empresa?"
         String name = reader.readLine()
         println "Qual o email da empresa?"
@@ -79,7 +73,7 @@ class CompaniesView {
             benefits = addBenefits()
         }
 
-        Company company = new Company(id, name, email, city, state, country, cep, description, cnpj, null, benefits)
+        Company company = new Company(null, name, email, city, state, country, cep, description, cnpj, null, benefits)
         service.add(company)
     }
 
@@ -102,7 +96,7 @@ class CompaniesView {
     }
 
     void updateCompany() {
-        println "Qual o id da empresa que deseja atualizar"
+        println "Qual o id da empresa que deseja atualizar?"
         Integer id
         try {
             id = reader.readLine() as Integer
@@ -159,12 +153,11 @@ class CompaniesView {
         Integer addMore = 1
 
         while (addMore) {
-            Integer id
             benefits.size() == 0 ? 1 : (benefits.size() + 1)
             println "Qual o benefício?"
             String title = reader.readLine()
 
-            Benefit benefit = new Benefit(id, title)
+            Benefit benefit = new Benefit(null, title)
             benefits.add(benefit)
 
             println "Deseja adicionar mais benefícios? (S/N)"

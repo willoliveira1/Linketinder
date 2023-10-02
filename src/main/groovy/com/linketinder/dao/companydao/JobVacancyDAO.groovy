@@ -4,8 +4,8 @@ package com.linketinder.dao.companydao
 import com.linketinder.database.DBService
 import com.linketinder.database.DatabaseFactory
 import com.linketinder.domain.jobvacancy.JobVacancy
-import com.linketinder.domain.shared.ContractType
-import com.linketinder.domain.shared.LocationType
+import com.linketinder.domain.jobvacancy.ContractType
+import com.linketinder.domain.jobvacancy.LocationType
 import com.linketinder.domain.shared.Skill
 
 import groovy.sql.Sql

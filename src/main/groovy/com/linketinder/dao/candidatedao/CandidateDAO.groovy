@@ -7,7 +7,7 @@ import com.linketinder.domain.candidate.AcademicExperience
 import com.linketinder.domain.candidate.Candidate
 import com.linketinder.domain.candidate.Certificate
 import com.linketinder.domain.candidate.WorkExperience
-import com.linketinder.domain.shared.Language
+import com.linketinder.domain.candidate.Language
 import com.linketinder.domain.shared.Person
 import com.linketinder.domain.shared.Skill
 import com.linketinder.domain.shared.State
