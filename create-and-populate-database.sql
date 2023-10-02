@@ -5,140 +5,140 @@ CREATE DATABASE linketinder;
 
 -- Tables Creation
 CREATE TABLE states (
-  id SERIAL PRIMARY KEY,
-  name VARCHAR(25) NOT NULL,
-  acronym VARCHAR(2) NOT NULL
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(25) NOT NULL,
+    acronym VARCHAR(2) NOT NULL
 );
 
 CREATE TABLE contract_types (
-  id SERIAL PRIMARY KEY,
-  title VARCHAR(20) NOT NULL
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(20) NOT NULL
 );
 
 CREATE TABLE location_types (
-  id SERIAL PRIMARY KEY,
-  title VARCHAR(20) NOT NULL
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(20) NOT NULL
 );
 
 CREATE TABLE proficiences (
-  id SERIAL PRIMARY KEY,
-  title VARCHAR(20) NOT NULL
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(20) NOT NULL
 );
 
 CREATE TABLE skills (
-  id SERIAL PRIMARY KEY,
-  title VARCHAR(50) NOT NULL
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE benefits (
-  id SERIAL PRIMARY KEY,
-  title VARCHAR(50) NOT NULL
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE course_status (
-  id SERIAL PRIMARY KEY,
-  title VARCHAR(20) NOT NULL
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(20) NOT NULL
 );
 
 CREATE TABLE languages (
-  id SERIAL PRIMARY KEY,
-  name VARCHAR(50) NOT NULL
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE candidates (
-  id SERIAL PRIMARY KEY,
-  name VARCHAR(100) NOT NULL,
-  email VARCHAR(100) NOT NULL,
-  city VARCHAR(50) NOT NULL,
-  state_id INTEGER NOT NULL REFERENCES states(id),
-  country VARCHAR(50) NOT NULL,
-  cep VARCHAR(8) NOT NULL,
-  description VARCHAR(1000) NOT NULL,
-  cpf VARCHAR(11) NOT NULL
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    city VARCHAR(50) NOT NULL,
+    state_id INTEGER NOT NULL REFERENCES states(id),
+    country VARCHAR(50) NOT NULL,
+    cep VARCHAR(8) NOT NULL,
+    description VARCHAR(1000) NOT NULL,
+    cpf VARCHAR(11) NOT NULL
 );
 
 CREATE TABLE companies (
-  id SERIAL PRIMARY KEY,
-  name VARCHAR(100) NOT NULL,
-  email VARCHAR(100) NOT NULL,
-  city VARCHAR(50) NOT NULL,
-  state_id INTEGER NOT NULL REFERENCES states(id),
-  country VARCHAR(50) NOT NULL,
-  cep VARCHAR(8) NOT NULL,
-  description VARCHAR(1000) NOT NULL,
-  cnpj VARCHAR(14) NOT NULL
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    city VARCHAR(50) NOT NULL,
+    state_id INTEGER NOT NULL REFERENCES states(id),
+    country VARCHAR(50) NOT NULL,
+    cep VARCHAR(8) NOT NULL,
+    description VARCHAR(1000) NOT NULL,
+    cnpj VARCHAR(14) NOT NULL
 );
 
 CREATE TABLE certificates (
-  id SERIAL PRIMARY KEY,
-  candidate_id INTEGER NOT NULL REFERENCES candidates(id),
-  title VARCHAR(50) NOT NULL,
-  duration VARCHAR(50) NOT NULL
+    id SERIAL PRIMARY KEY,
+    candidate_id INTEGER NOT NULL REFERENCES candidates(id) ON DELETE CASCADE,
+    title VARCHAR(50) NOT NULL,
+    duration VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE academic_experiences (
-  id SERIAL PRIMARY KEY,
-  candidate_id INTEGER NOT NULL REFERENCES candidates(id),
-  educational_institution VARCHAR(50) NOT NULL,
-  degree_type VARCHAR(50) NOT NULL,
-  field_of_study VARCHAR(50) NOT NULL,
-  course_status_id INTEGER NOT NULL REFERENCES course_status(id)
+    id SERIAL PRIMARY KEY,
+    candidate_id INTEGER NOT NULL REFERENCES candidates(id) ON DELETE CASCADE,
+    educational_institution VARCHAR(50) NOT NULL,
+    degree_type VARCHAR(50) NOT NULL,
+    field_of_study VARCHAR(50) NOT NULL,
+    course_status_id INTEGER NOT NULL REFERENCES course_status(id)
 );
 
 CREATE TABLE company_benefits (
-  id SERIAL PRIMARY KEY,
-  company_id INTEGER NOT NULL REFERENCES companies(id),
-  benefit_id INTEGER NOT NULL REFERENCES benefits(id)
+    id SERIAL PRIMARY KEY,
+    company_id INTEGER NOT NULL REFERENCES companies(id) ON DELETE CASCADE,
+    benefit_id INTEGER NOT NULL REFERENCES benefits(id)
 );
 
 CREATE TABLE work_experiences (
-  id SERIAL PRIMARY KEY,
-  candidate_id INTEGER NOT NULL REFERENCES candidates(id),
-  title VARCHAR(50) NOT NULL,
-  company_name VARCHAR(50) NOT NULL,
-  city VARCHAR(50) NOT NULL,
-  currently_work BOOLEAN NOT NULL,
-  description VARCHAR(1000) NOT NULL,
-  state_id INTEGER NOT NULL REFERENCES states(id),
-  contract_type_id INTEGER NOT NULL REFERENCES contract_types(id),
-  location_id INTEGER NOT NULL REFERENCES location_types(id)
+    id SERIAL PRIMARY KEY,
+    candidate_id INTEGER NOT NULL REFERENCES candidates(id) ON DELETE CASCADE,
+    title VARCHAR(50) NOT NULL,
+    company_name VARCHAR(50) NOT NULL,
+    city VARCHAR(50) NOT NULL,
+    currently_work BOOLEAN NOT NULL,
+    description VARCHAR(1000) NOT NULL,
+    state_id INTEGER NOT NULL REFERENCES states(id),
+    contract_type_id INTEGER NOT NULL REFERENCES contract_types(id),
+    location_id INTEGER NOT NULL REFERENCES location_types(id)
 );
 
 CREATE TABLE job_vacancies (
-  id SERIAL PRIMARY KEY,
-  company_id INTEGER NOT NULL REFERENCES companies(id),
-  title VARCHAR(50) NOT NULL,
-  description VARCHAR(2000) NOT NULL,
-  salary FLOAT NOT NULL,
-  contract_type_id INTEGER NOT NULL REFERENCES contract_types(id),
-  location_type_id INTEGER NOT NULL REFERENCES location_types(id)
+    id SERIAL PRIMARY KEY,
+    company_id INTEGER NOT NULL REFERENCES companies(id) ON DELETE CASCADE,
+    title VARCHAR(50) NOT NULL,
+    description VARCHAR(2000) NOT NULL,
+    salary FLOAT NOT NULL,
+    contract_type_id INTEGER NOT NULL REFERENCES contract_types(id),
+    location_type_id INTEGER NOT NULL REFERENCES location_types(id)
 );
 
 CREATE TABLE job_vacancy_skills (
-  id SERIAL PRIMARY KEY,
-  job_vacancy_id INTEGER NOT NULL REFERENCES job_vacancies(id),
-  skill_id INTEGER NOT NULL REFERENCES skills(id)
+    id SERIAL PRIMARY KEY,
+    job_vacancy_id INTEGER NOT NULL REFERENCES job_vacancies(id) ON DELETE CASCADE,
+    skill_id INTEGER NOT NULL REFERENCES skills(id)
 );
 
 CREATE TABLE candidate_languages (
-  id SERIAL PRIMARY KEY,
-  candidate_id INTEGER NOT NULL REFERENCES candidates(id),
-  language_id INTEGER NOT NULL REFERENCES languages(id),
-  proficiency_id INTEGER NOT NULL REFERENCES proficiences(id)
+    id SERIAL PRIMARY KEY,
+    candidate_id INTEGER NOT NULL REFERENCES candidates(id) ON DELETE CASCADE,
+    language_id INTEGER NOT NULL REFERENCES languages(id),
+    proficiency_id INTEGER NOT NULL REFERENCES proficiences(id)
 );
 
 CREATE TABLE candidate_skills (
-  id SERIAL PRIMARY KEY,
-  candidate_id INTEGER NOT NULL REFERENCES candidates(id),
-  skill_id INTEGER NOT NULL REFERENCES skills(id),
-  proficiency_id INTEGER NOT NULL REFERENCES proficiences(id)
+    id SERIAL PRIMARY KEY,
+    candidate_id INTEGER NOT NULL REFERENCES candidates(id) ON DELETE CASCADE,
+    skill_id INTEGER NOT NULL REFERENCES skills(id),
+    proficiency_id INTEGER NOT NULL REFERENCES proficiences(id)
 );
 
 CREATE TABLE matches (
-    id SERIAL PRIMARY KEY,
-    candidate_id INTEGER NOT NULL REFERENCES candidates(id),
-    job_vacancy_id INTEGER NOT NULL REFERENCES job_vacancies(id),
-    company_id INTEGER NOT NULL REFERENCES companies(id)
+     id SERIAL PRIMARY KEY,
+     candidate_id INTEGER NOT NULL REFERENCES candidates(id) ON DELETE CASCADE,
+     job_vacancy_id INTEGER NOT NULL REFERENCES job_vacancies(id) ON DELETE CASCADE,
+     company_id INTEGER NOT NULL REFERENCES companies(id) ON DELETE CASCADE
 );
 
 
