@@ -4,7 +4,6 @@ import com.linketinder.domain.company.Benefit
 import com.linketinder.domain.company.Company
 import com.linketinder.domain.shared.State
 import com.linketinder.service.CompanyService
-import com.linketinder.util.ObjectHandler
 
 class CompaniesView {
 

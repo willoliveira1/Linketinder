@@ -32,6 +32,7 @@ class CompanyDAO {
                     FROM companies AS c,
                          states AS s
                     WHERE c.state_id = s.id
+                    ORDER BY c.id
             """
             PreparedStatement stmt = sql.connection.prepareStatement(query)
             ResultSet result = stmt.executeQuery()

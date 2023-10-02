@@ -1,31 +1,30 @@
 package com.linketinder.service
 
+import com.linketinder.dao.candidatedao.CandidateDAO
 import com.linketinder.domain.candidate.Candidate
-import com.linketinder.fileprocessor.CandidatesProcessor
-import com.linketinder.fileprocessor.Processor
 
 class CandidateService implements IBaseService<Candidate> {
 
-    Processor processor = new CandidatesProcessor()
+    CandidateDAO candidateDAO = new CandidateDAO()
 
     List<Candidate> getAll() {
-        return processor.readFile()
+        return candidateDAO.getAllCandidates()
     }
 
     Candidate getById(Integer id) {
-        return processor.readById(id)
+        return candidateDAO.getCandidateById(id)
     }
 
     void add(Candidate candidate) {
-        processor.add(candidate)
+        candidateDAO.insertCandidate(candidate)
     }
 
     void update(Integer id, Candidate candidate) {
-        processor.update(id, candidate)
+        candidateDAO.updateCandidate(id, candidate)
     }
 
     void delete(Integer id) {
-        processor.delete(id)
+        candidateDAO.deleteCandidateById(id)
     }
 
 }

@@ -13,7 +13,6 @@ import com.linketinder.domain.shared.Skill
 import com.linketinder.domain.shared.State
 import com.linketinder.service.CandidateService
 import com.linketinder.service.IBaseService
-import com.linketinder.util.ObjectHandler
 
 class CandidatesView {
 
@@ -234,7 +233,7 @@ class CandidatesView {
             String degreeType = reader.readLine()
             println "Qual o curso?"
             String fieldOfStudy = reader.readLine()
-            println "Qual o status atual do curso? (Cursando/Concluido/Trancado)"
+            println "Qual o status atual do curso? (Cursando/Concluído/Trancado)"
             String input = reader.readLine()
             CourseStatus status
             try {
@@ -269,7 +268,7 @@ class CandidatesView {
             String title = reader.readLine()
             println "Qual a empresa?"
             String companyName = reader.readLine()
-            println "Qual o tipo de contrato? (CLT/PJ/Temporario/Estagio/Aprendiz)"
+            println "Qual o tipo de contrato? (CLT/PJ/Temporário/Estágio/Aprendiz)"
             ContractType contractType
             String input = reader.readLine()
             try {
@@ -278,7 +277,7 @@ class CandidatesView {
                 println "Argumento inválido."
                 addWorkExperiences()
             }
-            println "Qual o regime de trabalho? (Presencial/Hibrido/Remoto)"
+            println "Qual o regime de trabalho? (Presencial/Híbrido/Remoto)"
             LocationType locationType
             input = reader.readLine()
             try {
@@ -329,7 +328,7 @@ class CandidatesView {
             languages.size() == 0 ? 1 : (languages.size() + 1)
             println "Qual o idioma?"
             String name = reader.readLine()
-            println "Qual nível de proficiência? (Basico/Intermediario/Avancado)"
+            println "Qual nível de proficiência? (Básico/Intermediário/Avançado)"
             String input = reader.readLine()
             Proficiency proficiency
             try {
@@ -362,7 +361,7 @@ class CandidatesView {
             skills.size() == 0 ? 1 : (skills.size() + 1)
             println "Qual a competência?"
             String title = reader.readLine()
-            println "Qual nível de proficiência? (Basico/Intermediario/Avancado)"
+            println "Qual nível de proficiência? (Básico/Intermediário/Avançado)"
             String input = reader.readLine()
             Proficiency proficiency
             try {

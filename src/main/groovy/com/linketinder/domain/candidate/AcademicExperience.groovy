@@ -11,4 +11,9 @@ class AcademicExperience {
     String fieldOfStudy
     CourseStatus status
 
+    @Override
+    String toString() {
+        return "id=${id}, educationalInstitution=${educationalInstitution}, degreeType=${degreeType}, " +
+                "fieldOfStudy=${fieldOfStudy}, status=${status}"
+    }
 }

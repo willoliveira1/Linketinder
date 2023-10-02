@@ -4,8 +4,8 @@ import com.linketinder.database.DBService
 import com.linketinder.database.DatabaseFactory
 import com.linketinder.domain.candidate.CourseStatus
 import com.linketinder.domain.candidate.AcademicExperience
-import groovy.sql.Sql
 
+import groovy.sql.Sql
 import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.SQLException

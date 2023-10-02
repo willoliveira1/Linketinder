@@ -8,4 +8,8 @@ class Benefit {
     Integer id
     String title
 
+    @Override
+    String toString() {
+        return "id=${id}, title=${title}"
+    }
 }

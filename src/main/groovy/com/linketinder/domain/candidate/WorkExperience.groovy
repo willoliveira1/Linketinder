@@ -18,4 +18,10 @@ class WorkExperience {
     Boolean currentlyWork
     String description
 
+    @Override
+    String toString() {
+        return "id=${id}, title=${title}, companyName=${companyName}, contractType=${contractType}, " +
+                "locationType=${locationType}, city=${city}, state=${state}, currentlyWork=${currentlyWork}, " +
+                "description=${description}"
+    }
 }
