@@ -1,24 +1,27 @@
 package com.linketinder.service
 
+import com.linketinder.dao.companydao.CompanyDAO
 import com.linketinder.domain.company.*
 import com.linketinder.domain.shared.*
-import com.linketinder.fileprocessor.Processor
+
 import org.junit.jupiter.api.*
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runners.Parameterized
 import org.mockito.*
 import org.mockito.invocation.InvocationOnMock
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer
-
 import static org.junit.jupiter.api.Assertions.*
 import static org.mockito.Mockito.*
 
+@ExtendWith(MockitoExtension.class)
 class CompanyServiceTest {
 
     @InjectMocks
     private CompanyService companyService = new CompanyService()
 
     @Mock
-    private Processor processor
+    private CompanyDAO companyDAO
 
     @Parameterized.Parameters
     static List<Company> companiesList() {
@@ -35,15 +38,10 @@ class CompanyServiceTest {
         return companies
     }
 
-    @BeforeEach
-    void initialize() {
-        MockitoAnnotations.initMocks(this)
-    }
-
     @Test
     @DisplayName("Test getAll")
     void testShouldGetAListOfCompanies() {
-        when(processor.readFile()).thenReturn(companiesList())
+        when(companyDAO.getAllCompany()).thenReturn(companiesList())
         List<Company> result = companyService.getAll()
 
         List<Company> expectedResult = new ArrayList<>()
@@ -62,7 +60,7 @@ class CompanyServiceTest {
     @DisplayName("Test getById using valid id")
     void testShouldGetCompanyByValidId() {
         int id = 2
-        when(processor.readById(id)).thenReturn(companiesList().find {it.id == id})
+        when(companyDAO.getCompanyById(id)).thenReturn(companiesList().find {it.id == id})
         Person result = companyService.getById(id)
 
         Person expectedResult = new Company(id: 2, name: "Empresa 2", email: "empresa2@empresa2.com.br", city: "Uberlândia", state: State.MG, country: "Brasil", cep: "04680000", description: "Sobre a empresa 2", cnpj: "12345678912345", jobVacancies: [1], benefits: [new Benefit(id: 1, title: "Plano de Saúde")])
@@ -76,7 +74,7 @@ class CompanyServiceTest {
     @DisplayName("Test getById using invalid id")
     void testShouldBeNullUsingInvalidId() {
         int id = 10
-        when(processor.readById(id)).thenReturn(companiesList().find {it.id == id})
+        when(companyDAO.getCompanyById(id)).thenReturn(companiesList().find {it.id == id})
 
         Person result = companyService.getById(id)
 
@@ -87,7 +85,7 @@ class CompanyServiceTest {
     @DisplayName("Test getById using null id")
     void testShouldBeNullUsingNullId() {
         int id
-        when(processor.readById(id)).thenReturn(companiesList().find {it.id == id})
+        when(companyDAO.getCompanyById(id)).thenReturn(companiesList().find {it.id == id})
 
         Person result = companyService.getById(id)
 
@@ -110,7 +108,7 @@ class CompanyServiceTest {
         }
 
         Person company = new Company(id: 5, name: "Empresa 5", email: "empresa5@empresa5.com.br", city: "Curitiba", state: State.PR, country: "Brasil", cep: "19400000", description: "Sobre a empresa 5", cnpj: "12373415345763", jobVacancies: [], benefits: [new Benefit(id: 1, title: "Plano de Saúde"), new Benefit(id: 2, title: "Plano Odontológico"), new Benefit(id: 3, title: "Vale Refeição"), new Benefit(id: 4, title: "Vale Transporte")])
-        doAnswer(answer).when(processor).add(company)
+        doAnswer(answer).when(companyDAO).insertCompany(company)
         companyService.add(company)
 
         boolean result = companies.contains(company)
@@ -134,7 +132,7 @@ class CompanyServiceTest {
         }
 
         Company company = null
-        doAnswer(answer).when(processor).add(company)
+        doAnswer(answer).when(companyDAO).insertCompany(company)
         companyService.add(company)
 
         boolean result = companies.contains(company)
@@ -146,21 +144,11 @@ class CompanyServiceTest {
     void testShouldBeUpdateCompany() {
         List<Company> companies = companiesList()
         Integer id = 1
-        Answer<Person> answer = new Answer<Person>() {
-            @Override
-            Person answer(InvocationOnMock invocation) throws Throwable {
-                Person updatedCompany = (Company) invocation.getArguments()[1]
-                if (updatedCompany != null) {
-                    companies.set(id, updatedCompany)
-                }
-                return null
-            }
-        }
+
         Person updatedCompany = new Company(id: 1, name: "Empresa 5", email: "empresa5@empresa5.com.br", city: "Curitiba", state: State.PR, country: "Brasil", cep: "19400000", description: "Sobre a empresa 5", cnpj: "12373415345763", jobVacancies: [], benefits: [new Benefit(id: 1, title: "Plano de Saúde"), new Benefit(id: 2, title: "Plano Odontológico"), new Benefit(id: 3, title: "Vale Refeição"), new Benefit(id: 4, title: "Vale Transporte")])
 
-        doAnswer(answer).when(processor).update(id, updatedCompany)
         companyService.update(id, updatedCompany)
-        Person expectedResult = companies.find {it.id == id}
+        Company expectedResult = companies.find {it.id == id}
 
         assertEquals(expectedResult.id, updatedCompany.id)
         assertNotEquals(expectedResult.name, updatedCompany.name)
@@ -172,21 +160,10 @@ class CompanyServiceTest {
     void testShouldntBeUpdateCompanyUsingEmptyCompany() {
         List<Company> companies = companiesList()
         Integer id = 1
-        Answer<Person> answer = new Answer<Person>() {
-            @Override
-            Person answer(InvocationOnMock invocation) throws Throwable {
-                Person updatedCompany = (Company) invocation.getArguments()[1]
-                if (updatedCompany != null) {
-                    companies.set(id, updatedCompany)
-                }
-                return null
-            }
-        }
-        Company updatedCompany = null
+        Person updatedCompany = null
 
-        doAnswer(answer).when(processor).update(id, updatedCompany)
         companyService.update(id, updatedCompany)
-        Person expectedResult = companies.find {it.id == id}
+        Company expectedResult = companies.find {it.id == id}
 
         assertNull(updatedCompany)
         assertEquals(expectedResult.name, "Empresa 1")
@@ -207,7 +184,7 @@ class CompanyServiceTest {
             }
         }
 
-        doAnswer(answer).when(processor).delete(id)
+        doAnswer(answer).when(companyDAO).deleteCompanyById(id)
         companyService.delete(id)
         boolean result = companies.find {it.id == 4}
 
