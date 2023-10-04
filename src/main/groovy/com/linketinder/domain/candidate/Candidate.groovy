@@ -16,9 +16,9 @@ class Candidate extends Person {
 
     @Override
     String toString() {
-        return """${super.toString()}cpf=${cpf}, academicExperiences=${academicExperiences}, 
-            workExperiences=${workExperiences}, languages=${languages}, skills=${skills}, 
-            certificates=${certificates}"""
+        return "${super.toString()}cpf=${cpf}, academicExperiences=${academicExperiences}, " +
+            "workExperiences=${workExperiences}, languages=${languages}, skills=${skills}, " +
+            "certificates=${certificates}"
     }
 
 }
