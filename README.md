@@ -26,5 +26,5 @@ O arquivo que tem o método main para a execução do projeto está em:
 * Arquivo: Main.groovy
 
 ==================================================
-### Feito por: Willian Henrique de Oliveira
+### Feito por: Willian H. de Oliveira
 ==================================================
