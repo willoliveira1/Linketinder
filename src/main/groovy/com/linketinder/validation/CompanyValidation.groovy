@@ -2,6 +2,8 @@ package com.linketinder.validation
 
 import com.linketinder.model.shared.State
 
+import java.util.regex.Pattern
+
 class CompanyValidation implements IPersonValidation {
 
     BufferedReader reader = System.in.newReader()
@@ -20,6 +22,11 @@ class CompanyValidation implements IPersonValidation {
     String validateEmail() {
         println "Qual o email da empresa?"
         String email = reader.readLine()
+        String regexEmail = /^[\w\.-]{2,}@\w{3,}\.\w{2,6}(\.\w{2,3})?$/
+        if (!Pattern.matches(regexEmail, email)) {
+            println "Email inválido."
+            validateEmail()
+        }
         return email
     }
 
@@ -39,7 +46,8 @@ class CompanyValidation implements IPersonValidation {
     String validateCep() {
         println "Qual o cep da empresa?"
         String cep = reader.readLine()
-        if (cep.length() < 8 || cep.length() > 10) {
+        String regexCep = /^\d{2}(\.)?\d{3}(-)?\d{3}$/
+        if (!Pattern.matches(regexCep, cep)) {
             println "Cep inválido."
             validateCep()
         }
@@ -49,8 +57,9 @@ class CompanyValidation implements IPersonValidation {
     String validateCnpj() {
         println "Qual cnpj da empresa?"
         String cnpj = reader.readLine()
-        if (cnpj.length() < 14 || cnpj.length() > 18) {
-            println "Tamanho de CNPJ inválido."
+        String regexCnpj = /^\d{2}(\.)?\d{3}(\.)?\d{3}(\/)?\d{4}(-)?\d{2}$/
+        if (!Pattern.matches(regexCnpj, cnpj)) {
+            println "CNPJ inválido."
             validateCnpj()
         }
         return cnpj
