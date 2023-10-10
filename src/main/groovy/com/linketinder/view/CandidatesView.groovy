@@ -1,23 +1,26 @@
 package com.linketinder.view
 
-import com.linketinder.domain.candidate.AcademicExperience
-import com.linketinder.domain.candidate.Candidate
-import com.linketinder.domain.candidate.Certificate
-import com.linketinder.domain.candidate.CourseStatus
-import com.linketinder.domain.candidate.WorkExperience
-import com.linketinder.domain.jobvacancy.ContractType
-import com.linketinder.domain.candidate.Language
-import com.linketinder.domain.jobvacancy.LocationType
-import com.linketinder.domain.shared.Proficiency
-import com.linketinder.domain.shared.Skill
-import com.linketinder.domain.shared.State
+import com.linketinder.model.candidate.AcademicExperience
+import com.linketinder.model.candidate.Candidate
+import com.linketinder.model.candidate.Certificate
+import com.linketinder.model.candidate.CourseStatus
+import com.linketinder.model.candidate.Language
+import com.linketinder.model.candidate.WorkExperience
+import com.linketinder.model.jobvacancy.ContractType
+import com.linketinder.model.jobvacancy.LocationType
+import com.linketinder.model.shared.Proficiency
+import com.linketinder.model.shared.Skill
+import com.linketinder.model.shared.State
 import com.linketinder.service.CandidateService
 import com.linketinder.service.IBaseService
+import com.linketinder.validation.CandidateValidation
+import com.linketinder.validation.IPersonValidation
 
 class CandidatesView {
 
-    IBaseService service = new CandidateService()
     BufferedReader reader = System.in.newReader()
+    IBaseService service = new CandidateService()
+    IPersonValidation validation = new CandidateValidation()
 
     void getAllCandidates() {
         println "Listagem de Candidatos:"
@@ -26,362 +29,117 @@ class CandidatesView {
     }
 
     void getCandidateById() {
-        println "Qual id do Candidato que deseja ver o detalhamento?"
-        Integer id
-        try {
-            id = reader.readLine() as Integer
-        } catch (IllegalArgumentException e) {
-            println "Argumento inválido."
-            getCandidateById()
-        }
-        Candidate candidate = service.getById(id)
-        if (candidate == null) {
-            println "Candidato não encontrado."
-            return
-        }
-        println candidate
-    }
-
-    void addCandidate() {
-        println "Qual o nome do candidato?"
-        String name = reader.readLine()
-        println "Qual o email do candidato?"
-        String email = reader.readLine()
-        println "Qual a cidade do candidato?"
-        String city = reader.readLine()
-        println "Qual a sigla do estado do candidato?"
-        State state
-        try {
-            String input = reader.readLine()
-            state = State.valueOf(input.toUpperCase())
-        } catch (IllegalArgumentException e) {
-            println "Estado ${state} é inválido."
-            return
-        }
-        println "Qual o país do candidato?"
-        String country = reader.readLine()
-        println "Qual o cep do candidato?"
-        String cep = reader.readLine()
-        if (cep.length() < 8 || cep.length() > 10) {
-            println "Cep ${cep} é inválido."
-            return
-        }
-        println "Quais informações pessoais o candidato quer informar?"
-        String description = reader.readLine()
-        println "Qual cpf do candidato?"
-        String cpf = reader.readLine()
-        if (cpf.length() < 11 || cpf.length() > 14) {
-            println "Tamanho de CPF inválido."
-            return
-        }
-        println "Deseja adicionar experiências acadêmicas? (S/N)"
-        String input = reader.readLine()
-        List<AcademicExperience> academicExperiences = []
-        if (input.toUpperCase().equals("S")) {
-            academicExperiences = addAcademicExperiences()
-        }
-        println "Deseja adicionar experiências profissionais? (S/N)"
-        input = reader.readLine()
-        List<WorkExperience> workExperiences = []
-        if (input.toUpperCase().equals("S")) {
-            workExperiences = addWorkExperiences()
-        }
-        println "Deseja adicionar idiomas? (S/N)"
-        input = reader.readLine()
-        List<Language> languages = []
-        if (input.toUpperCase().equals("S")) {
-            languages = addLanguages()
-        }
-        println "Deseja adicionar competências? (S/N)"
-        input = reader.readLine()
-        List<Skill> skills = []
-        if (input.toUpperCase().equals("S")) {
-            skills = addSkills()
-        }
-        println "Deseja adicionar certificados? (S/N)"
-        input = reader.readLine()
-        List<Certificate> certificates = []
-        if (input.toUpperCase().equals("S")) {
-            certificates = addCertificates()
-        }
-
-        Candidate candidate = new Candidate(null, name, email, city, state, country, cep, description,
-                cpf, academicExperiences, workExperiences, languages, skills, certificates)
-        service.add(candidate)
-    }
-
-    void removeCandidate() {
-        println "Qual o id do candidato a ser removido?"
-        Integer id
-        try {
-            id = reader.readLine() as Integer
-        } catch (IllegalArgumentException e) {
-            println "Argumento inválido."
-            removeCandidate()
-        }
-        Candidate candidate = service.getById(id)
-        if (candidate == null) {
-            println "Candidato não encontrado."
-            return
-        }
-        service.delete(id)
-        println "Candidato Removido"
-    }
-
-    void updateCandidate() {
-        println "Qual o id do candidato que deseja atualizar"
-        Integer id
-        try {
-            id = reader.readLine() as Integer
-        } catch (IllegalArgumentException e) {
-            println "id inválido."
-            return
-        }
-        Candidate candidate = service.getById(id)
-        if (candidate == null) {
-            return
-        }
-
-        println "Qual o nome do candidato?"
-        String name = reader.readLine()
-        println "Qual o email do candidato?"
-        String email = reader.readLine()
-        println "Qual a cidade do candidato?"
-        String city = reader.readLine()
-        println "Qual a sigla do estado do candidato?"
-        State state
-        try {
-            String input = reader.readLine()
-            state = State.valueOf(input.toUpperCase())
-        } catch (IllegalArgumentException e) {
-            println "Estado ${state} é inválido."
-            return
-        }
-        println "Qual o país do candidato?"
-        String country = reader.readLine()
-        println "Qual o cep do candidato?"
-        String cep = reader.readLine()
-        if (cep.length() < 8 || cep.length() > 10) {
-            println "Cep ${cep} é inválido."
-            return
-        }
-        println "Quais informações pessoais o candidato quer informar?"
-        String description = reader.readLine()
-        println "Qual CPF do candidato?"
-        String cpf = reader.readLine()
-        if (cpf.length() < 11 || cpf.length() > 14) {
-            println "Tamanho de CPF inválido."
-            return
-        }
-        println "Deseja adicionar experiências acadêmicas? (S/N)"
-        String input = reader.readLine()
-        List<AcademicExperience> academicExperiences = []
-        if (input.toUpperCase().equals("S")) {
-            academicExperiences = addAcademicExperiences()
-        }
-        println "Deseja adicionar experiências profissionais? (S/N)"
-        input = reader.readLine()
-        List<WorkExperience> workExperiences = []
-        if (input.toUpperCase().equals("S")) {
-            workExperiences = addWorkExperiences()
-        }
-        println "Deseja adicionar idiomas? (S/N)"
-        input = reader.readLine()
-        List<Language> languages = []
-        if (input.toUpperCase().equals("S")) {
-            languages = addLanguages()
-        }
-        println "Deseja adicionar competências? (S/N)"
-        input = reader.readLine()
-        List<Skill> skills = []
-        if (input.toUpperCase().equals("S")) {
-            skills = addSkills()
-        }
-        println "Deseja adicionar certificados? (S/N)"
-        input = reader.readLine()
-        List<Certificate> certificates = []
-        if (input.toUpperCase().equals("S")) {
-            certificates = addCertificates()
-        }
-
-        Candidate updatedCandidate = new Candidate(candidate.id, name, email, city, state, country, cep, description,
-                cpf, academicExperiences, workExperiences, languages, skills, certificates)
-        service.update(id, updatedCandidate)
+        Integer id = validation.validateId()
+        println service.getById(id)
     }
 
     List<AcademicExperience> addAcademicExperiences() {
+        println "Deseja adicionar experiências acadêmicas? (S/N)"
         List<AcademicExperience> academicExperiences = []
-        Integer addMore = 1
+        String input = reader.readLine()
+        Boolean addMore = validation.validateAddMore(input)
 
         while (addMore) {
-            Integer id
-            if (academicExperiences.size() == 0) {
-                id = 1
-            } else {
-                id = academicExperiences.size() + 1
-            }
             println "Qual o nome da instituição de ensino?"
             String educationalInstitution = reader.readLine()
             println "Qual o tipo de diploma?"
             String degreeType = reader.readLine()
             println "Qual o curso?"
             String fieldOfStudy = reader.readLine()
-            println "Qual o status atual do curso? (Cursando/Concluído/Trancado)"
-            String input = reader.readLine()
-            CourseStatus status
-            try {
-                status = CourseStatus.valueOf(input)
-            } catch (IllegalArgumentException e) {
-                println "Status inválido."
-                addAcademicExperiences()
-            }
+            CourseStatus status = validation.validateCourseStatus()
 
-            AcademicExperience experience = new AcademicExperience(id, educationalInstitution, degreeType, fieldOfStudy, status)
+            AcademicExperience experience = new AcademicExperience(null, educationalInstitution, degreeType,
+                    fieldOfStudy, status)
             academicExperiences.add(experience)
 
             println "Deseja adicionar mais experiências acadêmicas? (S/N)"
             input = reader.readLine()
-            if (input.toUpperCase().equals("S")) {
-                addMore = 1
-            } else {
-                addMore = 0
-            }
+            addMore = validation.validateAddMore(input)
         }
         return academicExperiences
     }
 
     List<WorkExperience> addWorkExperiences() {
+        println "Deseja adicionar experiências profissionais? (S/N)"
         List<WorkExperience> workExperiences = []
-        Integer addMore = 1
+        String input = reader.readLine()
+        Boolean addMore = validation.validateAddMore(input)
 
         while (addMore) {
-            Integer id
-            workExperiences.size() == 0 ? 1 : (workExperiences.size() + 1)
             println "Qual o cargo?"
             String title = reader.readLine()
             println "Qual a empresa?"
             String companyName = reader.readLine()
-            println "Qual o tipo de contrato? (CLT/PJ/Temporário/Estágio/Aprendiz)"
-            ContractType contractType
-            String input = reader.readLine()
-            try {
-                contractType = ContractType.valueOf(input)
-            } catch (IllegalArgumentException e) {
-                println "Argumento inválido."
-                addWorkExperiences()
-            }
-            println "Qual o regime de trabalho? (Presencial/Híbrido/Remoto)"
-            LocationType locationType
-            input = reader.readLine()
-            try {
-                locationType = LocationType.valueOf(input)
-            } catch (IllegalArgumentException e) {
-                println "Argumento inválido."
-                addWorkExperiences()
-            }
+            ContractType contractType = validation.validateContractType()
+            LocationType locationType = validation.validateLocationType()
             println "Qual a cidade?"
             String city = reader.readLine()
-            println "Qual a sigla do estado?"
-            State state
-            try {
-                input = reader.readLine()
-                state = State.valueOf(input.toUpperCase())
-            } catch (IllegalArgumentException e) {
-                println "Estado ${state} é inválido."
-                return
-            }
-            println "É o emprego atual? (S/N)"
-            Boolean currentlyWork
-            input = reader.readLine()
-            input.toUpperCase().equals("S") ? (currentlyWork = true) : (currentlyWork = false)
+            State state = validation.validateState()
+            boolean currentlyWork = validation.validateCurrentlyWork()
 
             println "Descreva as funções desempenhadas na vaga:"
             String description = reader.readLine()
 
-            WorkExperience experience = new WorkExperience(id, title, companyName, contractType, locationType, city, state, currentlyWork, description)
+            WorkExperience experience = new WorkExperience(null, title, companyName, contractType, locationType,
+                    city, state, currentlyWork, description)
             workExperiences.add(experience)
 
             println "Deseja adicionar mais experiências profissionais? (S/N)"
             input = reader.readLine()
-            if (input.toUpperCase().equals("S")) {
-                addMore = 1
-            } else {
-                addMore = 0
-            }
+            addMore = validation.validateAddMore(input)
         }
         return workExperiences
     }
 
     List<Language> addLanguages() {
+        println "Deseja adicionar idiomas? (S/N)"
         List<Language> languages = []
-        Integer addMore = 1
+        String input = reader.readLine()
+        Boolean addMore = validation.validateAddMore(input)
 
         while (addMore) {
-            languages.size() == 0 ? 1 : (languages.size() + 1)
             println "Qual o idioma?"
             String name = reader.readLine()
-            println "Qual nível de proficiência? (Básico/Intermediário/Avançado)"
-            String input = reader.readLine()
-            Proficiency proficiency
-            try {
-                proficiency = Proficiency.valueOf(input)
-            } catch (IllegalArgumentException e) {
-                println "Argumento inválido."
-                addLanguages()
-            }
+            Proficiency proficiency = validation.validateProficiency()
 
             Language language = new Language(null, name, proficiency)
             languages.add(language)
 
             println "Deseja adicionar mais idiomas? (S/N)"
             input = reader.readLine()
-            if (input.toUpperCase().equals("S")) {
-                addMore = 1
-            } else {
-                addMore = 0
-            }
+            addMore = validation.validateAddMore(input)
         }
         return languages
     }
 
     List<Skill> addSkills() {
+        println "Deseja adicionar competências? (S/N)"
         List<Skill> skills = []
-        Integer addMore = 1
+        String input = reader.readLine()
+        Boolean addMore = validation.validateAddMore(input)
 
         while (addMore) {
-            skills.size() == 0 ? 1 : (skills.size() + 1)
             println "Qual a competência?"
             String title = reader.readLine()
-            println "Qual nível de proficiência? (Básico/Intermediário/Avançado)"
-            String input = reader.readLine()
-            Proficiency proficiency
-            try {
-                proficiency = Proficiency.valueOf(input)
-            } catch (IllegalArgumentException e) {
-                println "Argumento inválido."
-                addSkills()
-            }
+            Proficiency proficiency = validation.validateProficiency()
 
             Skill skill = new Skill(null, title, proficiency)
             skills.add(skill)
 
             println "Deseja adicionar mais competências? (S/N)"
             input = reader.readLine()
-            if (input.toUpperCase().equals("S")) {
-                addMore = 1
-            } else {
-                addMore = 0
-            }
+            addMore = validation.validateAddMore(input)
         }
         return skills
     }
 
     List<Certificate> addCertificates() {
+        println "Deseja adicionar certificados? (S/N)"
         List<Certificate> certificates = []
-        Integer addMore = 1
+        String input = reader.readLine()
+        Boolean addMore = validation.validateAddMore(input)
 
         while (addMore) {
-            certificates.size() == 0 ? 1 : (certificates.size() + 1)
             println "Qual o título do certificado?"
             String title = reader.readLine()
             println "Qual a duração?"
@@ -391,14 +149,64 @@ class CandidatesView {
             certificates.add(certificate)
 
             println "Deseja adicionar mais certificações? (S/N)"
-            String input = reader.readLine()
-            if (input.toUpperCase().equals("S")) {
-                addMore = 1
-            } else {
-                addMore = 0
-            }
+            input = reader.readLine()
+            addMore = validation.validateAddMore(input)
         }
         return certificates
+    }
+
+    void addCandidate() {
+        println "Qual o nome do candidato?"
+        String name = reader.readLine()
+        String email = validation.validateEmail()
+        println "Qual a cidade do candidato?"
+        String city = reader.readLine()
+        State state = validation.validateState()
+        println "Qual o país do candidato?"
+        String country = reader.readLine()
+        String cep = validation.validateCep()
+        println "Quais informações pessoais o candidato quer informar?"
+        String description = reader.readLine()
+        String cpf = validation.validateCpf()
+        List<AcademicExperience> academicExperiences = addAcademicExperiences()
+        List<WorkExperience> workExperiences = addWorkExperiences()
+        List<Language> languages = addLanguages()
+        List<Skill> skills = addSkills()
+        List<Certificate> certificates = addCertificates()
+
+        Candidate candidate = new Candidate(null, name, email, city, state, country, cep, description, cpf,
+                academicExperiences, workExperiences, languages, skills, certificates)
+        service.add(candidate)
+    }
+
+    void updateCandidate() {
+        Integer id = validation.validateId()
+        println "Qual o nome do candidato?"
+        String name = reader.readLine()
+        String email = validation.validateEmail()
+        println "Qual a cidade do candidato?"
+        String city = reader.readLine()
+        State state = validation.validateState()
+        println "Qual o país do candidato?"
+        String country = reader.readLine()
+        String cep = validation.validateCep()
+        println "Quais informações pessoais o candidato quer informar?"
+        String description = reader.readLine()
+        String cpf = validation.validateCpf()
+        List<AcademicExperience> academicExperiences = addAcademicExperiences()
+        List<WorkExperience> workExperiences = addWorkExperiences()
+        List<Language> languages = addLanguages()
+        List<Skill> skills = addSkills()
+        List<Certificate> certificates = addCertificates()
+
+        Candidate updatedCandidate = new Candidate(id, name, email, city, state, country, cep, description, cpf,
+                academicExperiences, workExperiences, languages, skills, certificates)
+        service.update(updatedCandidate.id, updatedCandidate)
+    }
+
+    void removeCandidate() {
+        Integer id = validation.validateId()
+        service.delete(id)
     }
 
 }

@@ -2,7 +2,7 @@ plugins {
     id 'groovy'
 }
 
-group = 'org.example'
+group = 'com.linketinder'
 version = '1.0-SNAPSHOT'
 
 repositories {

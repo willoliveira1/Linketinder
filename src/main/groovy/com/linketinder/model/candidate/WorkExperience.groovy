@@ -1,9 +1,9 @@
-package com.linketinder.domain.candidate
+package com.linketinder.model.candidate
 
+import com.linketinder.model.jobvacancy.ContractType
+import com.linketinder.model.jobvacancy.LocationType
+import com.linketinder.model.shared.State
 import groovy.transform.TupleConstructor
-import com.linketinder.domain.jobvacancy.ContractType
-import com.linketinder.domain.jobvacancy.LocationType
-import com.linketinder.domain.shared.State
 
 @TupleConstructor
 class WorkExperience {
@@ -24,4 +24,5 @@ class WorkExperience {
                 "locationType=${locationType}, city=${city}, state=${state}, currentlyWork=${currentlyWork}, " +
                 "description=${description}"
     }
+
 }

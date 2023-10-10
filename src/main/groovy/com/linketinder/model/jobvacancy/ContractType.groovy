@@ -1,4 +1,4 @@
-package com.linketinder.domain.jobvacancy
+package com.linketinder.model.jobvacancy
 
 enum ContractType {
 

@@ -1,4 +1,4 @@
-package com.linketinder.domain.shared
+package com.linketinder.model.shared
 
 import groovy.transform.TupleConstructor
 
@@ -14,10 +14,10 @@ abstract class Person {
     String cep
     String description
 
-
     @Override
     String toString() {
         return "id=${id}, name=${name}, email=${email}, city=${city}, state=${state}, country=${country}, " +
                 "cep=${cep}, description=${description}, "
     }
+
 }

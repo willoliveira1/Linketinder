@@ -1,7 +1,7 @@
 package com.linketinder.service
 
 import com.linketinder.dao.companydao.JobVacancyDAO
-import com.linketinder.domain.jobvacancy.JobVacancy
+import com.linketinder.model.jobvacancy.JobVacancy
 
 class JobVacancyService {
 
@@ -19,13 +19,12 @@ class JobVacancyService {
         return jobVacancyDAO.getJobVacancyById(id)
     }
 
-    void add(Integer id, JobVacancy jobVacancy) {
-        jobVacancyDAO.insertJobVacancy(jobVacancy, id)
+    void add(Integer companyId, JobVacancy jobVacancy) {
+        jobVacancyDAO.insertJobVacancy(companyId, jobVacancy)
     }
 
-
-    void update(Integer id, JobVacancy jobVacancy) {
-        jobVacancyDAO.updateJobVacancy(jobVacancy, id)
+    void update(JobVacancy jobVacancy) {
+        jobVacancyDAO.updateJobVacancy(jobVacancy)
     }
 
     void delete(Integer id) {

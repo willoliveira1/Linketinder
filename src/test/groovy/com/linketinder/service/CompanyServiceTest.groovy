@@ -1,8 +1,8 @@
 package com.linketinder.service
 
 import com.linketinder.dao.companydao.CompanyDAO
-import com.linketinder.domain.company.*
-import com.linketinder.domain.shared.*
+import com.linketinder.model.company.*
+import com.linketinder.model.shared.*
 
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.extension.ExtendWith;

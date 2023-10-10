@@ -1,4 +1,4 @@
-package com.linketinder.domain.candidate
+package com.linketinder.model.candidate
 
 import groovy.transform.TupleConstructor
 
@@ -16,4 +16,5 @@ class AcademicExperience {
         return "id=${id}, educationalInstitution=${educationalInstitution}, degreeType=${degreeType}, " +
                 "fieldOfStudy=${fieldOfStudy}, status=${status}"
     }
+
 }

@@ -1,7 +1,7 @@
 package com.linketinder.service
 
 import com.linketinder.dao.candidatedao.CandidateDAO
-import com.linketinder.domain.candidate.Candidate
+import com.linketinder.model.candidate.Candidate
 
 class CandidateService implements IBaseService<Candidate> {
 

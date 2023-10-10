@@ -1,11 +1,10 @@
 package com.linketinder.service
 
 import com.linketinder.dao.candidatedao.CandidateDAO
-import com.linketinder.domain.candidate.*
-import com.linketinder.domain.jobvacancy.ContractType
-import com.linketinder.domain.jobvacancy.LocationType
-import com.linketinder.domain.shared.*
-
+import com.linketinder.model.candidate.*
+import com.linketinder.model.jobvacancy.ContractType
+import com.linketinder.model.jobvacancy.LocationType
+import com.linketinder.model.shared.*
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runners.Parameterized
@@ -26,24 +25,19 @@ class CandidateServiceTest {
     private CandidateDAO candidateDAO
 
     @Parameterized.Parameters
-    static List<Candidate> candidatesList() {
+    static List<Candidate> candidates() {
         List<Candidate> candidates = new ArrayList<>()
-        Person candidate1 = new Candidate(id: 1, name: "Afonso Alberto", email: "aa@gmail.com", city: "Araraquara", state: State.SP, country: "Brasil", cep: "14800000", description: "Sobre mim 1", cpf: "12345678900", academicExperiences: [new AcademicExperience(id: 1, educationalInstitution: "Anhanguera", degreeType: "Bacharel", fieldOfStudy: "Engenharia de Software", status: CourseStatus.Cursando)], workExperiences: [new WorkExperience(id: 1, title: "Assistente Fiscal", companyName: "Empresa 1", contractType: ContractType.CLT, locationType: LocationType.Presencial, city: "Patos de Minas", state: State.MG, currentlyWork: true, description: "Descrição 1")], languages: [new Language(id: 1, name: "Português", proficiency: Proficiency.Avançado)], skills: [new Skill(id: 1, title: "Java", proficiency: Proficiency.Intermediário)], certificates: [new Certificate(id: 1, title: "Curso Certificado 1", duration: "6 meses")])
-        Person candidate2 = new Candidate(id: 2, name: "Breno Bernardo", email: "bb@gmail.com", city: "São Carlos", state: State.SP, country: "Brasil", cep: "14900000", description: "Sobre mim 2", cpf: "45678912312", academicExperiences: [new AcademicExperience(id: 1, educationalInstitution: "FGV", degreeType: "Bacharel", fieldOfStudy: "Análise e Desenvolvimento de Sistemas", status: CourseStatus.Concluído), new AcademicExperience(id: 2, educationalInstitution: "PUC", degreeType: "Mestrado", fieldOfStudy: "Engenharia de Software", status: CourseStatus.Cursando)], workExperiences: [], languages: [new Language(id: 1, name: "Português", proficiency: Proficiency.Avançado), new Language(id: 2, name: "Inglês", proficiency: Proficiency.Básico)], skills: [new Skill(id: 1, title: "Java", proficiency: Proficiency.Avançado), new Skill(id: 2, title: "Groovy", proficiency: Proficiency.Intermediário), new Skill(id: 3, title: "SQL", proficiency: Proficiency.Básico)], certificates: [])
-        Person candidate3 = new Candidate(id: 3, name: "Carlos Carvalho", email: "cc@gmail.com", city: "Patos de Minas", state: State.MG, country: "Brasil", cep: "17800000", description: "Sobre mim 3", cpf: "12398745617", academicExperiences: [new AcademicExperience(id: 1, educationalInstitution: "Logatti", degreeType: "Bacharel", fieldOfStudy: "Engenharia de Software", status: CourseStatus.Trancado)], workExperiences: [new WorkExperience(id: 1, title: "Estagiário de Desenvolvimento", companyName: "Empresa 8", contractType: ContractType.Estágio, locationType: LocationType.Híbrido, city: "Patos de Minas", state: State.MG, currentlyWork: true, description: "Descrição 1")], languages: [new Language(id: 1, name: "Inglês", proficiency: Proficiency.Avançado), new Language(id: 2, name: "Português", proficiency: Proficiency.Avançado)], skills: [new Skill(id: 1, title: "Rust", proficiency: Proficiency.Intermediário), new Skill(id: 2, title: "C++", proficiency: Proficiency.Básico)], certificates: [new Certificate(id: 1, title: "Curso Certificado 1", duration: "1 ano"), new Certificate(id: 2, title: "Curso Certificado 2", duration: "2 meses")])
-        Person candidate4 = new Candidate(id: 4, name: "Denis Delavechia", email: "dd@hotmail.com", city: "Curitiba", state: State.PR, country: "Brasil", cep: "12300000", description: "Sobre mim 4", cpf: "45615167904", academicExperiences: [new AcademicExperience(id: 1, educationalInstitution: "UFPR", degreeType: "Bacharel", fieldOfStudy: "Engenharia da Computação", status: CourseStatus.Cursando)], workExperiences: [new WorkExperience(id: 1, title: "Assistente Contábil", companyName: "Empresa Alfa", contractType: ContractType.Temporário, locationType: LocationType.Remoto, city: "Curitiba", state: State.PR, currentlyWork: false, description: "Descrição 1")], languages: [new Language(id: 1, name: "Português", proficiency: Proficiency.Avançado), new Language(id: 2, name: "Inglês", proficiency: Proficiency.Básico)], skills: [new Skill(id: 1, title: "Kotlin", proficiency: Proficiency.Avançado), new Skill(id: 2, title: "PostgreSQL", proficiency: Proficiency.Intermediário), new Skill(id: 3, title: "Angular", proficiency: Proficiency.Básico)], certificates: [new Certificate(id: 1, title: "Curso Certificado 1", duration: "1 mês")])
-        candidates.add(candidate1)
-        candidates.add(candidate2)
-        candidates.add(candidate3)
-        candidates.add(candidate4)
-
+        candidates.add(new Candidate(id: 1, name: "Afonso Alberto", email: "aa@gmail.com", city: "Araraquara", state: State.SP, country: "Brasil", cep: "14800000", description: "Sobre mim 1", cpf: "12345678900", academicExperiences: [new AcademicExperience(id: 1, educationalInstitution: "Anhanguera", degreeType: "Bacharel", fieldOfStudy: "Engenharia de Software", status: CourseStatus.Cursando)], workExperiences: [new WorkExperience(id: 1, title: "Assistente Fiscal", companyName: "Empresa 1", contractType: ContractType.CLT, locationType: LocationType.Presencial, city: "Patos de Minas", state: State.MG, currentlyWork: true, description: "Descrição 1")], languages: [new Language(id: 1, name: "Português", proficiency: Proficiency.Avançado)], skills: [new Skill(id: 1, title: "Java", proficiency: Proficiency.Intermediário)], certificates: [new Certificate(id: 1, title: "Curso Certificado 1", duration: "6 meses")]))
+        candidates.add(new Candidate(id: 2, name: "Breno Bernardo", email: "bb@gmail.com", city: "São Carlos", state: State.SP, country: "Brasil", cep: "14900000", description: "Sobre mim 2", cpf: "45678912312", academicExperiences: [new AcademicExperience(id: 1, educationalInstitution: "FGV", degreeType: "Bacharel", fieldOfStudy: "Análise e Desenvolvimento de Sistemas", status: CourseStatus.Concluído), new AcademicExperience(id: 2, educationalInstitution: "PUC", degreeType: "Mestrado", fieldOfStudy: "Engenharia de Software", status: CourseStatus.Cursando)], workExperiences: [], languages: [new Language(id: 1, name: "Português", proficiency: Proficiency.Avançado), new Language(id: 2, name: "Inglês", proficiency: Proficiency.Básico)], skills: [new Skill(id: 1, title: "Java", proficiency: Proficiency.Avançado), new Skill(id: 2, title: "Groovy", proficiency: Proficiency.Intermediário), new Skill(id: 3, title: "SQL", proficiency: Proficiency.Básico)], certificates: []))
+        candidates.add(new Candidate(id: 3, name: "Carlos Carvalho", email: "cc@gmail.com", city: "Patos de Minas", state: State.MG, country: "Brasil", cep: "17800000", description: "Sobre mim 3", cpf: "12398745617", academicExperiences: [new AcademicExperience(id: 1, educationalInstitution: "Logatti", degreeType: "Bacharel", fieldOfStudy: "Engenharia de Software", status: CourseStatus.Trancado)], workExperiences: [new WorkExperience(id: 1, title: "Estagiário de Desenvolvimento", companyName: "Empresa 8", contractType: ContractType.Estágio, locationType: LocationType.Híbrido, city: "Patos de Minas", state: State.MG, currentlyWork: true, description: "Descrição 1")], languages: [new Language(id: 1, name: "Inglês", proficiency: Proficiency.Avançado), new Language(id: 2, name: "Português", proficiency: Proficiency.Avançado)], skills: [new Skill(id: 1, title: "Rust", proficiency: Proficiency.Intermediário), new Skill(id: 2, title: "C++", proficiency: Proficiency.Básico)], certificates: [new Certificate(id: 1, title: "Curso Certificado 1", duration: "1 ano"), new Certificate(id: 2, title: "Curso Certificado 2", duration: "2 meses")]))
+        candidates.add(new Candidate(id: 4, name: "Denis Delavechia", email: "dd@hotmail.com", city: "Curitiba", state: State.PR, country: "Brasil", cep: "12300000", description: "Sobre mim 4", cpf: "45615167904", academicExperiences: [new AcademicExperience(id: 1, educationalInstitution: "UFPR", degreeType: "Bacharel", fieldOfStudy: "Engenharia da Computação", status: CourseStatus.Cursando)], workExperiences: [new WorkExperience(id: 1, title: "Assistente Contábil", companyName: "Empresa Alfa", contractType: ContractType.Temporário, locationType: LocationType.Remoto, city: "Curitiba", state: State.PR, currentlyWork: false, description: "Descrição 1")], languages: [new Language(id: 1, name: "Português", proficiency: Proficiency.Avançado), new Language(id: 2, name: "Inglês", proficiency: Proficiency.Básico)], skills: [new Skill(id: 1, title: "Kotlin", proficiency: Proficiency.Avançado), new Skill(id: 2, title: "PostgreSQL", proficiency: Proficiency.Intermediário), new Skill(id: 3, title: "Angular", proficiency: Proficiency.Básico)], certificates: [new Certificate(id: 1, title: "Curso Certificado 1", duration: "1 mês")]))
         return candidates
     }
 
     @Test
     @DisplayName("Test getAll")
     void testShouldGetAListOfCandidates() {
-        when(candidateDAO.getAllCandidates()).thenReturn(candidatesList())
+        when(candidateDAO.getAllCandidates()).thenReturn(candidates())
         List<Candidate> result = candidateService.getAll()
 
         List<Candidate> expectedResult = new ArrayList<>()
@@ -52,7 +46,7 @@ class CandidateServiceTest {
         expectedResult.add(new Candidate(id: 3, name: "Carlos Carvalho", email: "cc@gmail.com", city: "Patos de Minas", state: State.MG, country: "Brasil", cep: "17800000", description: "Sobre mim 3", cpf: "12398745617", academicExperiences: [new AcademicExperience(id: 1, educationalInstitution: "Logatti", degreeType: "Bacharel", fieldOfStudy: "Engenharia de Software", status: CourseStatus.Trancado)], workExperiences: [new WorkExperience(id: 1, title: "Estagiário de Desenvolvimento", companyName: "Empresa 8", contractType: ContractType.Estágio, locationType: LocationType.Híbrido, city: "Patos de Minas", state: State.MG, currentlyWork: true, description: "Descrição 1")], languages: [new Language(id: 1, name: "Inglês", proficiency: Proficiency.Avançado), new Language(id: 2, name: "Português", proficiency: Proficiency.Avançado)], skills: [new Skill(id: 1, title: "Rust", proficiency: Proficiency.Intermediário), new Skill(id: 2, title: "C++", proficiency: Proficiency.Básico)], certificates: [new Certificate(id: 1, title: "Curso Certificado 1", duration: "1 ano"), new Certificate(id: 2, title: "Curso Certificado 2", duration: "2 meses")]))
         expectedResult.add(new Candidate(id: 4, name: "Denis Delavechia", email: "dd@hotmail.com", city: "Curitiba", state: State.PR, country: "Brasil", cep: "12300000", description: "Sobre mim 4", cpf: "45615167904", academicExperiences: [new AcademicExperience(id: 1, educationalInstitution: "UFPR", degreeType: "Bacharel", fieldOfStudy: "Engenharia da Computação", status: CourseStatus.Cursando)], workExperiences: [new WorkExperience(id: 1, title: "Assistente Contábil", companyName: "Empresa Alfa", contractType: ContractType.Temporário, locationType: LocationType.Remoto, city: "Curitiba", state: State.PR, currentlyWork: false, description: "Descrição 1")], languages: [new Language(id: 1, name: "Português", proficiency: Proficiency.Avançado), new Language(id: 2, name: "Inglês", proficiency: Proficiency.Básico)], skills: [new Skill(id: 1, title: "Kotlin", proficiency: Proficiency.Avançado), new Skill(id: 2, title: "PostgreSQL", proficiency: Proficiency.Intermediário), new Skill(id: 3, title: "Angular", proficiency: Proficiency.Básico)], certificates: [new Certificate(id: 1, title: "Curso Certificado 1", duration: "1 mês")]))
 
-        assertEquals(expectedResult.id, result.id)
+        assertEquals(expectedResult.id as Integer, result.id as Integer)
         assertEquals(expectedResult.name, result.name)
         assertEquals(expectedResult.cpf, result.cpf)
         assertEquals(expectedResult.academicExperiences.educationalInstitution,
@@ -63,7 +57,7 @@ class CandidateServiceTest {
     @DisplayName("Test getById using valid id")
     void testShouldGetCandidateByValidId() {
         int id = 2
-        when(candidateDAO.getCandidateById(id)).thenReturn(candidatesList().find {it.id == id})
+        when(candidateDAO.getCandidateById(id)).thenReturn(candidates().find {it.id == id})
         Candidate result = candidateService.getById(id)
 
         Person expectedResult = new Candidate(id: 2, name: "Breno Bernardo", email: "bb@gmail.com", city: "São Carlos", state: State.SP, country: "Brasil", cep: "14900000", description: "Sobre mim 2", cpf: "45678912312", academicExperiences: [new AcademicExperience(id: 1, educationalInstitution: "FGV", degreeType: "Bacharel", fieldOfStudy: "Análise e Desenvolvimento de Sistemas", status: CourseStatus.Concluído), new AcademicExperience(id: 2, educationalInstitution: "PUC", degreeType: "Mestrado", fieldOfStudy: "Engenharia de Software", status: CourseStatus.Cursando)], workExperiences: [], languages: [new Language(id: 1, name: "Português", proficiency: Proficiency.Avançado), new Language(id: 2, name: "Inglês", proficiency: Proficiency.Básico)], skills: [new Skill(id: 1, title: "Java", proficiency: Proficiency.Avançado), new Skill(id: 2, title: "Groovy", proficiency: Proficiency.Intermediário), new Skill(id: 3, title: "SQL", proficiency: Proficiency.Básico)], certificates: [])
@@ -77,7 +71,7 @@ class CandidateServiceTest {
     @DisplayName("Test getById using invalid id")
     void testShouldBeNullUsingInvalidId() {
         int id = 10
-        when(candidateDAO.getCandidateById(id)).thenReturn(candidatesList().find {it.id == id})
+        when(candidateDAO.getCandidateById(id)).thenReturn(candidates().find {it.id == id})
 
         Candidate result = candidateService.getById(id)
 
@@ -88,7 +82,7 @@ class CandidateServiceTest {
     @DisplayName("Test getById using null id")
     void testShouldBeNullUsingNullId() {
         int id
-        when(candidateDAO.getCandidateById(id)).thenReturn(candidatesList().find {it.id == id})
+        when(candidateDAO.getCandidateById(id)).thenReturn(candidates().find {it.id == id})
 
         Candidate result = candidateService.getById(id)
 
@@ -98,7 +92,7 @@ class CandidateServiceTest {
     @Test
     @DisplayName("Test add using valid Candidate")
     void testShouldBeAddCandidate() {
-        List<Candidate> candidates = candidatesList()
+        List<Candidate> candidates = candidates()
         Answer<Candidate> answer = new Answer<Candidate>() {
             @Override
             Candidate answer(InvocationOnMock invocation) throws Throwable {
@@ -122,7 +116,7 @@ class CandidateServiceTest {
     @Test
     @DisplayName("Test add using null Candidate")
     void testShouldBeThrowExceptionAddNullCandidate() {
-        List<Candidate> candidates = candidatesList()
+        List<Candidate> candidates = candidates()
         Answer<Candidate> answer = new Answer<Candidate>() {
             @Override
             Candidate answer(InvocationOnMock invocation) throws Throwable {
@@ -145,7 +139,7 @@ class CandidateServiceTest {
     @Test
     @DisplayName("Test update using a valid Candidate")
     void testShouldBeUpdateCandidate() {
-        List<Candidate> candidates = candidatesList()
+        List<Candidate> candidates = candidates()
         Integer id = 1
         Answer<Candidate> answer = new Answer<Candidate>() {
             @Override
@@ -171,7 +165,7 @@ class CandidateServiceTest {
     @Test
     @DisplayName("Test update using a null Candidate")
     void testShouldntBeUpdateCandidateUsingEmptyCandidate() {
-        List<Candidate> candidates = candidatesList()
+        List<Candidate> candidates = candidates()
         Integer id = 1
         Answer<Candidate> answer = new Answer<Candidate>() {
             @Override
@@ -197,7 +191,7 @@ class CandidateServiceTest {
     @Test
     @DisplayName("Test delete using a valid id")
     void testShouldBeDeleteCandidate() {
-        List<Candidate> candidates = candidatesList()
+        List<Candidate> candidates = candidates()
         int id = 4
         Answer<Integer> answer = new Answer<Integer>() {
             @Override

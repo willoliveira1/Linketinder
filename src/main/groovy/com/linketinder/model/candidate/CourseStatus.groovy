@@ -1,4 +1,4 @@
-package com.linketinder.domain.candidate
+package com.linketinder.model.candidate
 
 enum CourseStatus {
 
