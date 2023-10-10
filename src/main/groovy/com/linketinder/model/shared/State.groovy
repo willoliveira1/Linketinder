@@ -1,4 +1,4 @@
-package com.linketinder.domain.shared
+package com.linketinder.model.shared
 
 enum State {
 

@@ -150,7 +150,6 @@ Digite a opção desejada:
             default:
                 invalidOption()
         }
-
         backToInitialScreen()
     }
 

@@ -1,6 +1,6 @@
-package com.linketinder.domain.candidate
+package com.linketinder.model.candidate
 
-import com.linketinder.domain.shared.Proficiency
+import com.linketinder.model.shared.Proficiency
 import groovy.transform.TupleConstructor
 
 @TupleConstructor
@@ -14,4 +14,5 @@ class Language {
     String toString() {
         return "id=${id}, name=${name}, proficiency=${proficiency}"
     }
+
 }

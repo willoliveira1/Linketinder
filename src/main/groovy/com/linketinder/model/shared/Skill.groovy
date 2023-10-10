@@ -1,4 +1,4 @@
-package com.linketinder.domain.shared
+package com.linketinder.model.shared
 
 import groovy.transform.TupleConstructor
 
@@ -13,4 +13,5 @@ class Skill {
     String toString() {
         return "id=${id}, title=${title}, proficiency=${proficiency}"
     }
+
 }

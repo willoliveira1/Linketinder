@@ -1,8 +1,8 @@
-package com.linketinder.domain.candidate
+package com.linketinder.model.candidate
 
+import com.linketinder.model.shared.Person
+import com.linketinder.model.shared.Skill
 import groovy.transform.TupleConstructor
-import com.linketinder.domain.shared.Person
-import com.linketinder.domain.shared.Skill
 
 @TupleConstructor(callSuper=true, includeSuperProperties=true, includeSuperFields=true)
 class Candidate extends Person {

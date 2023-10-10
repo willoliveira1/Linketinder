@@ -1,4 +1,4 @@
-package com.linketinder.domain.candidate
+package com.linketinder.model.candidate
 
 import groovy.transform.TupleConstructor
 
@@ -13,4 +13,5 @@ class Certificate {
     String toString() {
         return "id=${id}, title=${title}, duration=${duration}"
     }
+
 }

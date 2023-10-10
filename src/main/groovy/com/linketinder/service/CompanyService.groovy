@@ -1,7 +1,7 @@
 package com.linketinder.service
 
 import com.linketinder.dao.companydao.CompanyDAO
-import com.linketinder.domain.company.Company
+import com.linketinder.model.company.Company
 
 class CompanyService implements IBaseService<Company> {
 
@@ -20,7 +20,7 @@ class CompanyService implements IBaseService<Company> {
     }
 
     void update(Integer id, Company company) {
-        companyDAO.insertCompany(company)
+        companyDAO.updateCompany(id, company)
     }
 
     void delete(Integer id) {

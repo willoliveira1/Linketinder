@@ -1,4 +1,4 @@
-package com.linketinder.domain.company
+package com.linketinder.model.company
 
 import groovy.transform.TupleConstructor
 
@@ -12,4 +12,5 @@ class Benefit {
     String toString() {
         return "id=${id}, title=${title}"
     }
+
 }

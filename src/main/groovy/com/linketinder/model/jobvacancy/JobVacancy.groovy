@@ -1,8 +1,6 @@
-package com.linketinder.domain.jobvacancy
+package com.linketinder.model.jobvacancy
 
-
-import com.linketinder.domain.shared.Skill
-
+import com.linketinder.model.shared.Skill
 import groovy.transform.TupleConstructor
 
 @TupleConstructor
@@ -18,7 +16,8 @@ class JobVacancy {
 
     @Override
     String toString() {
-        return "id=${id}, title=${title}, description=${description}, requiredSkills=${requiredSkills}, salary=${salary}" +
-                ", contractType=${contractType}, locationType=${locationType}"
+        return "id=${id}, title=${title}, description=${description}, requiredSkills=${requiredSkills}, " +
+                "salary=${salary}, contractType=${contractType}, locationType=${locationType}"
     }
+
 }
