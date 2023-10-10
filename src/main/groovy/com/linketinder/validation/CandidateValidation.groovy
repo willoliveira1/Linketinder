@@ -6,6 +6,8 @@ import com.linketinder.model.jobvacancy.LocationType
 import com.linketinder.model.shared.Proficiency
 import com.linketinder.model.shared.State
 
+import java.util.regex.Pattern
+
 class CandidateValidation implements IPersonValidation {
 
     BufferedReader reader = System.in.newReader()
@@ -24,6 +26,11 @@ class CandidateValidation implements IPersonValidation {
     String validateEmail() {
         println "Qual o email do candidato?"
         String email = reader.readLine()
+        String regexEmail = /^[\w\.-]{2,}@\w{3,}\.\w{2,6}(\.\w{2,3})?$/
+        if (!Pattern.matches(regexEmail, email)) {
+            println "Email inválido."
+            validateEmail()
+        }
         return email
     }
 
@@ -43,7 +50,8 @@ class CandidateValidation implements IPersonValidation {
     String validateCep() {
         println "Qual o cep do candidato?"
         String cep = reader.readLine()
-        if (cep.length() < 8 || cep.length() > 10) {
+        String regexCep = /^\d{2}(\.)?\d{3}(-)?\d{3}$/
+        if (!Pattern.matches(regexCep, cep)) {
             println "Cep inválido."
             validateCep()
         }
@@ -53,7 +61,8 @@ class CandidateValidation implements IPersonValidation {
     String validateCpf() {
         println "Qual cpf do candidato?"
         String cpf = reader.readLine()
-        if (cpf.length() < 11 || cpf.length() > 14) {
+        String regexCpf = /^\d{3}(\.)?\d{3}(\.)?\d{3}(-)?\d{2}$/
+        if (!Pattern.matches(regexCpf, cpf)) {
             println "Tamanho de CPF inválido."
             validateCpf()
         }
