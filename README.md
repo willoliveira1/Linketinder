@@ -15,6 +15,8 @@ Projeto para desenvolver uma aplicação chamada Linketinder.
    * Nesse momento o match é concretizado, aqui a empresa consegue visualizar todas as informações do candidato e podem seguir para as próximas etapas do processo seletivo.
 * Refatorado utilizando as práticas do Clean Code.
 * Adicionado Regex as validações.
+* Adicionado funcionalidade de Curtida e Match.
+* Adicionada persistência do Match no BD.
 
 ## MER
 <img src="MER.png">
