@@ -13,6 +13,8 @@ Projeto para desenvolver uma aplicação chamada Linketinder.
    * Candidato ve a lista de vagas e curte as que lhe despertaram o interesse.
    * A empresa acessa a lista de candidatos e curte os candidatos que lhe interessam.
    * Nesse momento o match é concretizado, aqui a empresa consegue visualizar todas as informações do candidato e podem seguir para as próximas etapas do processo seletivo.
+* Refatorado utilizando as práticas do Clean Code.
+* Adicionado Regex as validações.
 
 ## MER
 <img src="MER.png">
@@ -24,5 +26,5 @@ O arquivo que tem o método main para a execução do projeto está em:
 * Arquivo: Main.groovy
 
 ==================================================
-### Feito por: Willian Henrique de Oliveira
+### Feito por: Willian H. de Oliveira
 ==================================================
