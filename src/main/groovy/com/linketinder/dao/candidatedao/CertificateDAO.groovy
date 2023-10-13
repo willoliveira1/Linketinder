@@ -120,7 +120,7 @@ class CertificateDAO {
 
     void deleteCertificate(int id) {
         Certificate certificate = new Certificate()
-        String query = "SELECT * FROM certificates WHERE id = ${id};"
+        String query = "SELECT * FROM certificates WHERE id=${id};"
         try {
             PreparedStatement stmt = sql.connection.prepareStatement(query)
             ResultSet result = stmt.executeQuery()
@@ -129,7 +129,7 @@ class CertificateDAO {
             }
 
             if (certificate.id != null) {
-                query = "DELETE FROM certificates WHERE id = ${id};"
+                query = "DELETE FROM certificates WHERE id=${id};"
                 stmt = sql.connection.prepareStatement(query)
                 stmt.executeUpdate()
                 return

@@ -137,8 +137,8 @@ CREATE TABLE candidate_skills (
 CREATE TABLE matches (
      id SERIAL PRIMARY KEY,
      candidate_id INTEGER NOT NULL REFERENCES candidates(id) ON DELETE CASCADE,
-     job_vacancy_id INTEGER NOT NULL REFERENCES job_vacancies(id) ON DELETE CASCADE,
-     company_id INTEGER NOT NULL REFERENCES companies(id) ON DELETE CASCADE
+     job_vacancy_id INTEGER REFERENCES job_vacancies(id) ON DELETE CASCADE,
+     company_id INTEGER REFERENCES companies(id) ON DELETE CASCADE
 );
 
 
@@ -365,4 +365,16 @@ INSERT INTO matches (candidate_id, job_vacancy_id, company_id) VALUES
 (5, 1, 1),
 (5, 6, 2),
 (5, 4, 4),
-(3, 1, 1);
+(3, 1, 1),
+(1, NULL, 1),
+(1, 2, NULL),
+(1, NULL, 2),
+(2, 3, NULL),
+(4, NULL, 3),
+(4, 1, NULL),
+(3, NULL, 2),
+(3, NULL, 4),
+(5, NULL, 1),
+(5, 6, NULL),
+(5, 4, NULL),
+(3, NULL, 1);

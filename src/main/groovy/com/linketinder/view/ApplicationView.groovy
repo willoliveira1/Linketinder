@@ -5,7 +5,7 @@ class ApplicationView {
     CandidatesView candidatesView = new CandidatesView()
     CompaniesView companiesView = new CompaniesView()
     JobVacanciesView jobVacanciesView = new JobVacanciesView()
-
+    MatchesView matchesView = new MatchesView()
     BufferedReader reader = System.in.newReader()
 
     void applicationGenerate() {
@@ -22,6 +22,7 @@ Digite a opção desejada:
 1) Candidatos
 2) Empresas
 3) Vagas
+4) Matches
 0) Sair
 """
         println text
@@ -79,16 +80,81 @@ Digite a opção desejada:
         println text
     }
 
-    private void initialScreen() {
-        clearConsole()
-        applicationText()
+    private void matchesText() {
+        String text = """##############################
+##                          ##
+##          Matches         ##
+##                          ##
+##############################
+Digite seu tipo de usuário:
+1) Candidato
+2) Empresa
+0) Voltar
+"""
+        println text
+    }
 
+    private void matchesCandidateText() {
+        String text = """##############################
+##                          ##
+##          Matches         ##
+##                          ##
+##############################
+Digite a opção desejada:
+1) Listar Todos os Matches
+2) Listar Todos os Matches de um Candidato Específico
+3) Curtir Vaga
+0) Voltar
+"""
+        println text
+    }
+
+    private void matchesCompanyText() {
+        String text = """##############################
+##                          ##
+##          Matches         ##
+##                          ##
+##############################
+Digite a opção desejada:
+1) Listar Todos os Matches
+2) Listar Todos os Matches de uma Empresa Específica
+3) Curtir Candidato
+0) Voltar
+"""
+        println text
+    }
+
+    private Integer selectOption() {
         Integer selectedOption
         try {
             selectedOption = reader.readLine() as Integer
         } catch (IllegalArgumentException e) {
             invalidOption()
         }
+        return selectedOption
+    }
+
+    private void invalidOption() {
+        println "Opção inválida."
+        Thread.sleep(1500)
+        initialScreen()
+    }
+
+    private void backToInitialScreen() {
+        println "Aperte enter para continuar..."
+        reader.readLine()
+        clearConsole()
+        initialScreen()
+    }
+
+    private void clearConsole() {
+        for (int i = 0; i < 20; ++i) System.out.println()
+    }
+
+    private void initialScreen() {
+        clearConsole()
+        applicationText()
+        Integer selectedOption = selectOption()
 
         switch (selectedOption) {
             case 1:
@@ -103,25 +169,22 @@ Digite a opção desejada:
                 clearConsole()
                 jobVacanciesScreen()
                 break
+            case 4:
+                clearConsole()
+                matchesScreen()
+                break
             case 0:
                 System.exit(0)
                 break
             default:
                 invalidOption()
         }
-
         backToInitialScreen()
     }
 
     private void candidatesScreen() {
         candidatesText()
-
-        Integer selectedOption
-        try {
-            selectedOption = reader.readLine() as Integer
-        } catch (IllegalArgumentException e) {
-            invalidOption()
-        }
+        Integer selectedOption = selectOption()
 
         switch (selectedOption) {
             case 1:
@@ -155,38 +218,28 @@ Digite a opção desejada:
 
     private void companiesScreen() {
         companiesText()
-        Integer selectedOption
-        try {
-            selectedOption = reader.readLine() as Integer
-        } catch (IllegalArgumentException e) {
-            invalidOption()
-        }
+        Integer selectedOption = selectOption()
 
         switch (selectedOption) {
             case 1:
                 clearConsole()
                 companiesView.getAllCompanies()
-                backToInitialScreen()
                 break
             case 2:
                 clearConsole()
                 companiesView.getCompanyById()
-                backToInitialScreen()
                 break
             case 3:
                 clearConsole()
                 companiesView.addCompany()
-                backToInitialScreen()
                 break
             case 4:
                 clearConsole()
                 companiesView.removeCompany()
-                backToInitialScreen()
                 break
             case 5:
                 clearConsole()
                 companiesView.updateCompany()
-                backToInitialScreen()
                 break
             case 0:
                 initialScreen()
@@ -194,47 +247,36 @@ Digite a opção desejada:
             default:
                 invalidOption()
         }
+        backToInitialScreen()
     }
 
     private void jobVacanciesScreen() {
         jobVacanciesText()
-        Integer selectedOption
-        try {
-            selectedOption = reader.readLine() as Integer
-        } catch (IllegalArgumentException e) {
-            invalidOption()
-        }
-
+        Integer selectedOption = selectOption()
         switch (selectedOption) {
             case 1:
                 clearConsole()
                 jobVacanciesView.getAllJobVacancies()
-                backToInitialScreen()
                 break
             case 2:
                 clearConsole()
                 jobVacanciesView.getAllJobVacanciesByCompanyId()
-                backToInitialScreen()
                 break
             case 3:
                 clearConsole()
                 jobVacanciesView.getJobVacancyById()
-                backToInitialScreen()
                 break
             case 4:
                 clearConsole()
                 jobVacanciesView.addJobVacancy()
-                backToInitialScreen()
                 break
             case 5:
                 clearConsole()
                 jobVacanciesView.removeJobVacancy()
-                backToInitialScreen()
                 break
             case 6:
                 clearConsole()
                 jobVacanciesView.updateJobVacancy()
-                backToInitialScreen()
                 break
             case 0:
                 initialScreen()
@@ -242,23 +284,78 @@ Digite a opção desejada:
             default:
                 invalidOption()
         }
+        backToInitialScreen()
     }
 
-    private void invalidOption() {
-        println "Opção inválida."
-        Thread.sleep(1500)
-        initialScreen()
+    void matchesScreen() {
+        matchesText()
+        Integer selectedOption = selectOption()
+
+        switch (selectedOption) {
+            case 1:
+                clearConsole()
+                this.matchesCandidateScreen()
+                break
+            case 2:
+                clearConsole()
+                this.matchesCompanyScreen()
+                break
+            default:
+                invalidOption()
+        }
+        backToInitialScreen()
     }
 
-    private void backToInitialScreen() {
-        println "Aperte enter para continuar..."
-        reader.readLine()
-        clearConsole()
-        initialScreen()
+    void matchesCandidateScreen() {
+        matchesCandidateText()
+        Integer selectedOption = selectOption()
+
+        switch (selectedOption) {
+            case 1:
+                clearConsole()
+                matchesView.getAllMatches()
+                break
+            case 2:
+                clearConsole()
+                matchesView.getAllMatchesByCandidateId()
+                break
+            case 3:
+                clearConsole()
+                matchesView.likeJobVacancy()
+                break
+            case 0:
+                initialScreen()
+                break
+            default:
+                invalidOption()
+        }
+        backToInitialScreen()
     }
 
-    private void clearConsole() {
-        for (int i = 0; i < 20; ++i) System.out.println()
+    void matchesCompanyScreen() {
+        matchesCompanyText()
+        Integer selectedOption = selectOption()
+
+        switch (selectedOption) {
+            case 1:
+                clearConsole()
+                matchesView.getAllMatches()
+                break
+            case 2:
+                clearConsole()
+                matchesView.getAllMatchesByCompanyId()
+                break
+            case 3:
+                clearConsole()
+                matchesView.likeCandidate()
+                break
+            case 0:
+                initialScreen()
+                break
+            default:
+                invalidOption()
+        }
+        backToInitialScreen()
     }
 
 }
