@@ -10,6 +10,8 @@ import com.linketinder.model.candidate.Language
 import com.linketinder.model.shared.Person
 import com.linketinder.model.shared.Skill
 import com.linketinder.model.shared.State
+import com.linketinder.util.ErrorMessages
+import com.linketinder.util.NotFoundMessages
 import groovy.sql.Sql
 import java.sql.PreparedStatement
 import java.sql.ResultSet
@@ -20,7 +22,19 @@ import java.util.logging.Logger
 
 class CandidateDAO {
 
+    private final String QUERY_GET_ALL_CANDIDATES = "SELECT c.id, c.name, c.email, c.city, s.acronym AS state, c.country, c.cep, c.description, c.cpf FROM candidates AS c, states AS s WHERE c.state_id = s.id ORDER BY c.id"
+    private final String QUERY_GET_CANDIDATE_BY_ID = "SELECT c.id, c.name, c.email, c.city, s.acronym AS state, c.country, c.cep, c.description, c.cpf FROM candidates AS c, states AS s WHERE c.state_id = s.id AND c.id=?"
+    private final String QUERY_CERTIFICATE_ID_BY_CANDIDATE_ID = "SELECT id FROM certificates WHERE candidate_id=?"
+    private final String QUERY_LANGUAGE_ID_BY_CANDIDATE_ID = "SELECT id FROM candidate_languages WHERE candidate_id=?"
+    private final String QUERY_SKILL_ID_BY_CANDIDATE_ID = "SELECT id FROM candidate_skills WHERE candidate_id=?"
+    private final String QUERY_GET_ACADEMIC_EXPERIENCE_ID_BY_CANDIDATE_ID = "SELECT id FROM academic_experiences WHERE candidate_id=?"
+    private final String QUERY_GET_WORK_EXPERIENCE_ID_BY_CANDIDATE_ID = "SELECT id FROM work_experiences WHERE candidate_id=?"
+    private final String INSERT_CANDIDATE = "INSERT INTO candidates (name, email, city, state_id, country, cep, description, cpf) VALUES (?,?,?,?,?,?,?,?)"
+    private final String UPDATE_CANDIDATE = "UPDATE candidates SET name=?, email=?, city=?, state_id=?, country=?, cep=?, description=?, cpf=? WHERE id=?"
+    private final String DELETE_CANDIDATE = "DELETE FROM candidates WHERE id=?"
+
     Sql sql = DatabaseFactory.instance()
+
     DBService dbService = new DBService()
     CertificateDAO certificateDAO = new CertificateDAO()
     LanguageDAO languageDAO = new LanguageDAO()
@@ -56,24 +70,18 @@ class CandidateDAO {
 
     List<Candidate> getAllCandidates() {
         List<Candidate> candidates = new ArrayList<>()
-        String query = """
-            SELECT c.id, c.name, c.email, c.city, s.acronym AS state, c.country, c.cep, c.description, c.cpf
-                FROM candidates AS c,
-                    states AS s
-                WHERE c.state_id = s.id
-                ORDER BY c.id
-        """
         try {
-            candidates = populateCandidates(query)
+            candidates = populateCandidates(QUERY_GET_ALL_CANDIDATES)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, null, e)
+            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DBMSG, e)
         }
         return candidates
     }
 
-    private Candidate populateCandidate(String query) {
+    private Candidate populateCandidate(String query, int id) {
         Person candidate = new Candidate()
         PreparedStatement stmt = sql.connection.prepareStatement(query)
+        stmt.setInt(1, id)
         ResultSet result = stmt.executeQuery()
         while (result.next()) {
             candidate.setId(result.getInt("id"))
@@ -96,17 +104,10 @@ class CandidateDAO {
 
     Candidate getCandidateById(int id) {
         Person candidate = new Candidate()
-        String query = """
-            SELECT c.id, c.name, c.email, c.city, s.acronym AS state, c.country, c.cep, c.description, c.cpf
-                FROM candidates AS c,
-                    states AS s
-                WHERE c.state_id = s.id
-                AND c.id = ${id}
-        """
         try {
-            candidate = populateCandidate(query)
+            candidate = populateCandidate(QUERY_GET_CANDIDATE_BY_ID, id)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, null, e)
+            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DBMSG, e)
         }
         return candidate
     }
@@ -142,11 +143,8 @@ class CandidateDAO {
     }
 
     void insertCandidate(Candidate candidate) {
-        String insertCandidate = "INSERT INTO candidates (name, email, city, state_id, country, cep, " +
-                "description, cpf) VALUES (?,?,?,?,?,?,?,?)"
         try {
-            PreparedStatement stmt = sql.connection.prepareStatement(insertCandidate,
-                    Statement.RETURN_GENERATED_KEYS)
+            PreparedStatement stmt = sql.connection.prepareStatement(INSERT_CANDIDATE, Statement.RETURN_GENERATED_KEYS)
             stmt.setString(1, candidate.name)
             stmt.setString(2, candidate.getEmail())
             stmt.setString(3, candidate.getCity())
@@ -171,13 +169,13 @@ class CandidateDAO {
             insertAcademicExperiences(candidate)
             insertWorkExperiences(candidate)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, null, e)
+            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DBMSG, e)
         }
     }
 
     private void updateCandidateCertificates(int id, Candidate candidate) {
         List<Integer> certificatesIds = new ArrayList<>()
-        sql.eachRow("SELECT id FROM certificates WHERE candidate_id=${id}") {row ->
+        sql.eachRow(QUERY_CERTIFICATE_ID_BY_CANDIDATE_ID, [id]) {row ->
             certificatesIds << row.getInt("id")
         }
 
@@ -197,7 +195,7 @@ class CandidateDAO {
 
     private void updateCandidateLanguages(int id, Candidate candidate) {
         List<Integer> languagesIds = new ArrayList<>()
-        sql.eachRow("SELECT id FROM candidate_languages WHERE candidate_id=${id}") {row ->
+        sql.eachRow(QUERY_LANGUAGE_ID_BY_CANDIDATE_ID, [id]) {row ->
             languagesIds << row.getInt("id")
         }
 
@@ -217,7 +215,7 @@ class CandidateDAO {
 
     private void updateCandidateSkills(int id, Candidate candidate) {
         List<Integer> skillsIds = new ArrayList<>()
-        sql.eachRow("SELECT id FROM candidate_skills WHERE candidate_id=${id}") {row ->
+        sql.eachRow(QUERY_SKILL_ID_BY_CANDIDATE_ID, [id]) {row ->
             skillsIds << row.getInt("id")
         }
 
@@ -237,7 +235,7 @@ class CandidateDAO {
 
     private void updateCandidateAcademicExperiences(int id, Candidate candidate) {
         List<Integer> academicExperiencesIds = new ArrayList<>()
-        sql.eachRow("SELECT id FROM academic_experiences WHERE candidate_id=${id}") {row ->
+        sql.eachRow(QUERY_GET_ACADEMIC_EXPERIENCE_ID_BY_CANDIDATE_ID, [id]) {row ->
             academicExperiencesIds << row.getInt("id")
         }
 
@@ -258,7 +256,7 @@ class CandidateDAO {
 
     private void updateCandidateWorkExperiences(int id, Candidate candidate) {
         List<Integer> workExperiencesIds = new ArrayList<>()
-        sql.eachRow("SELECT id FROM work_experiences WHERE candidate_id=${id}") {row ->
+        sql.eachRow(QUERY_GET_WORK_EXPERIENCE_ID_BY_CANDIDATE_ID, [id]) {row ->
             workExperiencesIds << row.getInt("id")
         }
 
@@ -277,13 +275,8 @@ class CandidateDAO {
     }
 
     void updateCandidate(int id, Candidate candidate) {
-        String updateCandidate = """
-            UPDATE candidates
-                SET name=?, email=?, city=?, state_id=?, country=?, cep=?, description=?, cpf=?
-                WHERE id=${id}
-        """
         try {
-            PreparedStatement stmt = sql.connection.prepareStatement(updateCandidate)
+            PreparedStatement stmt = sql.connection.prepareStatement(UPDATE_CANDIDATE)
             stmt.setString(1, candidate.name)
             stmt.setString(2, candidate.getEmail())
             stmt.setString(3, candidate.getCity())
@@ -291,6 +284,7 @@ class CandidateDAO {
             stmt.setString(6, candidate.getCep())
             stmt.setString(7, candidate.getDescription())
             stmt.setString(8, candidate.getCpf())
+            stmt.setInt(9, id)
 
             int stateId = dbService.idFinder("states", "acronym", candidate.getState().toString())
             stmt.setInt(4, stateId)
@@ -303,31 +297,31 @@ class CandidateDAO {
             updateCandidateAcademicExperiences(id, candidate)
             updateCandidateWorkExperiences(id, candidate)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, null, e)
+            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DBMSG, e)
         }
     }
 
     void deleteCandidateById(int id) {
         Person candidate = new Candidate()
-        String query = "SELECT * FROM candidates WHERE id = ${id};"
         try {
-            PreparedStatement stmt = sql.connection.prepareStatement(query)
+            PreparedStatement stmt = sql.connection.prepareStatement(QUERY_GET_CANDIDATE_BY_ID)
+            stmt.setInt(1, id)
             ResultSet result = stmt.executeQuery()
             while (result.next()) {
                 candidate.setId(result.getInt("id"))
             }
 
             if (candidate.id != null) {
-                query = "DELETE FROM candidates WHERE id = ${id};"
-                stmt = sql.connection.prepareStatement(query)
+                stmt = sql.connection.prepareStatement(DELETE_CANDIDATE)
+                stmt.setInt(1, id)
                 stmt.executeUpdate()
                 println "Candidato Removido"
                 return
             }
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, null, e)
+            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DBMSG, e)
         }
-        println "Candidato não encontrado."
+        println NotFoundMessages.CANDIDATE
     }
 
 }

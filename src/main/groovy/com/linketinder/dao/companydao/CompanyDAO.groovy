@@ -7,7 +7,8 @@ import com.linketinder.model.company.Company
 import com.linketinder.model.jobvacancy.JobVacancy
 import com.linketinder.model.shared.Person
 import com.linketinder.model.shared.State
-import com.linketinder.util.ErrorText
+import com.linketinder.util.ErrorMessages
+import com.linketinder.util.NotFoundMessages
 import groovy.sql.Sql
 import java.sql.PreparedStatement
 import java.sql.ResultSet
@@ -18,12 +19,12 @@ import java.util.logging.Logger
 
 class CompanyDAO {
 
-    static final String QUERY_GET_ALL_COMPANIES = "SELECT c.id, c.name, c.email, c.city, s.acronym AS state, c.country, c.cep, c.description, c.cnpj FROM companies AS c, states AS s WHERE c.state_id = s.id ORDER BY c.id"
-    static final String QUERY_GET_COMPANY_BY_ID = "SELECT c.id, c.name, c.email, c.city, s.acronym AS state, c.country, c.cep, c.description, c.cnpj FROM companies AS c, states AS s WHERE c.state_id = s.id AND c.id=?"
-    static final String QUERY_GET_COMPANY_BENEFITS_BY_COMPANY_ID = "SELECT id FROM company_benefits WHERE company_id=?"
-    static final String INSERT_COMPANY = "INSERT INTO companies (name, email, city, state_id, country, cep, description, cnpj) VALUES (?,?,?,?,?,?,?,?)"
-    static final String UPDATE_COMPANY = "UPDATE companies SET name=?, email=?, city=?, state_id=?, country=?, cep=?, description=?, cnpj=? WHERE id=?"
-    static final String DELETE_COMPANY = "DELETE FROM companies WHERE id=?"
+    private final String QUERY_GET_ALL_COMPANIES = "SELECT c.id, c.name, c.email, c.city, s.acronym AS state, c.country, c.cep, c.description, c.cnpj FROM companies AS c, states AS s WHERE c.state_id = s.id ORDER BY c.id"
+    private final String QUERY_GET_COMPANY_BY_ID = "SELECT c.id, c.name, c.email, c.city, s.acronym AS state, c.country, c.cep, c.description, c.cnpj FROM companies AS c, states AS s WHERE c.state_id = s.id AND c.id=?"
+    private final String QUERY_GET_COMPANY_BENEFITS_BY_COMPANY_ID = "SELECT id FROM company_benefits WHERE company_id=?"
+    private final String INSERT_COMPANY = "INSERT INTO companies (name, email, city, state_id, country, cep, description, cnpj) VALUES (?,?,?,?,?,?,?,?)"
+    private final String UPDATE_COMPANY = "UPDATE companies SET name=?, email=?, city=?, state_id=?, country=?, cep=?, description=?, cnpj=? WHERE id=?"
+    private final String DELETE_COMPANY = "DELETE FROM companies WHERE id=?"
 
     Sql sql = DatabaseFactory.instance()
     DBService dbService = new DBService()
@@ -57,7 +58,7 @@ class CompanyDAO {
         try {
             companies = populateCompanies(QUERY_GET_ALL_COMPANIES)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorText.DbMsg, e)
+            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DBMSG, e)
         }
         return companies
     }
@@ -91,7 +92,7 @@ class CompanyDAO {
         try {
             company = populateCompany(QUERY_GET_COMPANY_BY_ID, id)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorText.DbMsg, e)
+            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DBMSG, e)
         }
         return company
     }
@@ -132,7 +133,7 @@ class CompanyDAO {
             insertJobVacancies(company)
             insertBenefits(company)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorText.DbMsg, e)
+            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DBMSG, e)
         }
     }
 
@@ -175,7 +176,7 @@ class CompanyDAO {
 
             updateCompanyBenefits(id, company)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorText.DbMsg, e)
+            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DBMSG, e)
         }
     }
 
@@ -196,9 +197,9 @@ class CompanyDAO {
                 return
             }
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorText.DbMsg, e)
+            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DBMSG, e)
         }
-        println "Empresa não encontrada."
+        println NotFoundMessages.COMPANY
     }
 
 }

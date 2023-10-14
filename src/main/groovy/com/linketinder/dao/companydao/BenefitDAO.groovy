@@ -4,7 +4,8 @@ import com.linketinder.database.DatabaseFactory
 import com.linketinder.database.DBService
 import com.linketinder.database.IDBService
 import com.linketinder.model.company.Benefit
-import com.linketinder.util.ErrorText
+import com.linketinder.util.ErrorMessages
+import com.linketinder.util.NotFoundMessages
 import groovy.sql.Sql
 import java.sql.PreparedStatement
 import java.sql.ResultSet
@@ -15,12 +16,12 @@ import java.util.logging.Logger
 
 class BenefitDAO {
 
-    static final String QUERY_GET_ALL_BENEFITS = "SELECT cb.id, c.id AS company_id, b.title FROM companies AS c, company_benefits AS cb, benefits AS b WHERE c.id = cb.company_id AND b.id = cb.benefit_id"
-    static final String QUERY_GET_BENEFITS_BY_COMPANY_ID = "SELECT cb.id, c.id AS company_id, b.title FROM companies AS c, company_benefits AS cb, benefits AS b WHERE c.id = cb.company_id AND b.id = cb.benefit_id AND c.id=?"
-    static final String QUERY_GET_COMPANY_BENEFIT_BY_ID = "SELECT * FROM company_benefits WHERE id=?"
-    static final String INSERT_BENEFIT = "INSERT INTO company_benefits (company_id, benefit_id) VALUES (?,?)"
-    static final String UPDATE_BENEFIT = "UPDATE company_benefits SET company_id=?, benefit_id=? WHERE id=?"
-    static final String DELETE_COMPANY_BENEFIT = "DELETE FROM company_benefits WHERE id=?"
+    private final String QUERY_GET_ALL_BENEFITS = "SELECT cb.id, c.id AS company_id, b.title FROM companies AS c, company_benefits AS cb, benefits AS b WHERE c.id = cb.company_id AND b.id = cb.benefit_id"
+    private final String QUERY_GET_BENEFITS_BY_COMPANY_ID = "SELECT cb.id, c.id AS company_id, b.title FROM companies AS c, company_benefits AS cb, benefits AS b WHERE c.id = cb.company_id AND b.id = cb.benefit_id AND c.id=?"
+    private final String QUERY_GET_COMPANY_BENEFIT_BY_ID = "SELECT * FROM company_benefits WHERE id=?"
+    private final String INSERT_BENEFIT = "INSERT INTO company_benefits (company_id, benefit_id) VALUES (?,?)"
+    private final String UPDATE_BENEFIT = "UPDATE company_benefits SET company_id=?, benefit_id=? WHERE id=?"
+    private final String DELETE_COMPANY_BENEFIT = "DELETE FROM company_benefits WHERE id=?"
 
     Sql sql = DatabaseFactory.instance()
     IDBService dbService = new DBService()
@@ -46,7 +47,7 @@ class BenefitDAO {
         try {
             benefits = populateBenefits(QUERY_GET_ALL_BENEFITS)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorText.DbMsg, e)
+            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DBMSG, e)
         }
         return benefits
     }
@@ -56,7 +57,7 @@ class BenefitDAO {
         try {
             benefits = populateBenefits(QUERY_GET_BENEFITS_BY_COMPANY_ID, companyId)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorText.DbMsg, e)
+            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DBMSG, e)
         }
         return benefits
     }
@@ -71,7 +72,7 @@ class BenefitDAO {
 
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorText.DbMsg, e)
+            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DBMSG, e)
         }
     }
 
@@ -84,7 +85,7 @@ class BenefitDAO {
             stmt.setInt(3, benefit.id)
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorText.DbMsg, e)
+            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DBMSG, e)
         }
     }
 
@@ -104,9 +105,9 @@ class BenefitDAO {
                 return
             }
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorText.DbMsg, e)
+            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DBMSG, e)
         }
-        println "Benefício não encontrado."
+        println NotFoundMessages.BENEFIT
     }
 
 }

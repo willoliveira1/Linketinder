@@ -6,7 +6,8 @@ import com.linketinder.model.jobvacancy.JobVacancy
 import com.linketinder.model.jobvacancy.ContractType
 import com.linketinder.model.jobvacancy.LocationType
 import com.linketinder.model.shared.Skill
-import com.linketinder.util.ErrorText
+import com.linketinder.util.ErrorMessages
+import com.linketinder.util.NotFoundMessages
 import groovy.sql.Sql
 import java.sql.PreparedStatement
 import java.sql.ResultSet
@@ -17,14 +18,14 @@ import java.util.logging.Logger
 
 class JobVacancyDAO {
 
-    static final String QUERY_GET_ALL_JOB_VACANCIES = "SELECT jv.id, jv.title, jv.description, jv.salary, ct.title AS contract_type, lt.title AS location_type FROM job_vacancies AS jv, companies AS c, contract_types AS ct, location_types AS lt WHERE jv.company_id= c.id AND jv.contract_type_id = ct.id AND jv.location_type_id = lt.id"
-    static final String QUERY_GET_JOB_VACANCY_BY_COMPANY_ID = "SELECT jv.id, jv.title, jv.description, jv.salary, ct.title AS contract_type, lt.title AS location_type FROM job_vacancies AS jv, companies AS c, contract_types AS ct, location_types AS lt WHERE jv.company_id= c.id AND jv.contract_type_id = ct.id AND jv.location_type_id = lt.id AND c.id=?"
-    static final String QUERY_GET_JOB_VACANCY_BY_ID = "SELECT jv.id, jv.title, jv.description, jv.salary, ct.title AS contract_type, lt.title AS location_type FROM job_vacancies AS jv, companies AS c, contract_types AS ct, location_types AS lt WHERE jv.company_id= c.id AND jv.contract_type_id = ct.id AND jv.location_type_id = lt.id AND jv.id=?"
-    static final String QUERY_GET_SKILL_BY_JOB_VACANCY_ID = "SELECT id FROM job_vacancy_skills WHERE job_vacancy_id=?"
-    static final String QUERY_GET_COMPANY_ID = "SELECT company_id FROM job_vacancies WHERE id=?"
-    static final String INSERT_JOB_VACANCY = "INSERT INTO job_vacancies (company_id, title, description, salary, contract_type_id, location_type_id) VALUES (?,?,?,?,?,?)"
-    static final String UPDATE_JOB_VACANCY = "UPDATE job_vacancies SET company_id=?, title=?, description=?, salary=?, contract_type_id=?, location_type_id=? WHERE id=?"
-    static final String DELETE_JOB_VACANCY = "DELETE FROM job_vacancies WHERE id=?"
+    private final String QUERY_GET_ALL_JOB_VACANCIES = "SELECT jv.id, jv.title, jv.description, jv.salary, ct.title AS contract_type, lt.title AS location_type FROM job_vacancies AS jv, companies AS c, contract_types AS ct, location_types AS lt WHERE jv.company_id= c.id AND jv.contract_type_id = ct.id AND jv.location_type_id = lt.id"
+    private final String QUERY_GET_JOB_VACANCY_BY_COMPANY_ID = "SELECT jv.id, jv.title, jv.description, jv.salary, ct.title AS contract_type, lt.title AS location_type FROM job_vacancies AS jv, companies AS c, contract_types AS ct, location_types AS lt WHERE jv.company_id= c.id AND jv.contract_type_id = ct.id AND jv.location_type_id = lt.id AND c.id=?"
+    private final String QUERY_GET_JOB_VACANCY_BY_ID = "SELECT jv.id, jv.title, jv.description, jv.salary, ct.title AS contract_type, lt.title AS location_type FROM job_vacancies AS jv, companies AS c, contract_types AS ct, location_types AS lt WHERE jv.company_id= c.id AND jv.contract_type_id = ct.id AND jv.location_type_id = lt.id AND jv.id=?"
+    private final String QUERY_GET_SKILL_BY_JOB_VACANCY_ID = "SELECT id FROM job_vacancy_skills WHERE job_vacancy_id=?"
+    private final String QUERY_GET_COMPANY_ID = "SELECT company_id FROM job_vacancies WHERE id=?"
+    private final String INSERT_JOB_VACANCY = "INSERT INTO job_vacancies (company_id, title, description, salary, contract_type_id, location_type_id) VALUES (?,?,?,?,?,?)"
+    private final String UPDATE_JOB_VACANCY = "UPDATE job_vacancies SET company_id=?, title=?, description=?, salary=?, contract_type_id=?, location_type_id=? WHERE id=?"
+    private final String DELETE_JOB_VACANCY = "DELETE FROM job_vacancies WHERE id=?"
 
     Sql sql = DatabaseFactory.instance()
     DBService dbService = new DBService()
@@ -56,7 +57,7 @@ class JobVacancyDAO {
         try {
             jobVacancies = populateJobVacancies(QUERY_GET_ALL_JOB_VACANCIES)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorText.DbMsg, e)
+            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DBMSG, e)
         }
         return jobVacancies
     }
@@ -66,7 +67,7 @@ class JobVacancyDAO {
         try {
             jobVacancies = populateJobVacancies(QUERY_GET_JOB_VACANCY_BY_COMPANY_ID, companyId)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorText.DbMsg, e)
+            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DBMSG, e)
         }
         return jobVacancies
     }
@@ -93,7 +94,7 @@ class JobVacancyDAO {
         try {
             jobVacancy = populateJobVacancy(QUERY_GET_JOB_VACANCY_BY_ID, id)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorText.DbMsg, e)
+            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DBMSG, e)
         }
         return jobVacancy
     }
@@ -129,7 +130,7 @@ class JobVacancyDAO {
 
             insertRequiredSkills(jobVacancy)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorText.DbMsg, e)
+            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DBMSG, e)
         }
     }
 
@@ -184,7 +185,7 @@ class JobVacancyDAO {
 
             updateRequiredSkills(jobVacancy)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorText.DbMsg, e)
+            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DBMSG, e)
         }
     }
 
@@ -205,9 +206,9 @@ class JobVacancyDAO {
                 return
             }
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorText.DbMsg, e)
+            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DBMSG, e)
         }
-        println "Experiência profissional não encontrada."
+        println NotFoundMessages.JOB_VACANCY
     }
 
 }
