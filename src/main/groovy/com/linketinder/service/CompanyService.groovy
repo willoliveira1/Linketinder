@@ -8,7 +8,7 @@ class CompanyService implements IBaseService<Company> {
     CompanyDAO companyDAO = new CompanyDAO()
 
     List<Company> getAll() {
-        return companyDAO.getAllCompany()
+        return companyDAO.getAllCompanies()
     }
 
     Company getById(Integer id) {
