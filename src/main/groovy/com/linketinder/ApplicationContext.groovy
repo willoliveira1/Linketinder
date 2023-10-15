@@ -22,10 +22,12 @@ import com.linketinder.service.JobVacancyService
 import com.linketinder.service.MatchService
 import com.linketinder.validation.CandidateValidation
 import com.linketinder.validation.CompanyValidation
+import com.linketinder.validation.MatchValidation
 import com.linketinder.validation.interfaces.ICandidateValidation
 import com.linketinder.validation.interfaces.ICompanyValidation
 import com.linketinder.validation.interfaces.IJobVacancyValidation
 import com.linketinder.validation.JobVacancyValidation
+import com.linketinder.validation.interfaces.IMatchValidation
 import com.linketinder.view.ApplicationView
 import com.linketinder.view.CandidatesView
 import com.linketinder.view.CompaniesView
@@ -39,26 +41,27 @@ import com.linketinder.view.MatchesView
 
 class ApplicationContext {
 
-    ICandidateValidation candidateValidation = new CandidateValidation()
     ICandidateDAO candidateDAO = new CandidateDAO()
+    ICandidateValidation candidateValidation = new CandidateValidation()
     ICandidateService candidateService = new CandidateService(candidateDAO)
     ICandidatesView candidatesView = new CandidatesView(candidateService, candidateValidation)
 
-    ICompanyValidation companyValidation = new CompanyValidation()
     ICompanyDAO companyDAO = new CompanyDAO()
+    ICompanyValidation companyValidation = new CompanyValidation()
     ICompanyService companyService = new CompanyService(companyDAO)
     ICompaniesView companiesView = new CompaniesView(companyService, companyValidation)
 
-    IJobVacancyValidation jobVacancyValidation = new JobVacancyValidation()
     IJobVacancyDAO jobVacancyDAO = new JobVacancyDAO()
+    IJobVacancyValidation jobVacancyValidation = new JobVacancyValidation()
     IJobVacancyService jobVacancyService = new JobVacancyService(jobVacancyDAO)
     IJobVacanciesView jobVacanciesView = new JobVacanciesView(jobVacancyService, jobVacancyValidation)
 
     IMatchDAO matchDAO = new MatchDAO()
+    IMatchValidation matchValidation = new MatchValidation()
     ICandidateMatchDAO candidateMatchDAO = new CandidateMatchDAO(matchDAO)
     ICompanyMatchDAO companyMatchDAO = new CompanyMatchDAO(matchDAO)
     IMatchService matchService = new MatchService(matchDAO, candidateMatchDAO, companyMatchDAO)
-    IMatchesView matchesView = new MatchesView(candidatesView, jobVacanciesView, matchService)
+    IMatchesView matchesView = new MatchesView(candidatesView, jobVacanciesView, matchService, matchValidation)
 
     IApplicationView application = new ApplicationView(
         candidatesView,

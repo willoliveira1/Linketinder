@@ -1,5 +1,6 @@
 package com.linketinder
 
+
 import com.linketinder.database.DatabaseFactory
 
 static void main(String[] args) {

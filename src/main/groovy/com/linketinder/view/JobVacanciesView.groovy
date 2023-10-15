@@ -5,6 +5,7 @@ import com.linketinder.model.jobvacancy.ContractType
 import com.linketinder.model.jobvacancy.LocationType
 import com.linketinder.model.shared.Skill
 import com.linketinder.service.interfaces.IJobVacancyService
+import com.linketinder.util.viewtexts.JobVacancyTexts
 import com.linketinder.validation.interfaces.IJobVacancyValidation
 import com.linketinder.view.interfaces.IJobVacanciesView
 
@@ -20,7 +21,7 @@ class JobVacanciesView implements IJobVacanciesView {
     }
 
     void getAllJobVacancies() {
-        println "Listagem de Vagas:"
+        println JobVacancyTexts.ALL_JOB_VACANCIES_TEXT
         List<JobVacancy> jobVacancies = service.getAll()
         jobVacancies.each {println it}
     }
@@ -28,7 +29,7 @@ class JobVacanciesView implements IJobVacanciesView {
     void getAllJobVacanciesByCompanyId() {
         Integer id = validation.validateId()
         List<JobVacancy> jobVacancies = service.getAllByCompanyId(id)
-        println "Listagem de Vagas da Empresa de Id ${id}:"
+        println JobVacancyTexts.ALL_JOB_VACANCIES_BY_ID_TEXT + id+ ":"
         jobVacancies.each {println it}
     }
 
@@ -38,19 +39,19 @@ class JobVacanciesView implements IJobVacanciesView {
     }
 
     List<Skill> addRequiredSkills() {
-        println "Deseja adicionar habilidades necessárias? (S/N)"
+        println JobVacancyTexts.ADD_SKILL_TEXT
         List<Skill> skills = []
         String input = reader.readLine()
         boolean addMore = validation.validateAddMore(input)
 
         while (addMore) {
-            println "Qual a habilidade?"
+            println JobVacancyTexts.SKILL_TEXT
             String title = reader.readLine()
 
             Skill skill = new Skill(null, title)
             skills.add(skill)
 
-            println "Deseja adicionar mais habilidades necessárias? (S/N)"
+            println JobVacancyTexts.ADD_MORE_SKILL_TEXT
             input = reader.readLine()
             addMore = validation.validateAddMore(input)
         }
@@ -59,9 +60,9 @@ class JobVacanciesView implements IJobVacanciesView {
 
     void addJobVacancy() {
         Integer companyId = validation.validateCompanyId()
-        println "Qual o nome da vaga?"
+        println JobVacancyTexts.NAME_TEXT
         String title = reader.readLine()
-        println "Qual a descrição da vaga?"
+        println JobVacancyTexts.DESCRIPTION_TEXT
         String description = reader.readLine()
         Double salary = validation.validateSalary()
         ContractType contractType = validation.validateContractType()
@@ -75,9 +76,9 @@ class JobVacanciesView implements IJobVacanciesView {
 
     void updateJobVacancy() {
         Integer id = validation.validateId()
-        println "Qual o nome da vaga?"
+        println JobVacancyTexts.NAME_TEXT
         String title = reader.readLine()
-        println "Qual a descrição da vaga?"
+        println JobVacancyTexts.DESCRIPTION_TEXT
         String description = reader.readLine()
         Double salary = validation.validateSalary()
         ContractType contractType = validation.validateContractType()

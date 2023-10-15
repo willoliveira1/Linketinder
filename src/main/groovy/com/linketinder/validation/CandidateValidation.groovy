@@ -5,6 +5,7 @@ import com.linketinder.model.jobvacancy.ContractType
 import com.linketinder.model.jobvacancy.LocationType
 import com.linketinder.model.shared.Proficiency
 import com.linketinder.model.shared.State
+import com.linketinder.util.viewtexts.CandidateTexts
 import com.linketinder.validation.interfaces.ICandidateValidation
 import java.util.regex.Pattern
 
@@ -13,119 +14,119 @@ class CandidateValidation implements ICandidateValidation {
     Readable reader = System.in.newReader()
 
     Integer validateId() {
-        println "Qual o id do candidato?"
+        println CandidateTexts.ID_TEXT
         try {
             Integer id = reader.readLine() as Integer
             return id
         } catch (IllegalArgumentException e) {
-            println "Id inválido."
+            println CandidateTexts.INVALID_ID_TEXT
             validateId()
         }
     }
 
     String validateEmail() {
-        println "Qual o email do candidato?"
+        println CandidateTexts.EMAIL_TEXT
         String email = reader.readLine()
         String regexEmail = /^[\w\.-]{2,}@\w{3,}\.\w{2,6}(\.\w{2,3})?$/
         if (!Pattern.matches(regexEmail, email)) {
-            println "Email inválido."
+            println CandidateTexts.INVALID_EMAIL_TEXT
             validateEmail()
         }
         return email
     }
 
     State validateState() {
-        println "Qual a sigla do estado do candidato?"
+        println CandidateTexts.STATE_TEXT
         State state
         try {
             String input = reader.readLine()
             state = State.valueOf(input.toUpperCase())
             return state
         } catch (IllegalArgumentException e) {
-            println "Estado inválido."
+            println CandidateTexts.INVALID_STATE_TEXT
             validateState()
         }
     }
 
     String validateCep() {
-        println "Qual o cep do candidato?"
+        println CandidateTexts.CEP_TEXT
         String cep = reader.readLine()
         String regexCep = /^\d{2}(\.)?\d{3}(-)?\d{3}$/
         if (!Pattern.matches(regexCep, cep)) {
-            println "Cep inválido."
+            println CandidateTexts.INVALID_CEP_TEXT
             validateCep()
         }
         return cep
     }
 
     String validateCpf() {
-        println "Qual cpf do candidato?"
+        println CandidateTexts.CPF_TEXT
         String cpf = reader.readLine()
         String regexCpf = /^\d{3}(\.)?\d{3}(\.)?\d{3}(-)?\d{2}$/
         if (!Pattern.matches(regexCpf, cpf)) {
-            println "Tamanho de CPF inválido."
+            println CandidateTexts.INVALID_CPF_TEXT
             validateCpf()
         }
         return cpf
     }
 
     CourseStatus validateCourseStatus() {
-        println "Qual o status atual do curso? (Cursando/Concluído/Trancado)"
+        println CandidateTexts.STATUS_TEXT
         CourseStatus status
         try {
             String input = reader.readLine()
             status = CourseStatus.valueOf(input)
             return status
         } catch (IllegalArgumentException e) {
-            println "Status inválido."
+            println CandidateTexts.INVALID_ARG_TEXT
             validateCourseStatus()
         }
     }
 
     ContractType validateContractType() {
-        println "Qual o tipo de contrato? (CLT/PJ/Temporário/Estágio/Aprendiz)"
+        println CandidateTexts.CONTRACT_TYPE_TEXT
         ContractType contractType
         try {
             String input = reader.readLine()
             contractType = ContractType.valueOf(input)
             return contractType
         } catch (IllegalArgumentException e) {
-            println "Tipo de contrato inválido."
+            println CandidateTexts.INVALID_ARG_TEXT
             validateContractType()
         }
     }
 
     LocationType validateLocationType() {
-        println "Qual o regime de trabalho? (Presencial/Híbrido/Remoto)"
+        println CandidateTexts.LOCATION_TYPE_TEXT
         LocationType locationType
         try {
             String input = reader.readLine()
             locationType = LocationType.valueOf(input)
             return locationType
         } catch (IllegalArgumentException e) {
-            println "Regime de trabalho inválido."
+            println CandidateTexts.INVALID_ARG_TEXT
             validateLocationType()
         }
     }
 
     Proficiency validateProficiency() {
-        println "Qual nível de proficiência? (Básico/Intermediário/Avançado)"
+        println CandidateTexts.PROFICIENCY_TEXT
         Proficiency proficiency
         try {
             String input = reader.readLine()
             proficiency = Proficiency.valueOf(input)
             return proficiency
         } catch (IllegalArgumentException e) {
-            println "Argumento inválido."
+            println CandidateTexts.INVALID_ARG_TEXT
             validateProficiency()
         }
     }
 
     boolean validateCurrentlyWork() {
-        println "É o emprego atual? (S/N)"
+        println CandidateTexts.CURRENTLY_WORK_TEXT
         String input = reader.readLine()
         if (input.toUpperCase() != "S" && input.toUpperCase() != "N") {
-            println "Opção inválida."
+            println CandidateTexts.INVALID_ARG_TEXT
             validateCurrentlyWork()
         }
         return input.toUpperCase() == "S"
@@ -133,8 +134,8 @@ class CandidateValidation implements ICandidateValidation {
 
     boolean validateAddMore(String input) {
         if (input.toUpperCase() != "S" && input.toUpperCase() != "N") {
-            println "Opção inválida."
-            println "Deseja adicionar mais? (S/N)"
+            println CandidateTexts.INVALID_ARG_TEXT
+            println CandidateTexts.ADD_MORE_TEXT
             input = reader.readLine()
             validateAddMore(input)
         }

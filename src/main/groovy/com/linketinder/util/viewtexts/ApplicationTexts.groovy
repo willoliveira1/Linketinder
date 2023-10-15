@@ -1,4 +1,4 @@
-package com.linketinder.util
+package com.linketinder.util.viewtexts
 
 class ApplicationTexts {
 
@@ -13,7 +13,6 @@ class ApplicationTexts {
         "\n3) Vagas" +
         "\n4) Matches" +
         "\n0) Sair"
-
     public static final String CANDIDATES = "##############################" +
         "\n##                          ##" +
         "\nN##        Candidatos        ##" +
@@ -26,7 +25,6 @@ class ApplicationTexts {
         "\n4) Remover Candidato " +
         "\n5) Atualizar Candidato" +
         "\n0) Voltar"
-
     public static final String COMPANIES = "##############################" +
         "\n##                          ##" +
         "\n##         Empresas         ##" +
@@ -39,7 +37,6 @@ class ApplicationTexts {
         "\n4) Remover Empresa" +
         "\n5) Atualizar Empresa" +
         "\n0) Voltar"
-
     public static final String JOB_VACANCIES = "##############################" +
         "\n##                          ##" +
         "\n##           Vagas          ##" +
@@ -53,7 +50,6 @@ class ApplicationTexts {
         "\n5) Remover Vaga" +
         "\n6) Atualizar Vaga" +
         "\n0) Voltar"
-
     public static final String MATCHES = "##############################" +
         "\n##                          ##" +
         "\n##          Matches         ##" +
@@ -63,7 +59,6 @@ class ApplicationTexts {
         "\n1) Candidato" +
         "\n2) Empresa" +
         "\n0) Voltar"
-
     public static final String CANDIDATE_MATCHES = "##############################" +
         "\n##                          ##" +
         "\n##          Matches         ##" +
@@ -74,7 +69,6 @@ class ApplicationTexts {
         "\n2) Listar Todos os Matches de um Candidato Específico" +
         "\n3) Curtir Vaga" +
         "\n0) Voltar"
-
     public static final String COMPANY_MATCHES = "##############################" +
         "\n##                          ##" +
         "\n##          Matches         ##" +
@@ -85,5 +79,7 @@ class ApplicationTexts {
         "\n2) Listar Todos os Matches de uma Empresa Específica" +
         "\n3) Curtir Candidato" +
         "\n0) Voltar"
+    public static final String INVALID_TEXT = "Opção inválida."
+    public static final String PRESS_TEXT = "Aperte enter para continuar..."
 
 }

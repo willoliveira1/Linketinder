@@ -1,6 +1,6 @@
 package com.linketinder.view
 
-import com.linketinder.util.ApplicationTexts
+import com.linketinder.util.viewtexts.ApplicationTexts
 import com.linketinder.view.interfaces.IApplicationView
 import com.linketinder.view.interfaces.ICandidatesView
 import com.linketinder.view.interfaces.ICompaniesView
@@ -38,13 +38,13 @@ class ApplicationView implements IApplicationView {
     }
 
     private void invalidOption() {
-        println "Opção inválida."
+        println ApplicationTexts.INVALID_TEXT
         Thread.sleep(1500)
         initialScreen()
     }
 
     private void backToInitialScreen() {
-        println "Aperte enter para continuar..."
+        println ApplicationTexts.PRESS_TEXT
         reader.readLine()
         clearConsole()
         initialScreen()
