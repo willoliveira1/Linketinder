@@ -12,7 +12,7 @@ import com.linketinder.model.shared.Proficiency
 import com.linketinder.model.shared.Skill
 import com.linketinder.model.shared.State
 import com.linketinder.service.CandidateService
-import com.linketinder.service.IBaseService
+import com.linketinder.service.interfaces.IBaseService
 import com.linketinder.validation.CandidateValidation
 import com.linketinder.validation.IPersonValidation
 

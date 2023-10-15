@@ -4,7 +4,7 @@ import com.linketinder.model.company.Benefit
 import com.linketinder.model.company.Company
 import com.linketinder.model.shared.State
 import com.linketinder.service.CompanyService
-import com.linketinder.service.IBaseService
+import com.linketinder.service.interfaces.IBaseService
 import com.linketinder.validation.CompanyValidation
 import com.linketinder.validation.IPersonValidation
 

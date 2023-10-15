@@ -13,8 +13,8 @@ class CandidateValidation implements IPersonValidation {
     BufferedReader reader = System.in.newReader()
 
     Integer validateId() {
+        println "Qual o id do candidato?"
         try {
-            println "Qual o id do candidato?"
             Integer id = reader.readLine() as Integer
             return id
         } catch (IllegalArgumentException e) {
@@ -35,9 +35,9 @@ class CandidateValidation implements IPersonValidation {
     }
 
     State validateState() {
+        println "Qual a sigla do estado do candidato?"
         State state
         try {
-            println "Qual a sigla do estado do candidato?"
             String input = reader.readLine()
             state = State.valueOf(input.toUpperCase())
             return state
