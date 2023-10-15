@@ -4,8 +4,9 @@ import com.linketinder.dao.matchdao.CandidateMatchDAO
 import com.linketinder.dao.matchdao.CompanyMatchDAO
 import com.linketinder.dao.matchdao.MatchDAO
 import com.linketinder.model.match.Match
+import com.linketinder.service.interfaces.IMatchService
 
-class MatchService {
+class MatchService implements IMatchService {
 
     MatchDAO matchDAO = new MatchDAO()
     CandidateMatchDAO candidateMatchDAO = new CandidateMatchDAO()

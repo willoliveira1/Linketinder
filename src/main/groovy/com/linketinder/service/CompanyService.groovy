@@ -2,8 +2,9 @@ package com.linketinder.service
 
 import com.linketinder.dao.companydao.CompanyDAO
 import com.linketinder.model.company.Company
+import com.linketinder.service.interfaces.ICompanyService
 
-class CompanyService implements IBaseService<Company> {
+class CompanyService implements ICompanyService {
 
     CompanyDAO companyDAO = new CompanyDAO()
 

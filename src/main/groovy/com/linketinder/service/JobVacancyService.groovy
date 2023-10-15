@@ -2,8 +2,9 @@ package com.linketinder.service
 
 import com.linketinder.dao.companydao.JobVacancyDAO
 import com.linketinder.model.jobvacancy.JobVacancy
+import com.linketinder.service.interfaces.IJobVacancyService
 
-class JobVacancyService {
+class JobVacancyService implements IJobVacancyService {
 
     JobVacancyDAO jobVacancyDAO = new JobVacancyDAO()
 
