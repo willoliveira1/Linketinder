@@ -41,38 +41,38 @@ class RequiredSkillDAO {
     List<Skill> getSkillsByJobVacancyId(int jobVacancyId) {
         List<Skill> skills = new ArrayList<>()
         try {
-            skills = populateSkills(QUERY_GET_SKILLS_BY_JOB_VACANCY_ID, jobVacancyId)
+            skills = this.populateSkills(QUERY_GET_SKILLS_BY_JOB_VACANCY_ID, jobVacancyId)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DBMSG, e)
+            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         return skills
+    }
+
+    private PreparedStatement setSkillStatement(PreparedStatement stmt, Skill skill, int jobVacancyId) {
+        int skillId = dbService.idFinder("skills", "title", skill.getTitle())
+        stmt.setInt(1, jobVacancyId)
+        stmt.setInt(2, skillId)
+        return stmt
     }
 
     void insertSkill(Skill skill, int jobVacancyId) {
         try {
             PreparedStatement stmt = sql.connection.prepareStatement(INSERT_SKILL, Statement.RETURN_GENERATED_KEYS)
-            stmt.setInt(1, jobVacancyId)
-
-            int skillId = dbService.idFinder("skills", "title", skill.getTitle())
-            stmt.setInt(2, skillId)
-
+            stmt = this.setSkillStatement(stmt, skill, jobVacancyId)
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DBMSG, e)
+            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
     }
 
     void updateSkill(Skill skill, int jobVacancyId) {
         try {
             PreparedStatement stmt = sql.connection.prepareStatement(UPDATE_SKILL)
-            int skillId = dbService.idFinder("skills", "title", skill.getTitle())
-            stmt.setInt(1, jobVacancyId)
-            stmt.setInt(2, skillId)
+            stmt = this.setSkillStatement(stmt, skill, jobVacancyId)
             stmt.setInt(3, skill.id)
-
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DBMSG, e)
+            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
     }
 
@@ -93,7 +93,7 @@ class RequiredSkillDAO {
                 return
             }
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DBMSG, e)
+            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         println NotFoundMessages.SKILL
     }

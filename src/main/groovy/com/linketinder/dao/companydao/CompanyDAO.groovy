@@ -19,9 +19,9 @@ import java.util.logging.Logger
 
 class CompanyDAO {
 
-    private final String QUERY_GET_ALL_COMPANIES = "SELECT c.id, c.name, c.email, c.city, s.acronym AS state, c.country, c.cep, c.description, c.cnpj FROM companies AS c, states AS s WHERE c.state_id = s.id ORDER BY c.id"
-    private final String QUERY_GET_COMPANY_BY_ID = "SELECT c.id, c.name, c.email, c.city, s.acronym AS state, c.country, c.cep, c.description, c.cnpj FROM companies AS c, states AS s WHERE c.state_id = s.id AND c.id=?"
-    private final String QUERY_GET_COMPANY_BENEFITS_BY_COMPANY_ID = "SELECT id FROM company_benefits WHERE company_id=?"
+    private final String GET_ALL_COMPANIES = "SELECT c.id, c.name, c.email, c.city, s.acronym AS state, c.country, c.cep, c.description, c.cnpj FROM companies AS c, states AS s WHERE c.state_id = s.id ORDER BY c.id"
+    private final String GET_COMPANY_BY_ID = "SELECT c.id, c.name, c.email, c.city, s.acronym AS state, c.country, c.cep, c.description, c.cnpj FROM companies AS c, states AS s WHERE c.state_id = s.id AND c.id=?"
+    private final String GET_COMPANY_BENEFITS_BY_COMPANY_ID = "SELECT id FROM company_benefits WHERE company_id=?"
     private final String INSERT_COMPANY = "INSERT INTO companies (name, email, city, state_id, country, cep, description, cnpj) VALUES (?,?,?,?,?,?,?,?)"
     private final String UPDATE_COMPANY = "UPDATE companies SET name=?, email=?, city=?, state_id=?, country=?, cep=?, description=?, cnpj=? WHERE id=?"
     private final String DELETE_COMPANY = "DELETE FROM companies WHERE id=?"
@@ -31,70 +31,75 @@ class CompanyDAO {
     JobVacancyDAO jobVacancyDAO = new JobVacancyDAO()
     BenefitDAO benefitDAO = new BenefitDAO()
 
+    private Company createCompany(ResultSet result) {
+        Person company = new Company()
+        company.setId(result.getInt("id"))
+        company.setName(result.getString("name"))
+        company.setEmail(result.getString("email"))
+        company.setCity(result.getString("city"))
+        company.setState(State.valueOf(result.getString("state")))
+        company.setCountry(result.getString("country"))
+        company.setCep(result.getString("cep"))
+        company.setDescription(result.getString("description"))
+        company.setCnpj(result.getString("cnpj"))
+        company.setBenefits(benefitDAO.getBenefitsByCompanyId(company.id))
+        company.setJobVacancies(jobVacancyDAO.getJobVacancyByCompanyId(company.id))
+        return company
+    }
+
     private List<Company> populateCompanies(String query) {
         List<Company> companies = new ArrayList<>()
         PreparedStatement stmt = sql.connection.prepareStatement(query)
         ResultSet result = stmt.executeQuery()
         while (result.next()) {
-            Person company = new Company()
-            company.setId(result.getInt("id"))
-            company.setName(result.getString("name"))
-            company.setEmail(result.getString("email"))
-            company.setCity(result.getString("city"))
-            company.setState(State.valueOf(result.getString("state")))
-            company.setCountry(result.getString("country"))
-            company.setCep(result.getString("cep"))
-            company.setDescription(result.getString("description"))
-            company.setCnpj(result.getString("cnpj"))
-            company.setBenefits(benefitDAO.getBenefitsByCompanyId(company.id))
-            company.setJobVacancies(jobVacancyDAO.getJobVacancyByCompanyId(company.id))
+            Person company = this.createCompany(result)
             companies.add(company)
         }
         return companies
     }
 
+    private Company populateCompany(String query, int id) {
+        Person company = new Company()
+        PreparedStatement stmt = sql.connection.prepareStatement(query)
+        stmt.setInt(1, id)
+        ResultSet result = stmt.executeQuery()
+        while (result.next()) {
+            company = this.createCompany(result)
+        }
+        return company
+    }
+
     List<Company> getAllCompanies() {
         List<Company> companies = new ArrayList<>()
         try {
-            companies = populateCompanies(QUERY_GET_ALL_COMPANIES)
+            companies = this.populateCompanies(GET_ALL_COMPANIES)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DBMSG, e)
+            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         return companies
-    }
-
-    private Company populateCompany(String query, Integer... args) {
-        Person company = new Company()
-        PreparedStatement stmt = sql.connection.prepareStatement(query)
-        if (args.any()) {
-            stmt.setInt(1, args[0])
-        }
-        ResultSet result = stmt.executeQuery()
-        while (result.next()) {
-            company.setId(result.getInt("id"))
-            company.setName(result.getString("name"))
-            company.setEmail(result.getString("email"))
-            company.setCity(result.getString("city"))
-            company.setState(State.valueOf(result.getString("state")))
-            company.setCountry(result.getString("country"))
-            company.setCep(result.getString("cep"))
-            company.setDescription(result.getString("description"))
-            company.setCnpj(result.getString("cnpj"))
-
-            company.setBenefits(benefitDAO.getBenefitsByCompanyId(company.id))
-            company.setJobVacancies(jobVacancyDAO.getJobVacancyByCompanyId(company.id))
-        }
-        return company
     }
 
     Company getCompanyById(int id) {
         Person company = new Company()
         try {
-            company = populateCompany(QUERY_GET_COMPANY_BY_ID, id)
+            company = this.populateCompany(GET_COMPANY_BY_ID, id)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DBMSG, e)
+            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         return company
+    }
+
+    private setCompanyStatement(PreparedStatement stmt, Company company) {
+        int stateId = dbService.idFinder("states", "acronym", company.getState().toString())
+        stmt.setString(1, company.name)
+        stmt.setString(2, company.getEmail())
+        stmt.setString(3, company.getCity())
+        stmt.setInt(4, stateId)
+        stmt.setString(5, company.getCountry())
+        stmt.setString(6, company.getCep())
+        stmt.setString(7, company.getDescription())
+        stmt.setString(8, company.getCnpj())
+        return stmt
     }
 
     private void insertJobVacancies(Company company) {
@@ -112,17 +117,7 @@ class CompanyDAO {
     void insertCompany(Company company) {
         try {
             PreparedStatement stmt = sql.connection.prepareStatement(INSERT_COMPANY, Statement.RETURN_GENERATED_KEYS)
-            stmt.setString(1, company.name)
-            stmt.setString(2, company.getEmail())
-            stmt.setString(3, company.getCity())
-            stmt.setString(5, company.getCountry())
-            stmt.setString(6, company.getCep())
-            stmt.setString(7, company.getDescription())
-            stmt.setString(8, company.getCnpj())
-
-            int stateId = dbService.idFinder("states", "acronym", company.getState().toString())
-            stmt.setInt(4, stateId)
-
+            stmt = this.setCompanyStatement(stmt, company)
             stmt.executeUpdate()
 
             ResultSet getCompanyId = stmt.getGeneratedKeys()
@@ -130,16 +125,16 @@ class CompanyDAO {
                 company.id = getCompanyId.getInt(1)
             }
 
-            insertJobVacancies(company)
-            insertBenefits(company)
+            this.insertJobVacancies(company)
+            this.insertBenefits(company)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DBMSG, e)
+            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
     }
 
     private void updateCompanyBenefits(int id, Company company) {
         List<Integer> benefitsIds = new ArrayList<>()
-        sql.eachRow(QUERY_GET_COMPANY_BENEFITS_BY_COMPANY_ID, [id]) {row ->
+        sql.eachRow(GET_COMPANY_BENEFITS_BY_COMPANY_ID, [id]) {row ->
             benefitsIds << row.getInt("id")
         }
 
@@ -160,30 +155,19 @@ class CompanyDAO {
     void updateCompany(int id, Company company) {
         try {
             PreparedStatement stmt = sql.connection.prepareStatement(UPDATE_COMPANY)
-            stmt.setString(1, company.name)
-            stmt.setString(2, company.getEmail())
-            stmt.setString(3, company.getCity())
-            stmt.setString(5, company.getCountry())
-            stmt.setString(6, company.getCep())
-            stmt.setString(7, company.getDescription())
-            stmt.setString(8, company.getCnpj())
-            stmt.setInt(9, id)
-
-            int stateId = dbService.idFinder("states", "acronym", company.getState().toString())
-            stmt.setInt(4, stateId)
-
+            stmt = this.setCompanyStatement(stmt, company)
             stmt.executeUpdate()
 
-            updateCompanyBenefits(id, company)
+            this.updateCompanyBenefits(id, company)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DBMSG, e)
+            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
     }
 
     void deleteCompanyById(int id) {
         Person company = new Company()
         try {
-            PreparedStatement stmt = sql.connection.prepareStatement(QUERY_GET_COMPANY_BY_ID)
+            PreparedStatement stmt = sql.connection.prepareStatement(GET_COMPANY_BY_ID)
             stmt.setInt(1, id)
             ResultSet result = stmt.executeQuery()
             while (result.next()) {
@@ -197,7 +181,7 @@ class CompanyDAO {
                 return
             }
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DBMSG, e)
+            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         println NotFoundMessages.COMPANY
     }

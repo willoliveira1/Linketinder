@@ -16,8 +16,9 @@ import java.util.logging.Logger
 
 class CandidateSkillDAO {
 
-    private final String QUERY_GET_SKILLS_BY_CANDIDATE_ID = "SELECT cs.id, s.title, p.title AS proficiency_title FROM candidates AS c, candidate_skills AS cs, skills AS s, proficiences AS p WHERE c.id = cs.candidate_id AND s.id = cs.skill_id AND p.id = cs.proficiency_id AND c.id=?"
-    private final String QUERY_GET_SKILL_BY_ID = "SELECT * FROM candidate_skills WHERE id=?"
+    private final String GET_SKILLS_BY_CANDIDATE_ID = "SELECT cs.id, s.title, p.title AS proficiency_title FROM candidates AS c, candidate_skills AS cs, skills AS s, proficiences AS p WHERE c.id = cs.candidate_id AND s.id = cs.skill_id AND p.id = cs.proficiency_id AND c.id=?"
+    private final String GET_SKILL_BY_ID = "SELECT * FROM candidate_skills WHERE id=?"
+    private final String INSERT_SKILL = "INSERT INTO candidate_skills (candidate_id, skill_id, proficiency_id) VALUES (?,?,?)"
     private final String UPDATE_SKILL = "UPDATE candidate_skills SET candidate_id=?, skill_id=?, proficiency_id=? WHERE id=?"
     private final String DELETE_SKILL = "DELETE FROM candidate_skills WHERE id=?"
 
@@ -42,53 +43,47 @@ class CandidateSkillDAO {
     List<Skill> getSkillsByCandidateId(int candidateId) {
         List<Skill> skills = new ArrayList<>()
         try {
-            skills = populateSkills(QUERY_GET_SKILLS_BY_CANDIDATE_ID, candidateId)
+            skills = this.populateSkills(GET_SKILLS_BY_CANDIDATE_ID, candidateId)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DBMSG, e)
+            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         return skills
     }
 
+    private PreparedStatement setCandidateSkillStatement(PreparedStatement stmt, Skill skill, int candidateId) {
+        int skillId = dbService.idFinder("skills", "title", skill.getTitle())
+        int proficiencyId = dbService.idFinder("proficiences", "title", skill.getProficiency().toString())
+        stmt.setInt(1, candidateId)
+        stmt.setInt(2, skillId)
+        stmt.setInt(3, proficiencyId)
+        return stmt
+    }
+
     void insertSkill(Skill skill, int candidateId) {
-        String insertSkill = "INSERT INTO candidate_skills (candidate_id, skill_id, proficiency_id) VALUES (?,?,?)"
         try {
-            PreparedStatement stmt = sql.connection.prepareStatement(insertSkill, Statement.RETURN_GENERATED_KEYS)
-            stmt.setInt(1, candidateId)
-
-            int skillId = dbService.idFinder("skills", "title", skill.getTitle())
-            stmt.setInt(2, skillId)
-
-            int proficiencyId = dbService.idFinder("proficiences", "title",
-                    skill.getProficiency().toString())
-            stmt.setInt(3, proficiencyId)
-
+            PreparedStatement stmt = sql.connection.prepareStatement(INSERT_SKILL, Statement.RETURN_GENERATED_KEYS)
+            stmt = this.setCandidateSkillStatement(stmt, skill, candidateId)
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DBMSG, e)
+            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
     }
 
     void updateSkill(Skill skill, int candidateId) {
         try {
             PreparedStatement stmt = sql.connection.prepareStatement(UPDATE_SKILL)
-            stmt.setInt(1, candidateId)
-            int skillId = dbService.idFinder("skills", "title", skill.getTitle())
-            stmt.setInt(2, skillId)
-
-            int proficiencyId = dbService.idFinder("proficiences", "title", skill.getProficiency().toString())
-            stmt.setInt(3, proficiencyId)
+            stmt = this.setCandidateSkillStatement(stmt, skill, candidateId)
             stmt.setInt(4, skill.id)
-
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DBMSG, e)
+            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
     }
 
     void deleteSkill(int id) {
         Skill skill = new Skill()
         try {
-            PreparedStatement stmt = sql.connection.prepareStatement(QUERY_GET_SKILL_BY_ID)
+            PreparedStatement stmt = sql.connection.prepareStatement(GET_SKILL_BY_ID)
             stmt.setInt(1, id)
             ResultSet result = stmt.executeQuery()
             while (result.next()) {
@@ -102,7 +97,7 @@ class CandidateSkillDAO {
                 return
             }
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DBMSG, e)
+            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         println NotFoundMessages.SKILL
     }

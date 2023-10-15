@@ -16,9 +16,8 @@ import java.util.logging.Logger
 
 class BenefitDAO {
 
-    private final String QUERY_GET_ALL_BENEFITS = "SELECT cb.id, c.id AS company_id, b.title FROM companies AS c, company_benefits AS cb, benefits AS b WHERE c.id = cb.company_id AND b.id = cb.benefit_id"
-    private final String QUERY_GET_BENEFITS_BY_COMPANY_ID = "SELECT cb.id, c.id AS company_id, b.title FROM companies AS c, company_benefits AS cb, benefits AS b WHERE c.id = cb.company_id AND b.id = cb.benefit_id AND c.id=?"
-    private final String QUERY_GET_COMPANY_BENEFIT_BY_ID = "SELECT * FROM company_benefits WHERE id=?"
+    private final String GET_BENEFITS_BY_COMPANY_ID = "SELECT cb.id, c.id AS company_id, b.title FROM companies AS c, company_benefits AS cb, benefits AS b WHERE c.id = cb.company_id AND b.id = cb.benefit_id AND c.id=?"
+    private final String GET_COMPANY_BENEFIT_BY_ID = "SELECT * FROM company_benefits WHERE id=?"
     private final String INSERT_BENEFIT = "INSERT INTO company_benefits (company_id, benefit_id) VALUES (?,?)"
     private final String UPDATE_BENEFIT = "UPDATE company_benefits SET company_id=?, benefit_id=? WHERE id=?"
     private final String DELETE_COMPANY_BENEFIT = "DELETE FROM company_benefits WHERE id=?"
@@ -26,12 +25,10 @@ class BenefitDAO {
     Sql sql = DatabaseFactory.instance()
     IDBService dbService = new DBService()
 
-    private List<Benefit> populateBenefits(String query, Integer... args) {
+    private List<Benefit> populateBenefits(String query, int id) {
         List<Benefit> benefits = new ArrayList<>()
         PreparedStatement stmt = sql.connection.prepareStatement(query)
-        if (args.any()) {
-            stmt.setInt(1, args[0])
-        }
+        stmt.setInt(1, id)
         ResultSet result = stmt.executeQuery()
         while (result.next()) {
             Benefit benefit = new Benefit()
@@ -42,57 +39,48 @@ class BenefitDAO {
         return benefits
     }
 
-    List<Benefit> getAllBenefits() {
+    List<Benefit> getBenefitsByCompanyId(int companyId) {
         List<Benefit> benefits = new ArrayList<>()
         try {
-            benefits = populateBenefits(QUERY_GET_ALL_BENEFITS)
+            benefits = this.populateBenefits(GET_BENEFITS_BY_COMPANY_ID, companyId)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DBMSG, e)
+            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         return benefits
     }
 
-    List<Benefit> getBenefitsByCompanyId(int companyId) {
-        List<Benefit> benefits = new ArrayList<>()
-        try {
-            benefits = populateBenefits(QUERY_GET_BENEFITS_BY_COMPANY_ID, companyId)
-        } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DBMSG, e)
-        }
-        return benefits
+    private PreparedStatement setBenefitStatement(PreparedStatement stmt, Benefit benefit, int companyId) {
+        int benefitId = dbService.idFinder("benefits", "title", benefit.getTitle())
+        stmt.setInt(1, companyId)
+        stmt.setInt(2, benefitId)
+        return stmt
     }
 
     void insertBenefit(int companyId, Benefit benefit) {
         try {
             PreparedStatement stmt = sql.connection.prepareStatement(INSERT_BENEFIT, Statement.RETURN_GENERATED_KEYS)
-            stmt.setInt(1, companyId)
-
-            int benefitId = dbService.idFinder("benefits", "title", benefit.getTitle())
-            stmt.setInt(2, benefitId)
-
+            stmt = this.setBenefitStatement(stmt, benefit, companyId)
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DBMSG, e)
+            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
     }
 
     void updateBenefit(int companyId, Benefit benefit) {
         try {
             PreparedStatement stmt = sql.connection.prepareStatement(UPDATE_BENEFIT, companyId, benefit.id)
-            int benefitId = dbService.idFinder("benefits", "title", benefit.getTitle())
-            stmt.setInt(1, companyId)
-            stmt.setInt(2, benefitId)
+            stmt = this.setBenefitStatement(stmt, benefit, companyId)
             stmt.setInt(3, benefit.id)
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DBMSG, e)
+            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
     }
 
     void deleteBenefit(int id) {
         Benefit benefit = new Benefit()
         try {
-            PreparedStatement stmt = sql.connection.prepareStatement(QUERY_GET_COMPANY_BENEFIT_BY_ID)
+            PreparedStatement stmt = sql.connection.prepareStatement(GET_COMPANY_BENEFIT_BY_ID)
             stmt.setInt(1, id)
             ResultSet result = stmt.executeQuery()
             while (result.next()) {
@@ -105,7 +93,7 @@ class BenefitDAO {
                 return
             }
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DBMSG, e)
+            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         println NotFoundMessages.BENEFIT
     }
