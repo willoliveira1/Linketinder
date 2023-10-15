@@ -1,6 +1,6 @@
 package com.linketinder.dao.candidatedao.interfaces
 
-import com.linketinder.model.candidate.*
+import com.linketinder.model.candidate.Candidate
 
 interface ICandidateDAO {
 

@@ -2,7 +2,6 @@ package com.linketinder.validation
 
 import com.linketinder.model.shared.State
 import com.linketinder.validation.interfaces.ICompanyValidation
-
 import java.util.regex.Pattern
 
 class CompanyValidation implements ICompanyValidation {
@@ -10,8 +9,8 @@ class CompanyValidation implements ICompanyValidation {
     Readable reader = System.in.newReader()
 
     Integer validateId() {
+        println "Qual o id da empresa?"
         try {
-            println "Qual o id da empresa?"
             Integer id = reader.readLine() as Integer
             return id
         } catch (IllegalArgumentException e) {
@@ -33,8 +32,8 @@ class CompanyValidation implements ICompanyValidation {
 
     State validateState() {
         State state
+        println "Qual a sigla do estado da empresa?"
         try {
-            println "Qual a sigla do estado da empresa?"
             String input = reader.readLine()
             state = State.valueOf(input.toUpperCase())
             return state
