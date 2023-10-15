@@ -5,6 +5,7 @@ import com.linketinder.model.candidate.*
 import com.linketinder.model.jobvacancy.ContractType
 import com.linketinder.model.jobvacancy.LocationType
 import com.linketinder.model.shared.*
+import com.linketinder.service.interfaces.ICandidateService
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runners.Parameterized
@@ -19,7 +20,7 @@ import static org.mockito.Mockito.*
 class CandidateServiceTest {
 
     @InjectMocks
-    private CandidateService candidateService = new CandidateService()
+    private ICandidateService candidateService = new CandidateService()
 
     @Mock
     private CandidateDAO candidateDAO
