@@ -1,8 +1,12 @@
 package com.linketinder.dao.companydao
 
+import com.linketinder.dao.companydao.interfaces.IBenefitDAO
 import com.linketinder.dao.companydao.interfaces.IJobVacancyDAO
+import com.linketinder.dao.companydao.interfaces.IRequiredSkillDAO
 import com.linketinder.database.DatabaseFactory
 import com.linketinder.database.DBService
+import com.linketinder.database.interfaces.IDBService
+import com.linketinder.database.interfaces.IDatabaseFactory
 import com.linketinder.model.jobvacancy.JobVacancy
 import com.linketinder.model.jobvacancy.ContractType
 import com.linketinder.model.jobvacancy.LocationType
@@ -28,9 +32,16 @@ class JobVacancyDAO implements IJobVacancyDAO {
     private final String UPDATE_JOB_VACANCY = "UPDATE job_vacancies SET company_id=?, title=?, description=?, salary=?, contract_type_id=?, location_type_id=? WHERE id=?"
     private final String DELETE_JOB_VACANCY = "DELETE FROM job_vacancies WHERE id=?"
 
-    Sql sql = DatabaseFactory.instance()
-    DBService dbService = new DBService()
-    RequiredSkillDAO requiredSkillDAO = new RequiredSkillDAO()
+    IDBService dbService
+    IDatabaseFactory databaseFactory
+    IRequiredSkillDAO requiredSkillDAO
+    Sql sql = databaseFactory.instance()
+
+    JobVacancyDAO(IDBService dbService, IDatabaseFactory databaseFactory, IRequiredSkillDAO requiredSkillDAO) {
+        this.dbService = dbService
+        this.databaseFactory = databaseFactory
+        this.requiredSkillDAO = requiredSkillDAO
+    }
 
     private JobVacancy createJobVacancy(ResultSet result) {
         JobVacancy jobVacancy = new JobVacancy()

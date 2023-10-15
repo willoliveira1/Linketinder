@@ -4,7 +4,7 @@ import groovy.sql.Sql
 
 interface IDatabaseFactory {
 
-    Sql newInstance()
+    Sql createConnection()
     Sql instance()
 
 }

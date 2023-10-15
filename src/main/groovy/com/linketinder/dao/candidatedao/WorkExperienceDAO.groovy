@@ -3,6 +3,8 @@ package com.linketinder.dao.candidatedao
 import com.linketinder.dao.candidatedao.interfaces.IWorkExperienceDAO
 import com.linketinder.database.DBService
 import com.linketinder.database.DatabaseFactory
+import com.linketinder.database.interfaces.IDBService
+import com.linketinder.database.interfaces.IDatabaseFactory
 import com.linketinder.model.candidate.WorkExperience
 import com.linketinder.model.jobvacancy.ContractType
 import com.linketinder.model.jobvacancy.LocationType
@@ -25,8 +27,14 @@ class WorkExperienceDAO implements IWorkExperienceDAO {
     private final String UPDATE_WORK_EXPERIENCE = "UPDATE work_experiences SET candidate_id=?, title=?, company_name=?, city=?, currently_work=?, description=?, state_id=?, contract_type_id=?, location_id=? WHERE id=?"
     private final String DELETE_WORK_EXPERIENCE = "DELETE FROM work_experiences WHERE id=?"
 
-    Sql sql = DatabaseFactory.instance()
-    DBService dbService = new DBService()
+    IDatabaseFactory databaseFactory
+    IDBService dbService
+    Sql sql = databaseFactory.instance()
+
+    WorkExperienceDAO(IDBService dbService, IDatabaseFactory databaseFactory) {
+        this.dbService = dbService
+        this.databaseFactory = databaseFactory
+    }
 
     private List<WorkExperience> populateWorkExperiences(String query, int id) {
         List<WorkExperience> workExperiences = new ArrayList<>()

@@ -22,11 +22,13 @@ class CandidateMatchDAO implements ICandidateMatchDAO {
     private final String CANDIDATE_LIKE_JOB_VACANCY = "SELECT id, candidate_id, job_vacancy_id, company_id FROM matches WHERE (candidate_id=? AND company_id=?) OR (candidate_id=? AND job_vacancy_id=?)"
     private final String INSERT_CANDIDATE_LIKE = "INSERT INTO matches (candidate_id, job_vacancy_id, company_id) VALUES (?,?,null)"
 
-    Sql sql = DatabaseFactory.instance()
     IMatchDAO matchDAO
+    IDatabaseFactory databaseFactory
+    Sql sql = databaseFactory.instance()
 
-    CandidateMatchDAO(IMatchDAO matchDAO) {
+    CandidateMatchDAO(IMatchDAO matchDAO, IDatabaseFactory databaseFactory) {
         this.matchDAO = matchDAO
+        this.databaseFactory = databaseFactory
     }
 
     private int populateCompanyId(String query, int id) {

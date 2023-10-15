@@ -4,6 +4,7 @@ import com.linketinder.dao.companydao.interfaces.IBenefitDAO
 import com.linketinder.database.DatabaseFactory
 import com.linketinder.database.DBService
 import com.linketinder.database.interfaces.IDBService
+import com.linketinder.database.interfaces.IDatabaseFactory
 import com.linketinder.model.company.Benefit
 import com.linketinder.util.ErrorMessages
 import com.linketinder.util.NotFoundMessages
@@ -23,8 +24,14 @@ class BenefitDAO implements IBenefitDAO {
     private final String UPDATE_BENEFIT = "UPDATE company_benefits SET company_id=?, benefit_id=? WHERE id=?"
     private final String DELETE_COMPANY_BENEFIT = "DELETE FROM company_benefits WHERE id=?"
 
-    Sql sql = DatabaseFactory.instance()
-    IDBService dbService = new DBService()
+    IDatabaseFactory databaseFactory
+    IDBService dbService
+    Sql sql = databaseFactory.instance()
+
+    BenefitDAO(IDBService dbService, IDatabaseFactory databaseFactory) {
+        this.dbService = dbService
+        this.databaseFactory = databaseFactory
+    }
 
     private List<Benefit> populateBenefits(String query, int id) {
         List<Benefit> benefits = new ArrayList<>()

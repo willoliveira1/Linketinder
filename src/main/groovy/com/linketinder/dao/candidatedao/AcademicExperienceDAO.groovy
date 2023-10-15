@@ -3,6 +3,8 @@ package com.linketinder.dao.candidatedao
 import com.linketinder.dao.candidatedao.interfaces.IAcademicExperienceDAO
 import com.linketinder.database.DBService
 import com.linketinder.database.DatabaseFactory
+import com.linketinder.database.interfaces.IDBService
+import com.linketinder.database.interfaces.IDatabaseFactory
 import com.linketinder.model.candidate.CourseStatus
 import com.linketinder.model.candidate.AcademicExperience
 import com.linketinder.util.ErrorMessages
@@ -23,8 +25,14 @@ class AcademicExperienceDAO implements IAcademicExperienceDAO {
     private final String UPDATE_ACADEMIC_EXPERIENCE = "UPDATE academic_experiences SET candidate_id=?, educational_institution=?, degree_type=?, field_of_study=?, course_status_id=? WHERE id=?"
     private final String DELETE_ACADEMIC_EXPERIENCE = "DELETE FROM academic_experiences WHERE id=?"
 
-    Sql sql = DatabaseFactory.instance()
-    DBService dbService = new DBService()
+    IDatabaseFactory databaseFactory
+    IDBService dbService
+    Sql sql = databaseFactory.instance()
+
+    AcademicExperienceDAO(IDBService dbService, IDatabaseFactory databaseFactory) {
+        this.dbService = dbService
+        this.databaseFactory = databaseFactory
+    }
 
     private List<AcademicExperience> populateAcademicExperiences(String query, int id) {
         List<AcademicExperience> academicExperiences = new ArrayList<>()

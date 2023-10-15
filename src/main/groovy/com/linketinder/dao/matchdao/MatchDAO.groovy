@@ -17,7 +17,12 @@ class MatchDAO implements IMatchDAO {
     private final String GET_ALL_MATCHES = "SELECT id, candidate_id, company_id, job_vacancy_id FROM matches WHERE company_id IS NOT NULL AND job_vacancy_id IS NOT NULL ORDER BY id"
     private final String UPDATE_MATCH = "UPDATE matches SET candidate_id=?, company_id=?, job_vacancy_id=? WHERE id=?"
 
-    Sql sql = DatabaseFactory.instance()
+    IDatabaseFactory databaseFactory
+    Sql sql = databaseFactory.instance()
+
+    MatchDAO(IDatabaseFactory databaseFactory) {
+        this.databaseFactory = databaseFactory
+    }
 
     Match createMatch(ResultSet result) {
         Match match = new Match()

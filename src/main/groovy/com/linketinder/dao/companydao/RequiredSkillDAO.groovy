@@ -3,6 +3,8 @@ package com.linketinder.dao.companydao
 import com.linketinder.dao.companydao.interfaces.IRequiredSkillDAO
 import com.linketinder.database.DatabaseFactory
 import com.linketinder.database.DBService
+import com.linketinder.database.interfaces.IDBService
+import com.linketinder.database.interfaces.IDatabaseFactory
 import com.linketinder.model.shared.Skill
 import com.linketinder.util.ErrorMessages
 import com.linketinder.util.NotFoundMessages
@@ -22,8 +24,14 @@ class RequiredSkillDAO implements IRequiredSkillDAO {
     private final String UPDATE_SKILL = "UPDATE job_vacancy_skills SET job_vacancy_id=?, skill_id=? WHERE id=?"
     private final String DELETE_SKILL_BY_ID = "DELETE FROM job_vacancy_skills WHERE id=?"
 
-    Sql sql = DatabaseFactory.instance()
-    DBService dbService = new DBService()
+    IDatabaseFactory databaseFactory
+    IDBService dbService
+    Sql sql = databaseFactory.instance()
+
+    RequiredSkillDAO(IDBService dbService, IDatabaseFactory databaseFactory) {
+        this.dbService = dbService
+        this.databaseFactory = databaseFactory
+    }
 
     List<Skill> populateSkills(String query, int id) {
         List<Skill> skills = new ArrayList<>()

@@ -3,6 +3,8 @@ package com.linketinder.dao.candidatedao
 import com.linketinder.dao.candidatedao.interfaces.ILanguageDAO
 import com.linketinder.database.DBService
 import com.linketinder.database.DatabaseFactory
+import com.linketinder.database.interfaces.IDBService
+import com.linketinder.database.interfaces.IDatabaseFactory
 import com.linketinder.model.candidate.Language
 import com.linketinder.model.shared.Proficiency
 import com.linketinder.util.ErrorMessages
@@ -23,8 +25,14 @@ class LanguageDAO implements ILanguageDAO {
     private final String UPDATE_LANGUAGE = "UPDATE candidate_languages SET candidate_id=?, language_id=?, proficiency_id=? WHERE id=?"
     private final String DELETE_LANGUAGE = "DELETE FROM candidate_languages WHERE id=?"
 
-    Sql sql = DatabaseFactory.instance()
-    DBService dbService = new DBService()
+    IDatabaseFactory databaseFactory
+    IDBService dbService
+    Sql sql = databaseFactory.instance()
+
+    LanguageDAO(IDBService dbService, IDatabaseFactory databaseFactory) {
+        this.dbService = dbService
+        this.databaseFactory = databaseFactory
+    }
 
     private List<Language> populateLanguages(String query, int candidateId) {
         List<Language> languages = new ArrayList<>()

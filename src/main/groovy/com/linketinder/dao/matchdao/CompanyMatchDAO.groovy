@@ -3,6 +3,7 @@ package com.linketinder.dao.matchdao
 import com.linketinder.dao.matchdao.interfaces.ICompanyMatchDAO
 import com.linketinder.dao.matchdao.interfaces.IMatchDAO
 import com.linketinder.database.DatabaseFactory
+import com.linketinder.database.interfaces.IDatabaseFactory
 import com.linketinder.model.match.Match
 import com.linketinder.util.ErrorMessages
 import groovy.sql.Sql
@@ -20,12 +21,13 @@ class CompanyMatchDAO implements ICompanyMatchDAO {
     private final String COMPANY_LIKE_CANDIDATE = "SELECT DISTINCT m.id, m.candidate_id, m.job_vacancy_id, m.company_id FROM matches AS m, job_vacancies AS j WHERE m.candidate_id=? AND (m.job_vacancy_id = j.id OR m.job_vacancy_id IS NULL) AND (m.company_id=? OR m.company_id IS NULL)"
     private final String INSERT_COMPANY_LIKE = "INSERT INTO matches (candidate_id, job_vacancy_id, company_id) VALUES (?,null,?)"
 
-    Sql sql = DatabaseFactory.instance()
-
     IMatchDAO matchDAO
+    IDatabaseFactory databaseFactory
+    Sql sql = databaseFactory.instance()
 
-    CompanyMatchDAO(IMatchDAO matchDAO) {
+    CompanyMatchDAO(IMatchDAO matchDAO, IDatabaseFactory databaseFactory) {
         this.matchDAO = matchDAO
+        this.databaseFactory = databaseFactory
     }
 
     private void insertCompanyLike(int companyId, int candidateId) {

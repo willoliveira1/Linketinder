@@ -1,8 +1,13 @@
 package com.linketinder.dao.companydao
 
+import com.linketinder.dao.companydao.interfaces.IBenefitDAO
 import com.linketinder.dao.companydao.interfaces.ICompanyDAO
+import com.linketinder.dao.companydao.interfaces.IJobVacancyDAO
+import com.linketinder.dao.matchdao.interfaces.IMatchDAO
 import com.linketinder.database.DatabaseFactory
 import com.linketinder.database.DBService
+import com.linketinder.database.interfaces.IDBService
+import com.linketinder.database.interfaces.IDatabaseFactory
 import com.linketinder.model.company.Benefit
 import com.linketinder.model.company.Company
 import com.linketinder.model.jobvacancy.JobVacancy
@@ -27,10 +32,19 @@ class CompanyDAO implements ICompanyDAO {
     private final String UPDATE_COMPANY = "UPDATE companies SET name=?, email=?, city=?, state_id=?, country=?, cep=?, description=?, cnpj=? WHERE id=?"
     private final String DELETE_COMPANY = "DELETE FROM companies WHERE id=?"
 
-    Sql sql = DatabaseFactory.instance()
-    DBService dbService = new DBService()
-    JobVacancyDAO jobVacancyDAO = new JobVacancyDAO()
-    BenefitDAO benefitDAO = new BenefitDAO()
+    IDBService dbService
+    IDatabaseFactory databaseFactory
+    IBenefitDAO benefitDAO
+    IJobVacancyDAO jobVacancyDAO
+    Sql sql = databaseFactory.instance()
+
+    CompanyDAO(IDBService dbService, IDatabaseFactory databaseFactory, IBenefitDAO benefitDAO,
+               IJobVacancyDAO jobVacancyDAO) {
+        this.dbService = dbService
+        this.databaseFactory = databaseFactory
+        this.benefitDAO = benefitDAO
+        this.jobVacancyDAO = jobVacancyDAO
+    }
 
     private Company createCompany(ResultSet result) {
         Person company = new Company()
