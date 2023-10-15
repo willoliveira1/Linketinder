@@ -1,30 +1,35 @@
 package com.linketinder.service
 
+import com.linketinder.dao.matchdao.CandidateMatchDAO
+import com.linketinder.dao.matchdao.CompanyMatchDAO
 import com.linketinder.dao.matchdao.MatchDAO
 import com.linketinder.model.match.Match
+import com.linketinder.service.interfaces.IMatchService
 
-class MatchService {
+class MatchService implements IMatchService {
 
     MatchDAO matchDAO = new MatchDAO()
+    CandidateMatchDAO candidateMatchDAO = new CandidateMatchDAO()
+    CompanyMatchDAO companyMatchDAO = new CompanyMatchDAO()
 
     List<Match> getAllMatches() {
         return matchDAO.getAllMatches()
     }
 
     List<Match> getAllMatchesByCandidateId(int candidateId) {
-        return matchDAO.getAllMatchesByCandidateId(candidateId)
+        return candidateMatchDAO.getAllMatchesByCandidateId(candidateId)
     }
 
     List<Match> getAllMatchesByCompanyId(int companyId) {
-        return matchDAO.getAllMatchesByCompanyId(companyId)
+        return companyMatchDAO.getAllMatchesByCompanyId(companyId)
     }
 
     void likeJobVacancy(int candidateId, int jobVacancyId) {
-        matchDAO.candidateLikeJobVacancy(candidateId, jobVacancyId)
+        candidateMatchDAO.candidateLikeJobVacancy(candidateId, jobVacancyId)
     }
 
     void likeCandidate(int companyId, int candidateId) {
-        matchDAO.companyLikeCandidate(companyId, candidateId)
+        companyMatchDAO.companyLikeCandidate(companyId, candidateId)
     }
 
 }

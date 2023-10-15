@@ -41,7 +41,7 @@ class CompanyServiceTest {
     @Test
     @DisplayName("Test getAll")
     void testShouldGetAListOfCompanies() {
-        when(companyDAO.getAllCompany()).thenReturn(companiesList())
+        when(companyDAO.getAllCompanies()).thenReturn(companiesList())
         List<Company> result = companyService.getAll()
 
         List<Company> expectedResult = new ArrayList<>()

@@ -5,7 +5,7 @@ import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.SQLDataException
 
-class DBService {
+class DBService implements IDBService {
 
     Sql sql = DatabaseFactory.instance()
 

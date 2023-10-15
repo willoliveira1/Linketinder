@@ -2,9 +2,12 @@ package com.linketinder.service
 
 import com.linketinder.dao.candidatedao.CandidateDAO
 import com.linketinder.model.candidate.Candidate
+import com.linketinder.service.interfaces.ICandidateService
 
-class CandidateService implements IBaseService<Candidate> {
+class CandidateService implements ICandidateService {
 
+//    IDatabaseFactory databaseFactory = new DatabaseFactory()
+//    CandidateDAO candidateDAO = new CandidateDAO(databaseFactory)
     CandidateDAO candidateDAO = new CandidateDAO()
 
     List<Candidate> getAll() {

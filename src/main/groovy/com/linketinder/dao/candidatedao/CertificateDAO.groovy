@@ -2,6 +2,8 @@ package com.linketinder.dao.candidatedao
 
 import com.linketinder.database.DatabaseFactory
 import com.linketinder.model.candidate.Certificate
+import com.linketinder.util.ErrorMessages
+import com.linketinder.util.NotFoundMessages
 import groovy.sql.Sql
 import java.sql.PreparedStatement
 import java.sql.ResultSet
@@ -12,11 +14,18 @@ import java.util.logging.Logger
 
 class CertificateDAO {
 
+    private final String GET_CERTIFICATES_BY_CANDIDATE_ID = "SELECT id, candidate_id, title, duration FROM certificates WHERE candidate_id=? ORDER BY title"
+    private final String GET_CERTIFICATE_BY_ID = "SELECT * FROM certificates WHERE id=?"
+    private final String INSERT_CERTIFICATE = "INSERT INTO certificates (candidate_id, title, duration) VALUES (?,?,?)"
+    private final String UPDATE_CERTIFICATE = "UPDATE certificates SET candidate_id=?, title=?, duration=? WHERE id=?"
+    private final String DELETE_CERTIFICATE = "DELETE FROM certificates WHERE id=?"
+
     Sql sql = DatabaseFactory.instance()
 
-    private List<Certificate> populateCertificates(String query) {
+    private List<Certificate> populateCertificates(String query, int id) {
         List<Certificate> certificates = new ArrayList<>()
         PreparedStatement stmt = sql.connection.prepareStatement(query)
+        stmt.setInt(1, id)
         ResultSet result = stmt.executeQuery()
         while (result.next()) {
             Certificate certificate = new Certificate()
@@ -28,116 +37,64 @@ class CertificateDAO {
         return certificates
     }
 
-    List<Certificate> getAllCertificates() {
-        List<Certificate> certificates = new ArrayList<>()
-        String query = """
-            SELECT id, candidate_id, title, duration 
-                FROM certificates
-                ORDER BY id
-        """
-        try {
-            certificates = populateCertificates(query)
-        } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, null, e)
-        }
-        return certificates
-    }
-
     List<Certificate> getCertificatesByCandidateId(int candidateId) {
         List<Certificate> certificates = new ArrayList<>()
-        String query = """
-            SELECT id, candidate_id, title, duration 
-                FROM certificates
-                WHERE candidate_id=${candidateId}
-                ORDER BY title
-        """
         try {
-            certificates = populateCertificates(query)
+            certificates = populateCertificates(GET_CERTIFICATES_BY_CANDIDATE_ID, candidateId)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, null, e)
+            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         return certificates
     }
 
-    private Certificate populateCertificate(String query) {
-        Certificate certificate = new Certificate()
-        PreparedStatement stmt = sql.connection.prepareStatement(query)
-        ResultSet result = stmt.executeQuery()
-        while (result.next()) {
-            certificate.setId(result.getInt("id"))
-            certificate.setTitle(result.getString("title"))
-            certificate.setDuration(result.getString("duration"))
-        }
-        return certificate
-    }
-
-    Certificate getCertificateById(int id) {
-        Certificate certificate = new Certificate()
-        String query = """
-            SELECT id, candidate_id, title, duration 
-                FROM certificates
-                WHERE id=${id}
-        """
-        try {
-            certificate = populateCertificate(query)
-        } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, null, e)
-        }
-        return certificate
+    private PreparedStatement setCertificateStatement(PreparedStatement stmt, Certificate certificate, int candidateId) {
+        stmt.setInt(1, candidateId)
+        stmt.setString(2, certificate.getTitle())
+        stmt.setString(3, certificate.getDuration())
+        return stmt
     }
 
     void insertCertificate(Certificate certificate, int candidateId) {
-        String insertCertificate = "INSERT INTO certificates (candidate_id, title, duration) VALUES (?,?,?)"
         try {
-            PreparedStatement stmt = sql.connection.prepareStatement(insertCertificate,
-                    Statement.RETURN_GENERATED_KEYS)
-            stmt.setInt(1, candidateId)
-            stmt.setString(2, certificate.getTitle())
-            stmt.setString(3, certificate.getDuration())
-
+            PreparedStatement stmt = sql.connection.prepareStatement(INSERT_CERTIFICATE, Statement.RETURN_GENERATED_KEYS)
+            stmt = this.setCertificateStatement(stmt, certificate, candidateId)
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, null, e)
+            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
     }
 
     void updateCertificate(Certificate certificate, int candidateId) {
-        String updateCertificate = """
-            UPDATE certificates
-                SET id=${certificate.id}, candidate_id=${candidateId}, title=?, duration=? 
-                WHERE id=${certificate.id}
-        """
         try {
-            PreparedStatement stmt = sql.connection.prepareStatement(updateCertificate)
-            stmt.setString(1, certificate.title)
-            stmt.setString(2, certificate.duration)
-
+            PreparedStatement stmt = sql.connection.prepareStatement(UPDATE_CERTIFICATE)
+            stmt = this.setCertificateStatement(stmt, certificate, candidateId)
+            stmt.setInt(4, certificate.id)
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, null, e)
+            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
     }
 
     void deleteCertificate(int id) {
         Certificate certificate = new Certificate()
-        String query = "SELECT * FROM certificates WHERE id=${id};"
         try {
-            PreparedStatement stmt = sql.connection.prepareStatement(query)
+            PreparedStatement stmt = sql.connection.prepareStatement(GET_CERTIFICATE_BY_ID)
+            stmt.setInt(1, id)
             ResultSet result = stmt.executeQuery()
             while (result.next()) {
                 certificate.setId(result.getInt("id"))
             }
 
             if (certificate.id != null) {
-                query = "DELETE FROM certificates WHERE id=${id};"
-                stmt = sql.connection.prepareStatement(query)
+                stmt = sql.connection.prepareStatement(DELETE_CERTIFICATE)
+                stmt.setInt(1, id)
                 stmt.executeUpdate()
                 return
             }
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, null, e)
+            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
-        println "Certificado não encontrado."
+        println NotFoundMessages.CERTIFICATE
     }
 
 }
