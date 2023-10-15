@@ -1,127 +1,30 @@
 package com.linketinder.view
 
-class ApplicationView {
+import com.linketinder.util.ApplicationTexts
+import com.linketinder.view.interfaces.IApplicationView
+import com.linketinder.view.interfaces.ICandidatesView
+import com.linketinder.view.interfaces.ICompaniesView
+import com.linketinder.view.interfaces.IJobVacanciesView
+import com.linketinder.view.interfaces.IMatchesView
 
-    CandidatesView candidatesView = new CandidatesView()
-    CompaniesView companiesView = new CompaniesView()
-    JobVacanciesView jobVacanciesView = new JobVacanciesView()
-    MatchesView matchesView = new MatchesView()
-    BufferedReader reader = System.in.newReader()
+class ApplicationView implements IApplicationView {
+
+    ICandidatesView candidatesView
+    ICompaniesView companiesView
+    IJobVacanciesView jobVacanciesView
+    IMatchesView matchesView
+    Readable reader = System.in.newReader()
+
+    ApplicationView(ICandidatesView candidatesView, ICompaniesView companiesView, IJobVacanciesView jobVacanciesView,
+                    IMatchesView matchesView) {
+        this.candidatesView = candidatesView
+        this.companiesView = companiesView
+        this.jobVacanciesView = jobVacanciesView
+        this.matchesView = matchesView
+    }
 
     void applicationGenerate() {
         initialScreen()
-    }
-
-    private void applicationText() {
-        String text = """##############################
-##                          ##
-## Aplicação do Linketinder ##
-##                          ##
-##############################
-Digite a opção desejada:
-1) Candidatos
-2) Empresas
-3) Vagas
-4) Matches
-0) Sair
-"""
-        println text
-    }
-
-    private void candidatesText() {
-        String text = """##############################
-##                          ##
-##        Candidatos        ##
-##                          ##
-##############################
-Digite a opção desejada:
-1) Listar Candidatos
-2) Listar Candidato Especifico
-3) Adicionar Novo Candidato
-4) Remover Candidato 
-5) Atualizar Candidato
-0) Voltar
-"""
-        println text
-    }
-
-    private void companiesText() {
-        String text = """##############################
-##                          ##
-##         Empresas         ##
-##                          ##
-##############################
-Digite a opção desejada:
-1) Listar Empresas
-2) Listar Empresa Especifica
-3) Adicionar Nova Empresa
-4) Remover Empresa
-5) Atualizar Empresa
-0) Voltar
-"""
-        println text
-    }
-
-    private void jobVacanciesText() {
-        String text = """##############################
-##                          ##
-##           Vagas          ##
-##                          ##
-##############################
-Digite a opção desejada:
-1) Listar Vagas
-2) Listar Vagas de Empresa Específica
-3) Listar Vaga Especifica
-4) Adicionar Nova Vaga
-5) Remover Vaga
-6) Atualizar Vaga
-0) Voltar
-"""
-        println text
-    }
-
-    private void matchesText() {
-        String text = """##############################
-##                          ##
-##          Matches         ##
-##                          ##
-##############################
-Digite seu tipo de usuário:
-1) Candidato
-2) Empresa
-0) Voltar
-"""
-        println text
-    }
-
-    private void matchesCandidateText() {
-        String text = """##############################
-##                          ##
-##          Matches         ##
-##                          ##
-##############################
-Digite a opção desejada:
-1) Listar Todos os Matches
-2) Listar Todos os Matches de um Candidato Específico
-3) Curtir Vaga
-0) Voltar
-"""
-        println text
-    }
-
-    private void matchesCompanyText() {
-        String text = """##############################
-##                          ##
-##          Matches         ##
-##                          ##
-##############################
-Digite a opção desejada:
-1) Listar Todos os Matches
-2) Listar Todos os Matches de uma Empresa Específica
-3) Curtir Candidato
-0) Voltar
-"""
-        println text
     }
 
     private Integer selectOption() {
@@ -153,7 +56,7 @@ Digite a opção desejada:
 
     private void initialScreen() {
         clearConsole()
-        applicationText()
+        println ApplicationTexts.APPLICATION
         Integer selectedOption = selectOption()
 
         switch (selectedOption) {
@@ -183,7 +86,7 @@ Digite a opção desejada:
     }
 
     private void candidatesScreen() {
-        candidatesText()
+        println ApplicationTexts.CANDIDATES
         Integer selectedOption = selectOption()
 
         switch (selectedOption) {
@@ -217,7 +120,7 @@ Digite a opção desejada:
     }
 
     private void companiesScreen() {
-        companiesText()
+        println ApplicationTexts.COMPANIES
         Integer selectedOption = selectOption()
 
         switch (selectedOption) {
@@ -251,7 +154,7 @@ Digite a opção desejada:
     }
 
     private void jobVacanciesScreen() {
-        jobVacanciesText()
+        println ApplicationTexts.JOB_VACANCIES
         Integer selectedOption = selectOption()
         switch (selectedOption) {
             case 1:
@@ -288,7 +191,7 @@ Digite a opção desejada:
     }
 
     void matchesScreen() {
-        matchesText()
+        println ApplicationTexts.MATCHES
         Integer selectedOption = selectOption()
 
         switch (selectedOption) {
@@ -300,6 +203,9 @@ Digite a opção desejada:
                 clearConsole()
                 this.matchesCompanyScreen()
                 break
+            case 0:
+                initialScreen()
+                break
             default:
                 invalidOption()
         }
@@ -307,7 +213,7 @@ Digite a opção desejada:
     }
 
     void matchesCandidateScreen() {
-        matchesCandidateText()
+        println ApplicationTexts.CANDIDATE_MATCHES
         Integer selectedOption = selectOption()
 
         switch (selectedOption) {
@@ -333,7 +239,7 @@ Digite a opção desejada:
     }
 
     void matchesCompanyScreen() {
-        matchesCompanyText()
+        println ApplicationTexts.COMPANY_MATCHES
         Integer selectedOption = selectOption()
 
         switch (selectedOption) {

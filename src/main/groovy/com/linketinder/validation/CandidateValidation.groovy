@@ -5,12 +5,12 @@ import com.linketinder.model.jobvacancy.ContractType
 import com.linketinder.model.jobvacancy.LocationType
 import com.linketinder.model.shared.Proficiency
 import com.linketinder.model.shared.State
-
+import com.linketinder.validation.interfaces.ICandidateValidation
 import java.util.regex.Pattern
 
-class CandidateValidation implements IPersonValidation {
+class CandidateValidation implements ICandidateValidation {
 
-    BufferedReader reader = System.in.newReader()
+    Readable reader = System.in.newReader()
 
     Integer validateId() {
         println "Qual o id do candidato?"

@@ -20,7 +20,7 @@ import static org.mockito.Mockito.*
 class CandidateServiceTest {
 
     @InjectMocks
-    private ICandidateService candidateService = new CandidateService()
+    private ICandidateService candidateService = new CandidateService(new CandidateDAO())
 
     @Mock
     private CandidateDAO candidateDAO

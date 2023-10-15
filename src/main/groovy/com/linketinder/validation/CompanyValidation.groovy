@@ -1,12 +1,13 @@
 package com.linketinder.validation
 
 import com.linketinder.model.shared.State
+import com.linketinder.validation.interfaces.ICompanyValidation
 
 import java.util.regex.Pattern
 
-class CompanyValidation implements IPersonValidation {
+class CompanyValidation implements ICompanyValidation {
 
-    BufferedReader reader = System.in.newReader()
+    Readable reader = System.in.newReader()
 
     Integer validateId() {
         try {

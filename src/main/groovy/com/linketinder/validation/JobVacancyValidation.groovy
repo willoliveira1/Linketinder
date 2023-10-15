@@ -2,10 +2,11 @@ package com.linketinder.validation
 
 import com.linketinder.model.jobvacancy.ContractType
 import com.linketinder.model.jobvacancy.LocationType
+import com.linketinder.validation.interfaces.IJobVacancyValidation
 
-class JobVacancyValidation {
+class JobVacancyValidation implements IJobVacancyValidation {
 
-    BufferedReader reader = System.in.newReader()
+    Readable reader = System.in.newReader()
 
     int validateId() {
         println "Qual o id da vaga?"

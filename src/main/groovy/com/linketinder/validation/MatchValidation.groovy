@@ -1,8 +1,10 @@
 package com.linketinder.validation
 
-class MatchValidation {
+import com.linketinder.validation.interfaces.IMatchValidation
 
-    BufferedReader reader = System.in.newReader()
+class MatchValidation implements IMatchValidation {
+
+    Readable reader = System.in.newReader()
 
     Integer validateId() {
         try {

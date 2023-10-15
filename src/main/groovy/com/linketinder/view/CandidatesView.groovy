@@ -1,5 +1,6 @@
 package com.linketinder.view
 
+
 import com.linketinder.model.candidate.AcademicExperience
 import com.linketinder.model.candidate.Candidate
 import com.linketinder.model.candidate.Certificate
@@ -11,16 +12,20 @@ import com.linketinder.model.jobvacancy.LocationType
 import com.linketinder.model.shared.Proficiency
 import com.linketinder.model.shared.Skill
 import com.linketinder.model.shared.State
-import com.linketinder.service.CandidateService
-import com.linketinder.service.interfaces.IBaseService
-import com.linketinder.validation.CandidateValidation
-import com.linketinder.validation.IPersonValidation
+import com.linketinder.service.interfaces.ICandidateService
+import com.linketinder.validation.interfaces.ICandidateValidation
+import com.linketinder.view.interfaces.ICandidatesView
 
-class CandidatesView {
+class CandidatesView implements ICandidatesView {
 
-    BufferedReader reader = System.in.newReader()
-    IBaseService service = new CandidateService()
-    IPersonValidation validation = new CandidateValidation()
+    ICandidateService service
+    ICandidateValidation validation
+    Readable reader = System.in.newReader()
+
+    CandidatesView(ICandidateService service, ICandidateValidation validation) {
+        this.service = service
+        this.validation = validation
+    }
 
     void getAllCandidates() {
         println "Listagem de Candidatos:"

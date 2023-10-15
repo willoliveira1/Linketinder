@@ -1,4 +1,4 @@
-package com.linketinder.validation
+package com.linketinder.validation.interfaces
 
 import com.linketinder.model.shared.State
 

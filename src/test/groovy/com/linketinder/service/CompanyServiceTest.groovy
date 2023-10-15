@@ -18,7 +18,7 @@ import static org.mockito.Mockito.*
 class CompanyServiceTest {
 
     @InjectMocks
-    private CompanyService companyService = new CompanyService()
+    private CompanyService companyService = new CompanyService(new CompanyDAO())
 
     @Mock
     private CompanyDAO companyDAO

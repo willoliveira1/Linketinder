@@ -4,14 +4,20 @@ import com.linketinder.model.jobvacancy.JobVacancy
 import com.linketinder.model.jobvacancy.ContractType
 import com.linketinder.model.jobvacancy.LocationType
 import com.linketinder.model.shared.Skill
-import com.linketinder.service.JobVacancyService
-import com.linketinder.validation.JobVacancyValidation
+import com.linketinder.service.interfaces.IJobVacancyService
+import com.linketinder.validation.interfaces.IJobVacancyValidation
+import com.linketinder.view.interfaces.IJobVacanciesView
 
-class JobVacanciesView {
+class JobVacanciesView implements IJobVacanciesView {
 
-    JobVacancyService service = new JobVacancyService()
-    BufferedReader reader = System.in.newReader()
-    JobVacancyValidation validation = new JobVacancyValidation()
+    IJobVacancyService service
+    IJobVacancyValidation validation
+    Readable reader = System.in.newReader()
+
+    JobVacanciesView(IJobVacancyService service, IJobVacancyValidation validation) {
+        this.service = service
+        this.validation = validation
+    }
 
     void getAllJobVacancies() {
         println "Listagem de Vagas:"

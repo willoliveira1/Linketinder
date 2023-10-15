@@ -1,6 +1,7 @@
 package com.linketinder.dao.matchdao
 
 import com.linketinder.dao.matchdao.interfaces.ICandidateMatchDAO
+import com.linketinder.dao.matchdao.interfaces.IMatchDAO
 import com.linketinder.database.DatabaseFactory
 import com.linketinder.database.interfaces.IDatabaseFactory
 import com.linketinder.model.match.Match
@@ -22,7 +23,11 @@ class CandidateMatchDAO implements ICandidateMatchDAO {
     private final String INSERT_CANDIDATE_LIKE = "INSERT INTO matches (candidate_id, job_vacancy_id, company_id) VALUES (?,?,null)"
 
     Sql sql = DatabaseFactory.instance()
-    MatchDAO matchDAO = new MatchDAO()
+    IMatchDAO matchDAO
+
+    CandidateMatchDAO(IMatchDAO matchDAO) {
+        this.matchDAO = matchDAO
+    }
 
     private int populateCompanyId(String query, int id) {
         int companyId = 0

@@ -1,15 +1,24 @@
 package com.linketinder.view
 
 import com.linketinder.model.match.Match
-import com.linketinder.service.MatchService
+import com.linketinder.service.interfaces.IMatchService
 import com.linketinder.validation.MatchValidation
+import com.linketinder.view.interfaces.ICandidatesView
+import com.linketinder.view.interfaces.IJobVacanciesView
+import com.linketinder.view.interfaces.IMatchesView
 
-class MatchesView {
+class MatchesView implements IMatchesView {
 
-    MatchService matchService = new MatchService()
     MatchValidation validation = new MatchValidation()
-    CandidatesView candidateView = new CandidatesView()
-    JobVacanciesView jobVacancyView = new JobVacanciesView()
+    ICandidatesView candidateView
+    IJobVacanciesView jobVacancyView
+    IMatchService matchService
+
+    MatchesView(ICandidatesView candidateView, IJobVacanciesView jobVacancyView, IMatchService matchService) {
+        this.candidateView = candidateView
+        this.jobVacancyView = jobVacancyView
+        this.matchService = matchService
+    }
 
     void getAllMatches() {
         println "Listagem de Matches:"

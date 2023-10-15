@@ -3,16 +3,20 @@ package com.linketinder.view
 import com.linketinder.model.company.Benefit
 import com.linketinder.model.company.Company
 import com.linketinder.model.shared.State
-import com.linketinder.service.CompanyService
-import com.linketinder.service.interfaces.IBaseService
-import com.linketinder.validation.CompanyValidation
-import com.linketinder.validation.IPersonValidation
+import com.linketinder.service.interfaces.ICompanyService
+import com.linketinder.validation.interfaces.ICompanyValidation
+import com.linketinder.view.interfaces.ICompaniesView
 
-class CompaniesView {
+class CompaniesView implements ICompaniesView {
 
-    IBaseService service = new CompanyService()
-    BufferedReader reader = System.in.newReader()
-    IPersonValidation validation = new CompanyValidation()
+    ICompanyService service
+    ICompanyValidation validation
+    Readable reader = System.in.newReader()
+
+    CompaniesView(ICompanyService service, ICompanyValidation validation) {
+        this.service = service
+        this.validation = validation
+    }
 
     void getAllCompanies() {
         println "Listagem de Empresas:"
