@@ -1,7 +1,8 @@
 package com.linketinder.dao.matchdao
 
+import com.linketinder.dao.matchdao.interfaces.ICandidateMatchDAO
 import com.linketinder.database.DatabaseFactory
-import com.linketinder.database.IDatabaseFactory
+import com.linketinder.database.interfaces.IDatabaseFactory
 import com.linketinder.model.match.Match
 import com.linketinder.util.ErrorMessages
 import groovy.sql.Sql
@@ -12,7 +13,7 @@ import java.sql.Statement
 import java.util.logging.Level
 import java.util.logging.Logger
 
-class CandidateMatchDAO {
+class CandidateMatchDAO implements ICandidateMatchDAO {
 
     private final String GET_ALL_MATCHES_BY_CANDIDATE_ID = "SELECT id, candidate_id, company_id, job_vacancy_id FROM matches WHERE candidate_id=? AND company_id IS NOT NULL AND job_vacancy_id IS NOT NULL ORDER BY id"
     private final String GET_COMPANY_ID_BY_JOB_VACANCY_ID = "SELECT DISTINCT company_id FROM job_vacancies WHERE id=?"

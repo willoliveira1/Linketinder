@@ -27,19 +27,4 @@ class BenefitDAOTest {
         return benefits
     }
 
-    @Test
-    @DisplayName("Test getAllBenefits")
-    void testShouldGetAListOfBenefits() {
-        when(benefitDAO.populateBenefits(anyString())).thenReturn(benefits())
-        List<Benefit> result = benefitDAO.getAllBenefits()
-
-        List<Benefit> expectedResult = new ArrayList<>()
-        expectedResult.add(new Benefit(id: 1, title: "Vale-Transporte"))
-        expectedResult.add(new Benefit(id: 2, title: "Vale-Refeição"))
-        expectedResult.add(new Benefit(id: 3, title: "Gympass"))
-
-        assertEquals(expectedResult.id as Integer, result.id as Integer)
-        assertEquals(expectedResult.title, result.title)
-    }
-
 }

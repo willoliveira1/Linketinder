@@ -1,8 +1,9 @@
 package com.linketinder.dao.companydao
 
+import com.linketinder.dao.companydao.interfaces.IBenefitDAO
 import com.linketinder.database.DatabaseFactory
 import com.linketinder.database.DBService
-import com.linketinder.database.IDBService
+import com.linketinder.database.interfaces.IDBService
 import com.linketinder.model.company.Benefit
 import com.linketinder.util.ErrorMessages
 import com.linketinder.util.NotFoundMessages
@@ -14,7 +15,7 @@ import java.sql.Statement
 import java.util.logging.Level
 import java.util.logging.Logger
 
-class BenefitDAO {
+class BenefitDAO implements IBenefitDAO {
 
     private final String GET_BENEFITS_BY_COMPANY_ID = "SELECT cb.id, c.id AS company_id, b.title FROM companies AS c, company_benefits AS cb, benefits AS b WHERE c.id = cb.company_id AND b.id = cb.benefit_id AND c.id=?"
     private final String GET_COMPANY_BENEFIT_BY_ID = "SELECT * FROM company_benefits WHERE id=?"

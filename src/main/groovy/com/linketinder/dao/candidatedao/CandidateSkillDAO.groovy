@@ -1,5 +1,6 @@
 package com.linketinder.dao.candidatedao
 
+import com.linketinder.dao.candidatedao.interfaces.ICandidateSkillDAO
 import com.linketinder.database.DBService
 import com.linketinder.database.DatabaseFactory
 import com.linketinder.model.shared.Proficiency
@@ -14,7 +15,7 @@ import java.sql.Statement
 import java.util.logging.Level
 import java.util.logging.Logger
 
-class CandidateSkillDAO {
+class CandidateSkillDAO implements ICandidateSkillDAO {
 
     private final String GET_SKILLS_BY_CANDIDATE_ID = "SELECT cs.id, s.title, p.title AS proficiency_title FROM candidates AS c, candidate_skills AS cs, skills AS s, proficiences AS p WHERE c.id = cs.candidate_id AND s.id = cs.skill_id AND p.id = cs.proficiency_id AND c.id=?"
     private final String GET_SKILL_BY_ID = "SELECT * FROM candidate_skills WHERE id=?"

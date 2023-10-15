@@ -1,5 +1,6 @@
 package com.linketinder.database
 
+import com.linketinder.database.interfaces.IDBService
 import groovy.sql.Sql
 import java.sql.PreparedStatement
 import java.sql.ResultSet

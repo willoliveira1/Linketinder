@@ -1,5 +1,6 @@
 package com.linketinder.dao.candidatedao
 
+import com.linketinder.dao.candidatedao.interfaces.ICandidateDAO
 import com.linketinder.database.DatabaseFactory
 import com.linketinder.database.DBService
 import com.linketinder.model.candidate.AcademicExperience
@@ -20,7 +21,7 @@ import java.sql.Statement
 import java.util.logging.Level
 import java.util.logging.Logger
 
-class CandidateDAO {
+class CandidateDAO implements ICandidateDAO {
 
     private final String GET_ALL_CANDIDATES = "SELECT c.id, c.name, c.email, c.city, s.acronym AS state, c.country, c.cep, c.description, c.cpf FROM candidates AS c, states AS s WHERE c.state_id = s.id ORDER BY c.id"
     private final String GET_CANDIDATE_BY_ID = "SELECT c.id, c.name, c.email, c.city, s.acronym AS state, c.country, c.cep, c.description, c.cpf FROM candidates AS c, states AS s WHERE c.state_id = s.id AND c.id=?"

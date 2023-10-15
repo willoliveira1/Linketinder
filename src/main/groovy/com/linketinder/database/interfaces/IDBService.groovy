@@ -1,4 +1,4 @@
-package com.linketinder.database
+package com.linketinder.database.interfaces
 
 interface IDBService {
 

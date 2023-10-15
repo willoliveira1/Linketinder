@@ -1,5 +1,6 @@
 package com.linketinder.dao.companydao
 
+import com.linketinder.dao.companydao.interfaces.IJobVacancyDAO
 import com.linketinder.database.DatabaseFactory
 import com.linketinder.database.DBService
 import com.linketinder.model.jobvacancy.JobVacancy
@@ -16,7 +17,7 @@ import java.sql.Statement
 import java.util.logging.Level
 import java.util.logging.Logger
 
-class JobVacancyDAO {
+class JobVacancyDAO implements IJobVacancyDAO {
 
     private final String GET_ALL_JOB_VACANCIES = "SELECT jv.id, jv.title, jv.description, jv.salary, ct.title AS contract_type, lt.title AS location_type FROM job_vacancies AS jv, companies AS c, contract_types AS ct, location_types AS lt WHERE jv.company_id= c.id AND jv.contract_type_id = ct.id AND jv.location_type_id = lt.id"
     private final String GET_JOB_VACANCY_BY_COMPANY_ID = "SELECT jv.id, jv.title, jv.description, jv.salary, ct.title AS contract_type, lt.title AS location_type FROM job_vacancies AS jv, companies AS c, contract_types AS ct, location_types AS lt WHERE jv.company_id= c.id AND jv.contract_type_id = ct.id AND jv.location_type_id = lt.id AND c.id=?"

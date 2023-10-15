@@ -1,5 +1,6 @@
 package com.linketinder.dao.companydao
 
+import com.linketinder.dao.companydao.interfaces.IRequiredSkillDAO
 import com.linketinder.database.DatabaseFactory
 import com.linketinder.database.DBService
 import com.linketinder.model.shared.Skill
@@ -13,7 +14,7 @@ import java.sql.Statement
 import java.util.logging.Level
 import java.util.logging.Logger
 
-class RequiredSkillDAO {
+class RequiredSkillDAO implements IRequiredSkillDAO {
 
     private final String QUERY_GET_SKILLS_BY_JOB_VACANCY_ID = "SELECT jbs.id, jbs.job_vacancy_id, s.title FROM job_vacancy_skills AS jbs, skills AS s, job_vacancies AS jb WHERE jbs.skill_id = s.id AND jb.id = jbs.job_vacancy_id AND jb.id=?"
     private final String QUERY_GET_SKILL_BY_ID = "SELECT * FROM job_vacancy_skills WHERE id=?"

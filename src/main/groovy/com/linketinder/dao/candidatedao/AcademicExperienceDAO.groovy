@@ -1,5 +1,6 @@
 package com.linketinder.dao.candidatedao
 
+import com.linketinder.dao.candidatedao.interfaces.IAcademicExperienceDAO
 import com.linketinder.database.DBService
 import com.linketinder.database.DatabaseFactory
 import com.linketinder.model.candidate.CourseStatus
@@ -14,7 +15,7 @@ import java.sql.Statement
 import java.util.logging.Level
 import java.util.logging.Logger
 
-class AcademicExperienceDAO {
+class AcademicExperienceDAO implements IAcademicExperienceDAO {
 
     private final String GET_ACADEMIC_EXPERIENCES_BY_CANDIDATE_ID = "SELECT a.id, a.educational_institution, a.degree_type, a.field_of_study, cs.title FROM candidates AS c, academic_experiences AS a, course_status AS cs WHERE c.id = a.candidate_id AND a.course_status_id = cs.id AND c.id=?"
     private final String GET_ACADEMIC_EXPERIENCE_BY_ID = "SELECT * FROM academic_experiences WHERE id=?"

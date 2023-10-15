@@ -1,5 +1,6 @@
 package com.linketinder.dao.candidatedao
 
+import com.linketinder.dao.candidatedao.interfaces.ILanguageDAO
 import com.linketinder.database.DBService
 import com.linketinder.database.DatabaseFactory
 import com.linketinder.model.candidate.Language
@@ -14,7 +15,7 @@ import java.sql.Statement
 import java.util.logging.Level
 import java.util.logging.Logger
 
-class LanguageDAO {
+class LanguageDAO implements ILanguageDAO {
 
     private final String GET_LANGUAGES_BY_CANDIDATE_ID = "SELECT cl.id, l.name, p.title FROM candidates AS c, candidate_languages AS cl, languages AS l, proficiences AS p WHERE c.id = cl.candidate_id AND l.id = cl.language_id AND p.id = cl.proficiency_id AND c.id=?"
     private final String GET_LANGUAGES_BY_ID = "SELECT * FROM candidate_languages WHERE id=?"

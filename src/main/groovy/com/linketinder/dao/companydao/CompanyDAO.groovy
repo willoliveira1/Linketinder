@@ -1,5 +1,6 @@
 package com.linketinder.dao.companydao
 
+import com.linketinder.dao.companydao.interfaces.ICompanyDAO
 import com.linketinder.database.DatabaseFactory
 import com.linketinder.database.DBService
 import com.linketinder.model.company.Benefit
@@ -17,7 +18,7 @@ import java.sql.Statement
 import java.util.logging.Level
 import java.util.logging.Logger
 
-class CompanyDAO {
+class CompanyDAO implements ICompanyDAO {
 
     private final String GET_ALL_COMPANIES = "SELECT c.id, c.name, c.email, c.city, s.acronym AS state, c.country, c.cep, c.description, c.cnpj FROM companies AS c, states AS s WHERE c.state_id = s.id ORDER BY c.id"
     private final String GET_COMPANY_BY_ID = "SELECT c.id, c.name, c.email, c.city, s.acronym AS state, c.country, c.cep, c.description, c.cnpj FROM companies AS c, states AS s WHERE c.state_id = s.id AND c.id=?"

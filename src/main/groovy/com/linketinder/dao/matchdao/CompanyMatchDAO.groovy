@@ -1,19 +1,18 @@
 package com.linketinder.dao.matchdao
 
+import com.linketinder.dao.matchdao.interfaces.ICompanyMatchDAO
 import com.linketinder.database.DatabaseFactory
-import com.linketinder.database.IDatabaseFactory
 import com.linketinder.model.match.Match
 import com.linketinder.util.ErrorMessages
 import groovy.sql.Sql
 
 import java.sql.PreparedStatement
-import java.sql.ResultSet
 import java.sql.SQLException
 import java.sql.Statement
 import java.util.logging.Level
 import java.util.logging.Logger
 
-class CompanyMatchDAO {
+class CompanyMatchDAO implements ICompanyMatchDAO {
 
     private final String GET_ALL_MATCHES_BY_COMPANY_ID = "SELECT id, candidate_id, company_id, job_vacancy_id FROM matches WHERE company_id=? AND job_vacancy_id IS NOT NULL ORDER BY id"
     private final String GET_MATCH_BY_CANDIDATE_ID_AND_COMPANY_ID = "SELECT id, candidate_id, company_id, job_vacancy_id FROM matches WHERE candidate_id=? AND company_id=?"
