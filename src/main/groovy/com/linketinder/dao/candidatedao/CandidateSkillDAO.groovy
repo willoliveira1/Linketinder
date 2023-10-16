@@ -1,10 +1,9 @@
 package com.linketinder.dao.candidatedao
 
 import com.linketinder.dao.candidatedao.interfaces.ICandidateSkillDAO
-import com.linketinder.database.DBService
-import com.linketinder.database.DatabaseFactory
+import com.linketinder.database.DatabaseConnection
 import com.linketinder.database.interfaces.IDBService
-import com.linketinder.database.interfaces.IDatabaseFactory
+import com.linketinder.database.interfaces.IDatabaseConnection
 import com.linketinder.model.shared.Proficiency
 import com.linketinder.model.shared.Skill
 import com.linketinder.util.ErrorMessages
@@ -25,11 +24,11 @@ class CandidateSkillDAO implements ICandidateSkillDAO {
     private final String UPDATE_SKILL = "UPDATE candidate_skills SET candidate_id=?, skill_id=?, proficiency_id=? WHERE id=?"
     private final String DELETE_SKILL = "DELETE FROM candidate_skills WHERE id=?"
 
-    IDatabaseFactory databaseFactory
+    IDatabaseConnection databaseFactory
     IDBService dbService
     Sql sql = databaseFactory.instance()
 
-    CandidateSkillDAO(IDBService dbService, IDatabaseFactory databaseFactory) {
+    CandidateSkillDAO(IDBService dbService, IDatabaseConnection databaseFactory) {
         this.dbService = dbService
         this.databaseFactory = databaseFactory
     }
@@ -54,7 +53,7 @@ class CandidateSkillDAO implements ICandidateSkillDAO {
         try {
             skills = this.populateSkills(GET_SKILLS_BY_CANDIDATE_ID, candidateId)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         return skills
     }
@@ -74,7 +73,7 @@ class CandidateSkillDAO implements ICandidateSkillDAO {
             stmt = this.setCandidateSkillStatement(stmt, skill, candidateId)
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
     }
 
@@ -85,7 +84,7 @@ class CandidateSkillDAO implements ICandidateSkillDAO {
             stmt.setInt(4, skill.id)
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
     }
 
@@ -106,7 +105,7 @@ class CandidateSkillDAO implements ICandidateSkillDAO {
                 return
             }
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         println NotFoundMessages.SKILL
     }

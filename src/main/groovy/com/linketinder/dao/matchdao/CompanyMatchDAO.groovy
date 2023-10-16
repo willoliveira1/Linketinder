@@ -2,8 +2,8 @@ package com.linketinder.dao.matchdao
 
 import com.linketinder.dao.matchdao.interfaces.ICompanyMatchDAO
 import com.linketinder.dao.matchdao.interfaces.IMatchDAO
-import com.linketinder.database.DatabaseFactory
-import com.linketinder.database.interfaces.IDatabaseFactory
+import com.linketinder.database.DatabaseConnection
+import com.linketinder.database.interfaces.IDatabaseConnection
 import com.linketinder.model.match.Match
 import com.linketinder.util.ErrorMessages
 import groovy.sql.Sql
@@ -22,10 +22,10 @@ class CompanyMatchDAO implements ICompanyMatchDAO {
     private final String INSERT_COMPANY_LIKE = "INSERT INTO matches (candidate_id, job_vacancy_id, company_id) VALUES (?,null,?)"
 
     IMatchDAO matchDAO
-    IDatabaseFactory databaseFactory
+    IDatabaseConnection databaseFactory
     Sql sql = databaseFactory.instance()
 
-    CompanyMatchDAO(IMatchDAO matchDAO, IDatabaseFactory databaseFactory) {
+    CompanyMatchDAO(IMatchDAO matchDAO, IDatabaseConnection databaseFactory) {
         this.matchDAO = matchDAO
         this.databaseFactory = databaseFactory
     }
@@ -37,7 +37,7 @@ class CompanyMatchDAO implements ICompanyMatchDAO {
             stmt.setInt(2, companyId)
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
     }
 
@@ -46,7 +46,7 @@ class CompanyMatchDAO implements ICompanyMatchDAO {
         try {
             match = matchDAO.populateMatch(GET_MATCH_BY_CANDIDATE_ID_AND_COMPANY_ID, candidateId, companyId)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         boolean likeExist = match.getId() != null
         return likeExist
@@ -62,7 +62,7 @@ class CompanyMatchDAO implements ICompanyMatchDAO {
                 }
             }
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
 
         boolean existCandidateLike = this.isExistentCompanyLike(companyId, candidateId)
@@ -78,7 +78,7 @@ class CompanyMatchDAO implements ICompanyMatchDAO {
         try {
             matches = matchDAO.populateMatches(GET_ALL_MATCHES_BY_COMPANY_ID, companyId)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         return matches
     }

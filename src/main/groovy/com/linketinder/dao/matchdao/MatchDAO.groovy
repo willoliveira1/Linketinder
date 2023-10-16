@@ -1,8 +1,7 @@
 package com.linketinder.dao.matchdao
 
 import com.linketinder.dao.matchdao.interfaces.IMatchDAO
-import com.linketinder.database.DatabaseFactory
-import com.linketinder.database.interfaces.IDatabaseFactory
+import com.linketinder.database.interfaces.IDatabaseConnection
 import com.linketinder.model.match.Match
 import com.linketinder.util.ErrorMessages
 import groovy.sql.Sql
@@ -17,10 +16,10 @@ class MatchDAO implements IMatchDAO {
     private final String GET_ALL_MATCHES = "SELECT id, candidate_id, company_id, job_vacancy_id FROM matches WHERE company_id IS NOT NULL AND job_vacancy_id IS NOT NULL ORDER BY id"
     private final String UPDATE_MATCH = "UPDATE matches SET candidate_id=?, company_id=?, job_vacancy_id=? WHERE id=?"
 
-    IDatabaseFactory databaseFactory
+    IDatabaseConnection databaseFactory
     Sql sql = databaseFactory.instance()
 
-    MatchDAO(IDatabaseFactory databaseFactory) {
+    MatchDAO(IDatabaseConnection databaseFactory) {
         this.databaseFactory = databaseFactory
     }
 
@@ -81,7 +80,7 @@ class MatchDAO implements IMatchDAO {
             stmt.setInt(4, match.id)
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(IDatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(IDatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
     }
 
@@ -90,7 +89,7 @@ class MatchDAO implements IMatchDAO {
         try {
             matches = this.populateMatches(GET_ALL_MATCHES)
         } catch (SQLException e) {
-            Logger.getLogger(IDatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(IDatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         return matches
     }

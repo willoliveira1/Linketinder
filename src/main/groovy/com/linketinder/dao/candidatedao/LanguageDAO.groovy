@@ -1,10 +1,9 @@
 package com.linketinder.dao.candidatedao
 
 import com.linketinder.dao.candidatedao.interfaces.ILanguageDAO
-import com.linketinder.database.DBService
-import com.linketinder.database.DatabaseFactory
+import com.linketinder.database.DatabaseConnection
 import com.linketinder.database.interfaces.IDBService
-import com.linketinder.database.interfaces.IDatabaseFactory
+import com.linketinder.database.interfaces.IDatabaseConnection
 import com.linketinder.model.candidate.Language
 import com.linketinder.model.shared.Proficiency
 import com.linketinder.util.ErrorMessages
@@ -25,11 +24,11 @@ class LanguageDAO implements ILanguageDAO {
     private final String UPDATE_LANGUAGE = "UPDATE candidate_languages SET candidate_id=?, language_id=?, proficiency_id=? WHERE id=?"
     private final String DELETE_LANGUAGE = "DELETE FROM candidate_languages WHERE id=?"
 
-    IDatabaseFactory databaseFactory
+    IDatabaseConnection databaseFactory
     IDBService dbService
     Sql sql = databaseFactory.instance()
 
-    LanguageDAO(IDBService dbService, IDatabaseFactory databaseFactory) {
+    LanguageDAO(IDBService dbService, IDatabaseConnection databaseFactory) {
         this.dbService = dbService
         this.databaseFactory = databaseFactory
     }
@@ -54,7 +53,7 @@ class LanguageDAO implements ILanguageDAO {
         try {
             languages = populateLanguages(GET_LANGUAGES_BY_CANDIDATE_ID, candidateId)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         return languages
     }
@@ -75,7 +74,7 @@ class LanguageDAO implements ILanguageDAO {
             stmt = this.setLanguageStatement(stmt, language, candidateId)
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
     }
 
@@ -87,7 +86,7 @@ class LanguageDAO implements ILanguageDAO {
             stmt.setInt(4, languageId)
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
     }
 
@@ -108,7 +107,7 @@ class LanguageDAO implements ILanguageDAO {
                 return
             }
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         println NotFoundMessages.LANGUAGE
     }

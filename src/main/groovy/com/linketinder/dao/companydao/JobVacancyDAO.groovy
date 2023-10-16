@@ -1,12 +1,11 @@
 package com.linketinder.dao.companydao
 
-import com.linketinder.dao.companydao.interfaces.IBenefitDAO
+
 import com.linketinder.dao.companydao.interfaces.IJobVacancyDAO
 import com.linketinder.dao.companydao.interfaces.IRequiredSkillDAO
-import com.linketinder.database.DatabaseFactory
-import com.linketinder.database.DBService
+import com.linketinder.database.DatabaseConnection
 import com.linketinder.database.interfaces.IDBService
-import com.linketinder.database.interfaces.IDatabaseFactory
+import com.linketinder.database.interfaces.IDatabaseConnection
 import com.linketinder.model.jobvacancy.JobVacancy
 import com.linketinder.model.jobvacancy.ContractType
 import com.linketinder.model.jobvacancy.LocationType
@@ -33,11 +32,11 @@ class JobVacancyDAO implements IJobVacancyDAO {
     private final String DELETE_JOB_VACANCY = "DELETE FROM job_vacancies WHERE id=?"
 
     IDBService dbService
-    IDatabaseFactory databaseFactory
+    IDatabaseConnection databaseFactory
     IRequiredSkillDAO requiredSkillDAO
     Sql sql = databaseFactory.instance()
 
-    JobVacancyDAO(IDBService dbService, IDatabaseFactory databaseFactory, IRequiredSkillDAO requiredSkillDAO) {
+    JobVacancyDAO(IDBService dbService, IDatabaseConnection databaseFactory, IRequiredSkillDAO requiredSkillDAO) {
         this.dbService = dbService
         this.databaseFactory = databaseFactory
         this.requiredSkillDAO = requiredSkillDAO
@@ -85,7 +84,7 @@ class JobVacancyDAO implements IJobVacancyDAO {
         try {
             jobVacancies = this.populateJobVacancies(GET_ALL_JOB_VACANCIES)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         return jobVacancies
     }
@@ -95,7 +94,7 @@ class JobVacancyDAO implements IJobVacancyDAO {
         try {
             jobVacancies = this.populateJobVacancies(GET_JOB_VACANCY_BY_COMPANY_ID, companyId)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         return jobVacancies
     }
@@ -105,7 +104,7 @@ class JobVacancyDAO implements IJobVacancyDAO {
         try {
             jobVacancy = this.populateJobVacancy(GET_JOB_VACANCY_BY_ID, id)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         return jobVacancy
     }
@@ -143,7 +142,7 @@ class JobVacancyDAO implements IJobVacancyDAO {
 
             this.insertRequiredSkills(jobVacancy)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
     }
 
@@ -186,7 +185,7 @@ class JobVacancyDAO implements IJobVacancyDAO {
 
             this.updateRequiredSkills(jobVacancy)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
     }
 
@@ -207,7 +206,7 @@ class JobVacancyDAO implements IJobVacancyDAO {
                 return
             }
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         println NotFoundMessages.JOB_VACANCY
     }

@@ -1,10 +1,9 @@
 package com.linketinder.dao.companydao
 
 import com.linketinder.dao.companydao.interfaces.IBenefitDAO
-import com.linketinder.database.DatabaseFactory
-import com.linketinder.database.DBService
+import com.linketinder.database.DatabaseConnection
 import com.linketinder.database.interfaces.IDBService
-import com.linketinder.database.interfaces.IDatabaseFactory
+import com.linketinder.database.interfaces.IDatabaseConnection
 import com.linketinder.model.company.Benefit
 import com.linketinder.util.ErrorMessages
 import com.linketinder.util.NotFoundMessages
@@ -24,11 +23,11 @@ class BenefitDAO implements IBenefitDAO {
     private final String UPDATE_BENEFIT = "UPDATE company_benefits SET company_id=?, benefit_id=? WHERE id=?"
     private final String DELETE_COMPANY_BENEFIT = "DELETE FROM company_benefits WHERE id=?"
 
-    IDatabaseFactory databaseFactory
+    IDatabaseConnection databaseFactory
     IDBService dbService
     Sql sql = databaseFactory.instance()
 
-    BenefitDAO(IDBService dbService, IDatabaseFactory databaseFactory) {
+    BenefitDAO(IDBService dbService, IDatabaseConnection databaseFactory) {
         this.dbService = dbService
         this.databaseFactory = databaseFactory
     }
@@ -52,7 +51,7 @@ class BenefitDAO implements IBenefitDAO {
         try {
             benefits = this.populateBenefits(GET_BENEFITS_BY_COMPANY_ID, companyId)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         return benefits
     }
@@ -70,7 +69,7 @@ class BenefitDAO implements IBenefitDAO {
             stmt = this.setBenefitStatement(stmt, benefit, companyId)
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
     }
 
@@ -81,7 +80,7 @@ class BenefitDAO implements IBenefitDAO {
             stmt.setInt(3, benefit.id)
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
     }
 
@@ -101,7 +100,7 @@ class BenefitDAO implements IBenefitDAO {
                 return
             }
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         println NotFoundMessages.BENEFIT
     }
