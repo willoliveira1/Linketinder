@@ -1,7 +1,10 @@
 package com.linketinder.dao.candidatedao
 
+import com.linketinder.dao.candidatedao.interfaces.ILanguageDAO
 import com.linketinder.database.DBService
 import com.linketinder.database.DatabaseFactory
+import com.linketinder.database.interfaces.IDBService
+import com.linketinder.database.interfaces.IDatabaseFactory
 import com.linketinder.model.candidate.Language
 import com.linketinder.model.shared.Proficiency
 import com.linketinder.util.ErrorMessages
@@ -14,7 +17,7 @@ import java.sql.Statement
 import java.util.logging.Level
 import java.util.logging.Logger
 
-class LanguageDAO {
+class LanguageDAO implements ILanguageDAO {
 
     private final String GET_LANGUAGES_BY_CANDIDATE_ID = "SELECT cl.id, l.name, p.title FROM candidates AS c, candidate_languages AS cl, languages AS l, proficiences AS p WHERE c.id = cl.candidate_id AND l.id = cl.language_id AND p.id = cl.proficiency_id AND c.id=?"
     private final String GET_LANGUAGES_BY_ID = "SELECT * FROM candidate_languages WHERE id=?"
@@ -22,8 +25,14 @@ class LanguageDAO {
     private final String UPDATE_LANGUAGE = "UPDATE candidate_languages SET candidate_id=?, language_id=?, proficiency_id=? WHERE id=?"
     private final String DELETE_LANGUAGE = "DELETE FROM candidate_languages WHERE id=?"
 
-    Sql sql = DatabaseFactory.instance()
-    DBService dbService = new DBService()
+    IDatabaseFactory databaseFactory
+    IDBService dbService
+    Sql sql = databaseFactory.instance()
+
+    LanguageDAO(IDBService dbService, IDatabaseFactory databaseFactory) {
+        this.dbService = dbService
+        this.databaseFactory = databaseFactory
+    }
 
     private List<Language> populateLanguages(String query, int candidateId) {
         List<Language> languages = new ArrayList<>()

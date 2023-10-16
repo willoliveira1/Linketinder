@@ -1,13 +1,15 @@
 package com.linketinder.database
 
+
+import com.linketinder.database.interfaces.IDatabaseFactory
 import groovy.sql.Sql
 import java.util.logging.Level
 import java.util.logging.Logger
 import java.sql.SQLException
 
-class DatabaseFactory {
+class DatabaseFactory implements IDatabaseFactory {
 
-    static Sql newInstance() {
+    Sql createConnection() {
         String driver = "org.postgresql.Driver"
         String url = "jdbc:postgresql://localhost:5432/linketinder"
         String user = "postgres"
@@ -15,9 +17,9 @@ class DatabaseFactory {
         return Sql.newInstance(url, user, password, driver)
     }
 
-    static Sql instance() {
+    Sql instance() {
         try {
-            return newInstance()
+            return this.createConnection()
         } catch (ClassNotFoundException | SQLException e) {
             return Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, null, e)
         }

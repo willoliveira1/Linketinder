@@ -1,7 +1,10 @@
 package com.linketinder.dao.candidatedao
 
+import com.linketinder.dao.candidatedao.interfaces.ICandidateSkillDAO
 import com.linketinder.database.DBService
 import com.linketinder.database.DatabaseFactory
+import com.linketinder.database.interfaces.IDBService
+import com.linketinder.database.interfaces.IDatabaseFactory
 import com.linketinder.model.shared.Proficiency
 import com.linketinder.model.shared.Skill
 import com.linketinder.util.ErrorMessages
@@ -14,7 +17,7 @@ import java.sql.Statement
 import java.util.logging.Level
 import java.util.logging.Logger
 
-class CandidateSkillDAO {
+class CandidateSkillDAO implements ICandidateSkillDAO {
 
     private final String GET_SKILLS_BY_CANDIDATE_ID = "SELECT cs.id, s.title, p.title AS proficiency_title FROM candidates AS c, candidate_skills AS cs, skills AS s, proficiences AS p WHERE c.id = cs.candidate_id AND s.id = cs.skill_id AND p.id = cs.proficiency_id AND c.id=?"
     private final String GET_SKILL_BY_ID = "SELECT * FROM candidate_skills WHERE id=?"
@@ -22,8 +25,14 @@ class CandidateSkillDAO {
     private final String UPDATE_SKILL = "UPDATE candidate_skills SET candidate_id=?, skill_id=?, proficiency_id=? WHERE id=?"
     private final String DELETE_SKILL = "DELETE FROM candidate_skills WHERE id=?"
 
-    Sql sql = DatabaseFactory.instance()
-    DBService dbService = new DBService()
+    IDatabaseFactory databaseFactory
+    IDBService dbService
+    Sql sql = databaseFactory.instance()
+
+    CandidateSkillDAO(IDBService dbService, IDatabaseFactory databaseFactory) {
+        this.dbService = dbService
+        this.databaseFactory = databaseFactory
+    }
 
     private List<Skill> populateSkills(String query, int candidateId) {
         List<Skill> skills = new ArrayList<>()

@@ -1,6 +1,9 @@
 package com.linketinder.dao.candidatedao
 
+import com.linketinder.dao.candidatedao.interfaces.ICertificateDAO
 import com.linketinder.database.DatabaseFactory
+import com.linketinder.database.interfaces.IDBService
+import com.linketinder.database.interfaces.IDatabaseFactory
 import com.linketinder.model.candidate.Certificate
 import com.linketinder.util.ErrorMessages
 import com.linketinder.util.NotFoundMessages
@@ -12,7 +15,7 @@ import java.sql.Statement
 import java.util.logging.Level
 import java.util.logging.Logger
 
-class CertificateDAO {
+class CertificateDAO implements ICertificateDAO {
 
     private final String GET_CERTIFICATES_BY_CANDIDATE_ID = "SELECT id, candidate_id, title, duration FROM certificates WHERE candidate_id=? ORDER BY title"
     private final String GET_CERTIFICATE_BY_ID = "SELECT * FROM certificates WHERE id=?"
@@ -20,7 +23,12 @@ class CertificateDAO {
     private final String UPDATE_CERTIFICATE = "UPDATE certificates SET candidate_id=?, title=?, duration=? WHERE id=?"
     private final String DELETE_CERTIFICATE = "DELETE FROM certificates WHERE id=?"
 
-    Sql sql = DatabaseFactory.instance()
+    IDatabaseFactory databaseFactory
+    Sql sql = databaseFactory.instance()
+
+    CertificateDAO(IDatabaseFactory databaseFactory) {
+        this.databaseFactory = databaseFactory
+    }
 
     private List<Certificate> populateCertificates(String query, int id) {
         List<Certificate> certificates = new ArrayList<>()

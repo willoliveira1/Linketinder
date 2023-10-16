@@ -5,21 +5,22 @@ import com.linketinder.model.candidate.*
 import com.linketinder.model.jobvacancy.ContractType
 import com.linketinder.model.jobvacancy.LocationType
 import com.linketinder.model.shared.*
+import com.linketinder.service.interfaces.ICandidateService
 import org.junit.jupiter.api.*
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.runners.Parameterized
 import org.mockito.*
 import org.mockito.invocation.InvocationOnMock
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.stubbing.Answer
 import static org.junit.jupiter.api.Assertions.*
 import static org.mockito.Mockito.*
 
-@ExtendWith(MockitoExtension.class)
+@ExtendWith(MockitoExtension)
 class CandidateServiceTest {
 
     @InjectMocks
-    private CandidateService candidateService = new CandidateService()
+    private ICandidateService candidateService = new CandidateService(candidateDAO)
 
     @Mock
     private CandidateDAO candidateDAO
@@ -46,7 +47,7 @@ class CandidateServiceTest {
         expectedResult.add(new Candidate(id: 3, name: "Carlos Carvalho", email: "cc@gmail.com", city: "Patos de Minas", state: State.MG, country: "Brasil", cep: "17800000", description: "Sobre mim 3", cpf: "12398745617", academicExperiences: [new AcademicExperience(id: 1, educationalInstitution: "Logatti", degreeType: "Bacharel", fieldOfStudy: "Engenharia de Software", status: CourseStatus.Trancado)], workExperiences: [new WorkExperience(id: 1, title: "Estagiário de Desenvolvimento", companyName: "Empresa 8", contractType: ContractType.Estágio, locationType: LocationType.Híbrido, city: "Patos de Minas", state: State.MG, currentlyWork: true, description: "Descrição 1")], languages: [new Language(id: 1, name: "Inglês", proficiency: Proficiency.Avançado), new Language(id: 2, name: "Português", proficiency: Proficiency.Avançado)], skills: [new Skill(id: 1, title: "Rust", proficiency: Proficiency.Intermediário), new Skill(id: 2, title: "C++", proficiency: Proficiency.Básico)], certificates: [new Certificate(id: 1, title: "Curso Certificado 1", duration: "1 ano"), new Certificate(id: 2, title: "Curso Certificado 2", duration: "2 meses")]))
         expectedResult.add(new Candidate(id: 4, name: "Denis Delavechia", email: "dd@hotmail.com", city: "Curitiba", state: State.PR, country: "Brasil", cep: "12300000", description: "Sobre mim 4", cpf: "45615167904", academicExperiences: [new AcademicExperience(id: 1, educationalInstitution: "UFPR", degreeType: "Bacharel", fieldOfStudy: "Engenharia da Computação", status: CourseStatus.Cursando)], workExperiences: [new WorkExperience(id: 1, title: "Assistente Contábil", companyName: "Empresa Alfa", contractType: ContractType.Temporário, locationType: LocationType.Remoto, city: "Curitiba", state: State.PR, currentlyWork: false, description: "Descrição 1")], languages: [new Language(id: 1, name: "Português", proficiency: Proficiency.Avançado), new Language(id: 2, name: "Inglês", proficiency: Proficiency.Básico)], skills: [new Skill(id: 1, title: "Kotlin", proficiency: Proficiency.Avançado), new Skill(id: 2, title: "PostgreSQL", proficiency: Proficiency.Intermediário), new Skill(id: 3, title: "Angular", proficiency: Proficiency.Básico)], certificates: [new Certificate(id: 1, title: "Curso Certificado 1", duration: "1 mês")]))
 
-        assertEquals(expectedResult.id as Integer, result.id as Integer)
+        assertEquals(expectedResult.id, result.id)
         assertEquals(expectedResult.name, result.name)
         assertEquals(expectedResult.cpf, result.cpf)
         assertEquals(expectedResult.academicExperiences.educationalInstitution,

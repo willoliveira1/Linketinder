@@ -1,16 +1,22 @@
 package com.linketinder.service
 
-import com.linketinder.dao.matchdao.CandidateMatchDAO
-import com.linketinder.dao.matchdao.CompanyMatchDAO
-import com.linketinder.dao.matchdao.MatchDAO
+import com.linketinder.dao.matchdao.interfaces.ICandidateMatchDAO
+import com.linketinder.dao.matchdao.interfaces.ICompanyMatchDAO
+import com.linketinder.dao.matchdao.interfaces.IMatchDAO
 import com.linketinder.model.match.Match
 import com.linketinder.service.interfaces.IMatchService
 
 class MatchService implements IMatchService {
 
-    MatchDAO matchDAO = new MatchDAO()
-    CandidateMatchDAO candidateMatchDAO = new CandidateMatchDAO()
-    CompanyMatchDAO companyMatchDAO = new CompanyMatchDAO()
+    IMatchDAO matchDAO
+    ICandidateMatchDAO candidateMatchDAO
+    ICompanyMatchDAO companyMatchDAO
+
+    MatchService(IMatchDAO matchDAO, ICandidateMatchDAO candidateMatchDAO, ICompanyMatchDAO companyMatchDAO) {
+        this.matchDAO = matchDAO
+        this.candidateMatchDAO = candidateMatchDAO
+        this.companyMatchDAO = companyMatchDAO
+    }
 
     List<Match> getAllMatches() {
         return matchDAO.getAllMatches()

@@ -1,7 +1,10 @@
 package com.linketinder.dao.candidatedao
 
+import com.linketinder.dao.candidatedao.interfaces.IWorkExperienceDAO
 import com.linketinder.database.DBService
 import com.linketinder.database.DatabaseFactory
+import com.linketinder.database.interfaces.IDBService
+import com.linketinder.database.interfaces.IDatabaseFactory
 import com.linketinder.model.candidate.WorkExperience
 import com.linketinder.model.jobvacancy.ContractType
 import com.linketinder.model.jobvacancy.LocationType
@@ -16,7 +19,7 @@ import java.sql.Statement
 import java.util.logging.Level
 import java.util.logging.Logger
 
-class WorkExperienceDAO {
+class WorkExperienceDAO implements IWorkExperienceDAO {
 
     private final String GET_WORK_EXPERIENCES_BY_CANDIDATE_ID = "SELECT we.id, we.title, we.company_name, ct.title AS contract_type_title, lt.title AS location_type_title, we.city, s.acronym, we.currently_work, we.description FROM candidates AS c, work_experiences AS we, states AS s, contract_types AS ct, location_types AS lt WHERE c.id = we.candidate_id AND we.contract_type_id = ct.id AND we.location_id = lt.id AND we.state_id = s.id AND c.id=?"
     private final String GET_WORK_EXPERIENCES_ID = "SELECT * FROM work_experiences WHERE id=?"
@@ -24,8 +27,14 @@ class WorkExperienceDAO {
     private final String UPDATE_WORK_EXPERIENCE = "UPDATE work_experiences SET candidate_id=?, title=?, company_name=?, city=?, currently_work=?, description=?, state_id=?, contract_type_id=?, location_id=? WHERE id=?"
     private final String DELETE_WORK_EXPERIENCE = "DELETE FROM work_experiences WHERE id=?"
 
-    Sql sql = DatabaseFactory.instance()
-    DBService dbService = new DBService()
+    IDatabaseFactory databaseFactory
+    IDBService dbService
+    Sql sql = databaseFactory.instance()
+
+    WorkExperienceDAO(IDBService dbService, IDatabaseFactory databaseFactory) {
+        this.dbService = dbService
+        this.databaseFactory = databaseFactory
+    }
 
     private List<WorkExperience> populateWorkExperiences(String query, int id) {
         List<WorkExperience> workExperiences = new ArrayList<>()

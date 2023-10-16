@@ -1,14 +1,17 @@
 package com.linketinder.validation
 
-class MatchValidation {
+import com.linketinder.util.viewtexts.MatchTexts
+import com.linketinder.validation.interfaces.IMatchValidation
 
-    BufferedReader reader = System.in.newReader()
+class MatchValidation implements IMatchValidation {
+
+    Readable reader = System.in.newReader()
 
     Integer validateId() {
         try {
             return reader.readLine() as Integer
         } catch (IllegalArgumentException e) {
-            println "Id inválido."
+            println MatchTexts.INVALID_ID_TEXT
             validateId()
         }
     }

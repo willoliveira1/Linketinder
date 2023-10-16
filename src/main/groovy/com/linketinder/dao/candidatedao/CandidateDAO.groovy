@@ -1,7 +1,17 @@
 package com.linketinder.dao.candidatedao
 
+import com.linketinder.dao.candidatedao.interfaces.IAcademicExperienceDAO
+import com.linketinder.dao.candidatedao.interfaces.ICandidateDAO
+import com.linketinder.dao.candidatedao.interfaces.ICandidateSkillDAO
+import com.linketinder.dao.candidatedao.interfaces.ICertificateDAO
+import com.linketinder.dao.candidatedao.interfaces.ILanguageDAO
+import com.linketinder.dao.candidatedao.interfaces.IWorkExperienceDAO
+import com.linketinder.dao.companydao.interfaces.IBenefitDAO
+import com.linketinder.dao.companydao.interfaces.IJobVacancyDAO
 import com.linketinder.database.DatabaseFactory
 import com.linketinder.database.DBService
+import com.linketinder.database.interfaces.IDBService
+import com.linketinder.database.interfaces.IDatabaseFactory
 import com.linketinder.model.candidate.AcademicExperience
 import com.linketinder.model.candidate.Candidate
 import com.linketinder.model.candidate.Certificate
@@ -20,7 +30,7 @@ import java.sql.Statement
 import java.util.logging.Level
 import java.util.logging.Logger
 
-class CandidateDAO {
+class CandidateDAO implements ICandidateDAO {
 
     private final String GET_ALL_CANDIDATES = "SELECT c.id, c.name, c.email, c.city, s.acronym AS state, c.country, c.cep, c.description, c.cpf FROM candidates AS c, states AS s WHERE c.state_id = s.id ORDER BY c.id"
     private final String GET_CANDIDATE_BY_ID = "SELECT c.id, c.name, c.email, c.city, s.acronym AS state, c.country, c.cep, c.description, c.cpf FROM candidates AS c, states AS s WHERE c.state_id = s.id AND c.id=?"
@@ -33,14 +43,26 @@ class CandidateDAO {
     private final String UPDATE_CANDIDATE = "UPDATE candidates SET name=?, email=?, city=?, state_id=?, country=?, cep=?, description=?, cpf=? WHERE id=?"
     private final String DELETE_CANDIDATE = "DELETE FROM candidates WHERE id=?"
 
-    Sql sql = DatabaseFactory.instance()
+    IDBService dbService
+    IDatabaseFactory databaseFactory
+    ICertificateDAO certificateDAO
+    ILanguageDAO languageDAO
+    ICandidateSkillDAO skillDAO
+    IAcademicExperienceDAO academicExperienceDAO
+    IWorkExperienceDAO workExperienceDAO
+    Sql sql = databaseFactory.instance()
 
-    DBService dbService = new DBService()
-    CertificateDAO certificateDAO = new CertificateDAO()
-    LanguageDAO languageDAO = new LanguageDAO()
-    CandidateSkillDAO skillDAO = new CandidateSkillDAO()
-    AcademicExperienceDAO academicExperienceDAO = new AcademicExperienceDAO()
-    WorkExperienceDAO workExperienceDAO = new WorkExperienceDAO()
+    CandidateDAO(IDBService dbService, IDatabaseFactory databaseFactory, ICertificateDAO certificateDAO,
+               ILanguageDAO languageDAO, ICandidateSkillDAO skillDAO, IAcademicExperienceDAO academicExperienceDAO,
+               IWorkExperienceDAO workExperienceDAO) {
+        this.dbService = dbService
+        this.databaseFactory = databaseFactory
+        this.certificateDAO = certificateDAO
+        this.languageDAO = languageDAO
+        this.skillDAO = skillDAO
+        this.academicExperienceDAO = academicExperienceDAO
+        this.workExperienceDAO = workExperienceDAO
+    }
 
     private Candidate createCandidate(ResultSet result) {
         Person candidate = new Candidate()
