@@ -1,14 +1,19 @@
 package com.linketinder.service
 
-import com.linketinder.dao.companydao.CompanyDAO
+import com.linketinder.dao.companydao.interfaces.ICompanyDAO
 import com.linketinder.model.company.Company
+import com.linketinder.service.interfaces.ICompanyService
 
-class CompanyService implements IBaseService<Company> {
+class CompanyService implements ICompanyService {
 
-    CompanyDAO companyDAO = new CompanyDAO()
+    ICompanyDAO companyDAO
+
+    CompanyService(ICompanyDAO companyDAO) {
+        this.companyDAO = companyDAO
+    }
 
     List<Company> getAll() {
-        return companyDAO.getAllCompany()
+        return companyDAO.getAllCompanies()
     }
 
     Company getById(Integer id) {

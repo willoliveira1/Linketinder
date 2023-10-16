@@ -1,4 +1,4 @@
-package com.linketinder.service
+package com.linketinder.service.interfaces
 
 interface IBaseService<T> {
 

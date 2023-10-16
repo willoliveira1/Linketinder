@@ -11,19 +11,29 @@ import com.linketinder.model.jobvacancy.LocationType
 import com.linketinder.model.shared.Proficiency
 import com.linketinder.model.shared.Skill
 import com.linketinder.model.shared.State
-import com.linketinder.service.CandidateService
-import com.linketinder.service.IBaseService
-import com.linketinder.validation.CandidateValidation
-import com.linketinder.validation.IPersonValidation
+import com.linketinder.service.interfaces.ICandidateService
+import com.linketinder.util.viewtexts.AcademicExperienceTexts
+import com.linketinder.util.viewtexts.CandidateTexts
+import com.linketinder.util.viewtexts.CertificateTexts
+import com.linketinder.util.viewtexts.LanguageTexts
+import com.linketinder.util.viewtexts.SkillTexts
+import com.linketinder.util.viewtexts.WorkExperienceTexts
+import com.linketinder.validation.interfaces.ICandidateValidation
+import com.linketinder.view.interfaces.ICandidatesView
 
-class CandidatesView {
+class CandidatesView implements ICandidatesView {
 
-    BufferedReader reader = System.in.newReader()
-    IBaseService service = new CandidateService()
-    IPersonValidation validation = new CandidateValidation()
+    ICandidateService service
+    ICandidateValidation validation
+    Readable reader = System.in.newReader()
+
+    CandidatesView(ICandidateService service, ICandidateValidation validation) {
+        this.service = service
+        this.validation = validation
+    }
 
     void getAllCandidates() {
-        println "Listagem de Candidatos:"
+        println CandidateTexts.ALL_CANDIDATES_TEXT
         List<Candidate> candidates = service.getAll()
         candidates.each {println it}
     }
@@ -34,17 +44,17 @@ class CandidatesView {
     }
 
     List<AcademicExperience> addAcademicExperiences() {
-        println "Deseja adicionar experiências acadêmicas? (S/N)"
+        println AcademicExperienceTexts.ADD_ACADEMIC_EXPERIENCE__TEXT
         List<AcademicExperience> academicExperiences = []
         String input = reader.readLine()
         Boolean addMore = validation.validateAddMore(input)
 
         while (addMore) {
-            println "Qual o nome da instituição de ensino?"
+            println AcademicExperienceTexts.EDUCATIONAl_INSTITUTION_TEXT
             String educationalInstitution = reader.readLine()
-            println "Qual o tipo de diploma?"
+            println AcademicExperienceTexts.DEGREE_TYPE_TEXT
             String degreeType = reader.readLine()
-            println "Qual o curso?"
+            println AcademicExperienceTexts.FIELD_OF_STUDY_TEXT
             String fieldOfStudy = reader.readLine()
             CourseStatus status = validation.validateCourseStatus()
 
@@ -52,7 +62,7 @@ class CandidatesView {
                     fieldOfStudy, status)
             academicExperiences.add(experience)
 
-            println "Deseja adicionar mais experiências acadêmicas? (S/N)"
+            println AcademicExperienceTexts.ADD_MORE_ACADEMIC_EXPERIENCE_TEXT
             input = reader.readLine()
             addMore = validation.validateAddMore(input)
         }
@@ -60,31 +70,31 @@ class CandidatesView {
     }
 
     List<WorkExperience> addWorkExperiences() {
-        println "Deseja adicionar experiências profissionais? (S/N)"
+        println WorkExperienceTexts.ADD_WORK_EXPERIENCE_TEXT
         List<WorkExperience> workExperiences = []
         String input = reader.readLine()
         Boolean addMore = validation.validateAddMore(input)
 
         while (addMore) {
-            println "Qual o cargo?"
+            println WorkExperienceTexts.TITLE_TEXT
             String title = reader.readLine()
-            println "Qual a empresa?"
+            println WorkExperienceTexts.COMPANY_TEXT
             String companyName = reader.readLine()
             ContractType contractType = validation.validateContractType()
             LocationType locationType = validation.validateLocationType()
-            println "Qual a cidade?"
+            println WorkExperienceTexts.COMPANY_CITY_TEXT
             String city = reader.readLine()
             State state = validation.validateState()
             boolean currentlyWork = validation.validateCurrentlyWork()
 
-            println "Descreva as funções desempenhadas na vaga:"
+            println WorkExperienceTexts.DESCRIPTION_TEXT
             String description = reader.readLine()
 
             WorkExperience experience = new WorkExperience(null, title, companyName, contractType, locationType,
                     city, state, currentlyWork, description)
             workExperiences.add(experience)
 
-            println "Deseja adicionar mais experiências profissionais? (S/N)"
+            println WorkExperienceTexts.ADD_MORE_WORK_EXPERIENCE_TEXT
             input = reader.readLine()
             addMore = validation.validateAddMore(input)
         }
@@ -92,20 +102,20 @@ class CandidatesView {
     }
 
     List<Language> addLanguages() {
-        println "Deseja adicionar idiomas? (S/N)"
+        println LanguageTexts.ADD_LANGUAGE_TEXT
         List<Language> languages = []
         String input = reader.readLine()
         Boolean addMore = validation.validateAddMore(input)
 
         while (addMore) {
-            println "Qual o idioma?"
+            println LanguageTexts.NAME_TEXT
             String name = reader.readLine()
             Proficiency proficiency = validation.validateProficiency()
 
             Language language = new Language(null, name, proficiency)
             languages.add(language)
 
-            println "Deseja adicionar mais idiomas? (S/N)"
+            println LanguageTexts.ADD_MORE_LANGUGAGE_TEXT
             input = reader.readLine()
             addMore = validation.validateAddMore(input)
         }
@@ -113,20 +123,20 @@ class CandidatesView {
     }
 
     List<Skill> addSkills() {
-        println "Deseja adicionar competências? (S/N)"
+        println SkillTexts.ADD_SKILL_TEXT
         List<Skill> skills = []
         String input = reader.readLine()
         Boolean addMore = validation.validateAddMore(input)
 
         while (addMore) {
-            println "Qual a competência?"
+            println SkillTexts.TITLE_TEXT
             String title = reader.readLine()
             Proficiency proficiency = validation.validateProficiency()
 
             Skill skill = new Skill(null, title, proficiency)
             skills.add(skill)
 
-            println "Deseja adicionar mais competências? (S/N)"
+            println SkillTexts.ADD_MORE_SKILL_TEXT
             input = reader.readLine()
             addMore = validation.validateAddMore(input)
         }
@@ -134,21 +144,21 @@ class CandidatesView {
     }
 
     List<Certificate> addCertificates() {
-        println "Deseja adicionar certificados? (S/N)"
+        println CertificateTexts.ADD_CERTIFICATE_TEXT
         List<Certificate> certificates = []
         String input = reader.readLine()
         Boolean addMore = validation.validateAddMore(input)
 
         while (addMore) {
-            println "Qual o título do certificado?"
+            println CertificateTexts.TITLE_TEXT
             String title = reader.readLine()
-            println "Qual a duração?"
+            println CertificateTexts.DURATION_TEXT
             String duration = reader.readLine()
 
             Certificate certificate = new Certificate(null, title, duration)
             certificates.add(certificate)
 
-            println "Deseja adicionar mais certificações? (S/N)"
+            println CertificateTexts.ADD_MORE_CERTIFICATE_TEXT
             input = reader.readLine()
             addMore = validation.validateAddMore(input)
         }
@@ -156,16 +166,16 @@ class CandidatesView {
     }
 
     void addCandidate() {
-        println "Qual o nome do candidato?"
+        println CandidateTexts.NAME_TEXT
         String name = reader.readLine()
         String email = validation.validateEmail()
-        println "Qual a cidade do candidato?"
+        println CandidateTexts.CITY_TEXT
         String city = reader.readLine()
         State state = validation.validateState()
-        println "Qual o país do candidato?"
+        println CandidateTexts.COUNTRY_TEXT
         String country = reader.readLine()
         String cep = validation.validateCep()
-        println "Quais informações pessoais o candidato quer informar?"
+        println CandidateTexts.DESCRIPTION_TEXT
         String description = reader.readLine()
         String cpf = validation.validateCpf()
         List<AcademicExperience> academicExperiences = addAcademicExperiences()
@@ -181,16 +191,16 @@ class CandidatesView {
 
     void updateCandidate() {
         Integer id = validation.validateId()
-        println "Qual o nome do candidato?"
+        println CandidateTexts.NAME_TEXT
         String name = reader.readLine()
         String email = validation.validateEmail()
-        println "Qual a cidade do candidato?"
+        println CandidateTexts.CITY_TEXT
         String city = reader.readLine()
         State state = validation.validateState()
-        println "Qual o país do candidato?"
+        println CandidateTexts.COUNTRY_TEXT
         String country = reader.readLine()
         String cep = validation.validateCep()
-        println "Quais informações pessoais o candidato quer informar?"
+        println CandidateTexts.DESCRIPTION_TEXT
         String description = reader.readLine()
         String cpf = validation.validateCpf()
         List<AcademicExperience> academicExperiences = addAcademicExperiences()

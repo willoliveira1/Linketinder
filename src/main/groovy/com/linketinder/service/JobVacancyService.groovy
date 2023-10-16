@@ -1,11 +1,16 @@
 package com.linketinder.service
 
-import com.linketinder.dao.companydao.JobVacancyDAO
+import com.linketinder.dao.companydao.interfaces.IJobVacancyDAO
 import com.linketinder.model.jobvacancy.JobVacancy
+import com.linketinder.service.interfaces.IJobVacancyService
 
-class JobVacancyService {
+class JobVacancyService implements IJobVacancyService {
 
-    JobVacancyDAO jobVacancyDAO = new JobVacancyDAO()
+    IJobVacancyDAO jobVacancyDAO
+
+    JobVacancyService(IJobVacancyDAO jobVacancyDAO) {
+        this.jobVacancyDAO = jobVacancyDAO
+    }
 
     List<JobVacancy> getAll() {
         return jobVacancyDAO.getAllJobVacancies()

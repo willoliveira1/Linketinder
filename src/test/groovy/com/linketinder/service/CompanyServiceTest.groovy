@@ -5,20 +5,20 @@ import com.linketinder.model.company.*
 import com.linketinder.model.shared.*
 
 import org.junit.jupiter.api.*
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.runners.Parameterized
 import org.mockito.*
 import org.mockito.invocation.InvocationOnMock
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.stubbing.Answer
 import static org.junit.jupiter.api.Assertions.*
 import static org.mockito.Mockito.*
 
-@ExtendWith(MockitoExtension.class)
+@ExtendWith(MockitoExtension)
 class CompanyServiceTest {
 
     @InjectMocks
-    private CompanyService companyService = new CompanyService()
+    private CompanyService companyService = new CompanyService(companyDAO)
 
     @Mock
     private CompanyDAO companyDAO
@@ -41,7 +41,7 @@ class CompanyServiceTest {
     @Test
     @DisplayName("Test getAll")
     void testShouldGetAListOfCompanies() {
-        when(companyDAO.getAllCompany()).thenReturn(companiesList())
+        when(companyDAO.getAllCompanies()).thenReturn(companiesList())
         List<Company> result = companyService.getAll()
 
         List<Company> expectedResult = new ArrayList<>()
