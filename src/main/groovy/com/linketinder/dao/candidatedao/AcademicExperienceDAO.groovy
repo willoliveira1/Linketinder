@@ -1,10 +1,9 @@
 package com.linketinder.dao.candidatedao
 
 import com.linketinder.dao.candidatedao.interfaces.IAcademicExperienceDAO
-import com.linketinder.database.DBService
-import com.linketinder.database.DatabaseFactory
+import com.linketinder.database.DatabaseConnection
 import com.linketinder.database.interfaces.IDBService
-import com.linketinder.database.interfaces.IDatabaseFactory
+import com.linketinder.database.interfaces.IDatabaseConnection
 import com.linketinder.model.candidate.CourseStatus
 import com.linketinder.model.candidate.AcademicExperience
 import com.linketinder.util.ErrorMessages
@@ -25,11 +24,11 @@ class AcademicExperienceDAO implements IAcademicExperienceDAO {
     private final String UPDATE_ACADEMIC_EXPERIENCE = "UPDATE academic_experiences SET candidate_id=?, educational_institution=?, degree_type=?, field_of_study=?, course_status_id=? WHERE id=?"
     private final String DELETE_ACADEMIC_EXPERIENCE = "DELETE FROM academic_experiences WHERE id=?"
 
-    IDatabaseFactory databaseFactory
+    IDatabaseConnection databaseFactory
     IDBService dbService
     Sql sql = databaseFactory.instance()
 
-    AcademicExperienceDAO(IDBService dbService, IDatabaseFactory databaseFactory) {
+    AcademicExperienceDAO(IDBService dbService, IDatabaseConnection databaseFactory) {
         this.dbService = dbService
         this.databaseFactory = databaseFactory
     }
@@ -56,7 +55,7 @@ class AcademicExperienceDAO implements IAcademicExperienceDAO {
         try {
             academicExperiences = this.populateAcademicExperiences(GET_ACADEMIC_EXPERIENCES_BY_CANDIDATE_ID, candidateId)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         return academicExperiences
     }
@@ -80,7 +79,7 @@ class AcademicExperienceDAO implements IAcademicExperienceDAO {
             stmt = this.setAcademicExperienceStatement(stmt, academicExperience, candidateId)
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
     }
 
@@ -91,7 +90,7 @@ class AcademicExperienceDAO implements IAcademicExperienceDAO {
             stmt.setInt(6, academicExperience.id)
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
     }
 
@@ -112,7 +111,7 @@ class AcademicExperienceDAO implements IAcademicExperienceDAO {
                 return
             }
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         println NotFoundMessages.ACADEMIC_EXPERIENCE
     }

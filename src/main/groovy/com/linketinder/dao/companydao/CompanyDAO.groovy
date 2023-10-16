@@ -3,11 +3,9 @@ package com.linketinder.dao.companydao
 import com.linketinder.dao.companydao.interfaces.IBenefitDAO
 import com.linketinder.dao.companydao.interfaces.ICompanyDAO
 import com.linketinder.dao.companydao.interfaces.IJobVacancyDAO
-import com.linketinder.dao.matchdao.interfaces.IMatchDAO
-import com.linketinder.database.DatabaseFactory
-import com.linketinder.database.DBService
+import com.linketinder.database.DatabaseConnection
 import com.linketinder.database.interfaces.IDBService
-import com.linketinder.database.interfaces.IDatabaseFactory
+import com.linketinder.database.interfaces.IDatabaseConnection
 import com.linketinder.model.company.Benefit
 import com.linketinder.model.company.Company
 import com.linketinder.model.jobvacancy.JobVacancy
@@ -33,12 +31,12 @@ class CompanyDAO implements ICompanyDAO {
     private final String DELETE_COMPANY = "DELETE FROM companies WHERE id=?"
 
     IDBService dbService
-    IDatabaseFactory databaseFactory
+    IDatabaseConnection databaseFactory
     IBenefitDAO benefitDAO
     IJobVacancyDAO jobVacancyDAO
     Sql sql = databaseFactory.instance()
 
-    CompanyDAO(IDBService dbService, IDatabaseFactory databaseFactory, IBenefitDAO benefitDAO,
+    CompanyDAO(IDBService dbService, IDatabaseConnection databaseFactory, IBenefitDAO benefitDAO,
                IJobVacancyDAO jobVacancyDAO) {
         this.dbService = dbService
         this.databaseFactory = databaseFactory
@@ -89,7 +87,7 @@ class CompanyDAO implements ICompanyDAO {
         try {
             companies = this.populateCompanies(GET_ALL_COMPANIES)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         return companies
     }
@@ -99,7 +97,7 @@ class CompanyDAO implements ICompanyDAO {
         try {
             company = this.populateCompany(GET_COMPANY_BY_ID, id)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         return company
     }
@@ -143,7 +141,7 @@ class CompanyDAO implements ICompanyDAO {
             this.insertJobVacancies(company)
             this.insertBenefits(company)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
     }
 
@@ -175,7 +173,7 @@ class CompanyDAO implements ICompanyDAO {
 
             this.updateCompanyBenefits(id, company)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
     }
 
@@ -196,7 +194,7 @@ class CompanyDAO implements ICompanyDAO {
                 return
             }
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         println NotFoundMessages.COMPANY
     }

@@ -6,12 +6,9 @@ import com.linketinder.dao.candidatedao.interfaces.ICandidateSkillDAO
 import com.linketinder.dao.candidatedao.interfaces.ICertificateDAO
 import com.linketinder.dao.candidatedao.interfaces.ILanguageDAO
 import com.linketinder.dao.candidatedao.interfaces.IWorkExperienceDAO
-import com.linketinder.dao.companydao.interfaces.IBenefitDAO
-import com.linketinder.dao.companydao.interfaces.IJobVacancyDAO
-import com.linketinder.database.DatabaseFactory
-import com.linketinder.database.DBService
+import com.linketinder.database.DatabaseConnection
 import com.linketinder.database.interfaces.IDBService
-import com.linketinder.database.interfaces.IDatabaseFactory
+import com.linketinder.database.interfaces.IDatabaseConnection
 import com.linketinder.model.candidate.AcademicExperience
 import com.linketinder.model.candidate.Candidate
 import com.linketinder.model.candidate.Certificate
@@ -44,7 +41,7 @@ class CandidateDAO implements ICandidateDAO {
     private final String DELETE_CANDIDATE = "DELETE FROM candidates WHERE id=?"
 
     IDBService dbService
-    IDatabaseFactory databaseFactory
+    IDatabaseConnection databaseFactory
     ICertificateDAO certificateDAO
     ILanguageDAO languageDAO
     ICandidateSkillDAO skillDAO
@@ -52,9 +49,9 @@ class CandidateDAO implements ICandidateDAO {
     IWorkExperienceDAO workExperienceDAO
     Sql sql = databaseFactory.instance()
 
-    CandidateDAO(IDBService dbService, IDatabaseFactory databaseFactory, ICertificateDAO certificateDAO,
-               ILanguageDAO languageDAO, ICandidateSkillDAO skillDAO, IAcademicExperienceDAO academicExperienceDAO,
-               IWorkExperienceDAO workExperienceDAO) {
+    CandidateDAO(IDBService dbService, IDatabaseConnection databaseFactory, ICertificateDAO certificateDAO,
+                 ILanguageDAO languageDAO, ICandidateSkillDAO skillDAO, IAcademicExperienceDAO academicExperienceDAO,
+                 IWorkExperienceDAO workExperienceDAO) {
         this.dbService = dbService
         this.databaseFactory = databaseFactory
         this.certificateDAO = certificateDAO
@@ -110,7 +107,7 @@ class CandidateDAO implements ICandidateDAO {
         try {
             candidates = this.populateCandidates(GET_ALL_CANDIDATES)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         return candidates
     }
@@ -120,7 +117,7 @@ class CandidateDAO implements ICandidateDAO {
         try {
             candidate = this.populateCandidate(GET_CANDIDATE_BY_ID, id)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         return candidate
     }
@@ -185,7 +182,7 @@ class CandidateDAO implements ICandidateDAO {
             this.insertAcademicExperiences(candidate)
             this.insertWorkExperiences(candidate)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
     }
 
@@ -302,7 +299,7 @@ class CandidateDAO implements ICandidateDAO {
             this.updateCandidateAcademicExperiences(id, candidate)
             this.updateCandidateWorkExperiences(id, candidate)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
     }
 
@@ -324,7 +321,7 @@ class CandidateDAO implements ICandidateDAO {
                 return
             }
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         println NotFoundMessages.CANDIDATE
     }

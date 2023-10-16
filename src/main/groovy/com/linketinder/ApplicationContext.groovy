@@ -27,9 +27,9 @@ import com.linketinder.dao.matchdao.interfaces.ICompanyMatchDAO
 import com.linketinder.dao.matchdao.interfaces.IMatchDAO
 import com.linketinder.dao.matchdao.MatchDAO
 import com.linketinder.database.DBService
-import com.linketinder.database.DatabaseFactory
+import com.linketinder.database.DatabaseConnection
 import com.linketinder.database.interfaces.IDBService
-import com.linketinder.database.interfaces.IDatabaseFactory
+import com.linketinder.database.interfaces.IDatabaseConnection
 import com.linketinder.service.CandidateService
 import com.linketinder.service.CompanyService
 import com.linketinder.service.interfaces.ICandidateService
@@ -59,7 +59,7 @@ import com.linketinder.view.MatchesView
 
 class ApplicationContext {
 
-    IDatabaseFactory databaseFactory = new DatabaseFactory()
+    IDatabaseConnection databaseFactory = new DatabaseConnection()
     IDBService dbService = new DBService(databaseFactory)
 
     IAcademicExperienceDAO academicExperienceDAO = new AcademicExperienceDAO(dbService, databaseFactory)

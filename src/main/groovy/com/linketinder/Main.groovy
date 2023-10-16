@@ -1,13 +1,13 @@
 package com.linketinder
 
 
-import com.linketinder.database.DatabaseFactory
+import com.linketinder.database.DatabaseConnection
 
 static void main(String[] args) {
 
     ApplicationContext context = new ApplicationContext()
     context.generate()
 
-    DatabaseFactory.instance().connection.close()
+    DatabaseConnection.instance().connection.close()
 
 }

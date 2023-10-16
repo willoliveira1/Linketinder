@@ -1,10 +1,9 @@
 package com.linketinder.dao.companydao
 
 import com.linketinder.dao.companydao.interfaces.IRequiredSkillDAO
-import com.linketinder.database.DatabaseFactory
-import com.linketinder.database.DBService
+import com.linketinder.database.DatabaseConnection
 import com.linketinder.database.interfaces.IDBService
-import com.linketinder.database.interfaces.IDatabaseFactory
+import com.linketinder.database.interfaces.IDatabaseConnection
 import com.linketinder.model.shared.Skill
 import com.linketinder.util.ErrorMessages
 import com.linketinder.util.NotFoundMessages
@@ -24,11 +23,11 @@ class RequiredSkillDAO implements IRequiredSkillDAO {
     private final String UPDATE_SKILL = "UPDATE job_vacancy_skills SET job_vacancy_id=?, skill_id=? WHERE id=?"
     private final String DELETE_SKILL_BY_ID = "DELETE FROM job_vacancy_skills WHERE id=?"
 
-    IDatabaseFactory databaseFactory
+    IDatabaseConnection databaseFactory
     IDBService dbService
     Sql sql = databaseFactory.instance()
 
-    RequiredSkillDAO(IDBService dbService, IDatabaseFactory databaseFactory) {
+    RequiredSkillDAO(IDBService dbService, IDatabaseConnection databaseFactory) {
         this.dbService = dbService
         this.databaseFactory = databaseFactory
     }
@@ -52,7 +51,7 @@ class RequiredSkillDAO implements IRequiredSkillDAO {
         try {
             skills = this.populateSkills(QUERY_GET_SKILLS_BY_JOB_VACANCY_ID, jobVacancyId)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         return skills
     }
@@ -70,7 +69,7 @@ class RequiredSkillDAO implements IRequiredSkillDAO {
             stmt = this.setSkillStatement(stmt, skill, jobVacancyId)
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
     }
 
@@ -81,7 +80,7 @@ class RequiredSkillDAO implements IRequiredSkillDAO {
             stmt.setInt(3, skill.id)
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
     }
 
@@ -102,7 +101,7 @@ class RequiredSkillDAO implements IRequiredSkillDAO {
                 return
             }
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         println NotFoundMessages.SKILL
     }

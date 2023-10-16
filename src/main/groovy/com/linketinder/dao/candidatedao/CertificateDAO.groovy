@@ -1,9 +1,8 @@
 package com.linketinder.dao.candidatedao
 
 import com.linketinder.dao.candidatedao.interfaces.ICertificateDAO
-import com.linketinder.database.DatabaseFactory
-import com.linketinder.database.interfaces.IDBService
-import com.linketinder.database.interfaces.IDatabaseFactory
+import com.linketinder.database.DatabaseConnection
+import com.linketinder.database.interfaces.IDatabaseConnection
 import com.linketinder.model.candidate.Certificate
 import com.linketinder.util.ErrorMessages
 import com.linketinder.util.NotFoundMessages
@@ -23,10 +22,10 @@ class CertificateDAO implements ICertificateDAO {
     private final String UPDATE_CERTIFICATE = "UPDATE certificates SET candidate_id=?, title=?, duration=? WHERE id=?"
     private final String DELETE_CERTIFICATE = "DELETE FROM certificates WHERE id=?"
 
-    IDatabaseFactory databaseFactory
+    IDatabaseConnection databaseFactory
     Sql sql = databaseFactory.instance()
 
-    CertificateDAO(IDatabaseFactory databaseFactory) {
+    CertificateDAO(IDatabaseConnection databaseFactory) {
         this.databaseFactory = databaseFactory
     }
 
@@ -50,7 +49,7 @@ class CertificateDAO implements ICertificateDAO {
         try {
             certificates = populateCertificates(GET_CERTIFICATES_BY_CANDIDATE_ID, candidateId)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         return certificates
     }
@@ -68,7 +67,7 @@ class CertificateDAO implements ICertificateDAO {
             stmt = this.setCertificateStatement(stmt, certificate, candidateId)
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
     }
 
@@ -79,7 +78,7 @@ class CertificateDAO implements ICertificateDAO {
             stmt.setInt(4, certificate.id)
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
     }
 
@@ -100,7 +99,7 @@ class CertificateDAO implements ICertificateDAO {
                 return
             }
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseFactory.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         println NotFoundMessages.CERTIFICATE
     }
