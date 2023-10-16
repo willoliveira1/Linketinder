@@ -9,15 +9,13 @@ import org.junit.jupiter.api.*
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.runners.Parameterized
 import org.mockito.InjectMocks
-import org.mockito.Mock
+import org.mockito.invocation.InvocationOnMock
 import org.mockito.junit.jupiter.MockitoExtension
-
+import org.mockito.Mock
+import org.mockito.stubbing.Answer
 import static org.junit.jupiter.api.Assertions.*
+import static org.mockito.Mockito.doAnswer
 import static org.mockito.Mockito.when
-
-
-
-\
 
 @ExtendWith(MockitoExtension)
 class MatchServiceTest {
@@ -138,41 +136,61 @@ class MatchServiceTest {
 
         assertTrue(result.isEmpty())
     }
-//void likeJobVacancy(int candidateId, int jobVacancyId) {
-//    candidateMatchDAO.candidateLikeJobVacancy(candidateId, jobVacancyId)
-//}
-    @Test
-    @DisplayName("Test likeJobVacancy")
-    void test4() {
 
+    @Test
+    @DisplayName("Test add like using valid candidateId and jobVacancyId")
+    void testShouldBeAddLikeJobVacancyToMatchList() {
+        List<Match> matches = matches()
+        Answer<Match> answer = new Answer<Match>() {
+            @Override
+            Match answer(InvocationOnMock invocation) throws Throwable {
+                Object[] arguments = invocation.getArguments()
+                if (arguments.length == 2) {
+                    int candidateId = (int) arguments[0]
+                    int jobVacancyId = (int) arguments[1]
+                    Match newMatch = new Match(id: 6, candidateId: candidateId, companyId: null, jobVacancyId: jobVacancyId)
+                    matches.add(newMatch)
+                }
+                return null
+            }
+        }
+        Match match = new Match(id: 6, candidateId: 1, companyId: null, jobVacancyId: 3)
+        doAnswer(answer).when(candidateMatchDAO).candidateLikeJobVacancy(match.candidateId, match.jobVacancyId)
+        matchService.likeJobVacancy(match.candidateId, match.jobVacancyId)
+
+        boolean result = matches.find {it ->
+            it.id = 6
+        }
+
+        assertTrue(result)
     }
 
     @Test
-    @DisplayName("Test likeJobVacancy")
-    void test5() {
+    @DisplayName("Test add like using valid companyId and candidateId")
+    void testShouldBeAddLikeCompanyToMatchList() {
+        List<Match> matches = matches()
+        Answer<Match> answer = new Answer<Match>() {
+            @Override
+            Match answer(InvocationOnMock invocation) throws Throwable {
+                Object[] arguments = invocation.getArguments()
+                if (arguments.length == 2) {
+                    int companyId = (int) arguments[0]
+                    int candidateId = (int) arguments[1]
+                    Match newMatch = new Match(id: 7, candidateId: candidateId, companyId: companyId, jobVacancyId: null)
+                    matches.add(newMatch)
+                }
+                return null
+            }
+        }
+        Match match = new Match(id: 7, candidateId: 1, companyId: 3, jobVacancyId: null)
+        doAnswer(answer).when(companyMatchDAO).companyLikeCandidate(match.companyId, match.candidateId)
+        matchService.likeCandidate(match.companyId, match.candidateId)
 
-    }
-//void likeCandidate(int companyId, int candidateId) {
-//    companyMatchDAO.companyLikeCandidate(companyId, candidateId)
-//}
-    @Test
-    @DisplayName("Test likeCandidate")
-    void test6() {
+        boolean result = matches.find {it ->
+            it.id = 7
+        }
 
-    }
-
-    @Test
-    @DisplayName("Test likeCandidate")
-    void test7() {
-
+        assertTrue(result)
     }
 
 }
-
-
-
-
-
-
-
-
