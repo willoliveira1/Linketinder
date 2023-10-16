@@ -6,7 +6,6 @@ import com.linketinder.model.jobvacancy.ContractType
 import com.linketinder.model.jobvacancy.LocationType
 import com.linketinder.model.shared.*
 import com.linketinder.service.interfaces.ICandidateService
-import org.junit.Before
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runners.Parameterized
@@ -17,7 +16,6 @@ import org.mockito.stubbing.Answer
 import static org.junit.jupiter.api.Assertions.*
 import static org.mockito.Mockito.*
 
-//@ExtendWith(MockitoExtension.class)
 @ExtendWith(MockitoExtension)
 class CandidateServiceTest {
 
@@ -26,11 +24,6 @@ class CandidateServiceTest {
 
     @Mock
     private CandidateDAO candidateDAO
-
-    @BeforeEach
-    void setup() {
-        candidateService = new CandidateService(candidateDAO)
-    }
 
     @Parameterized.Parameters
     static List<Candidate> candidates() {
