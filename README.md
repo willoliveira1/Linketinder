@@ -13,11 +13,14 @@ Projeto para desenvolver uma aplicação chamada Linketinder.
    * Candidato ve a lista de vagas e curte as que lhe despertaram o interesse.
    * A empresa acessa a lista de candidatos e curte os candidatos que lhe interessam.
    * Nesse momento o match é concretizado, aqui a empresa consegue visualizar todas as informações do candidato e podem seguir para as próximas etapas do processo seletivo.
-* Refatorado utilizando as práticas do Clean Code e SOLID.
 * Adicionado Regex as validações.
 * Adicionado funcionalidade de Curtida e Match.
 * Adicionada persistência do Match no BD.
 
+* Utilizado as boas práticas do Clean Code e do SOLID.
+   * Refatorado as classes para que os métodos fiquem mais sucintos, sem repetição de código.
+   * Feito o desacoplamento das classes utilizando a prática do SOLID.
+  
 ## MER
 <img src="MER.png">
 
@@ -26,6 +29,15 @@ O arquivo que tem o método main para a execução do projeto está em:
 
 * Pasta: src/main/groovy/com/linketinder
 * Arquivo: Main.groovy
+
+## Tecnologias
+* Groovy
+* PostgreSQL
+* JUnit
+* Mockito
+* Typescript
+* HTML
+* CSS
 
 ==================================================
 ### Feito por: Willian H. de Oliveira
