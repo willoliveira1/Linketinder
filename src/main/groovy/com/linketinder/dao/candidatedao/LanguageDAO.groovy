@@ -70,23 +70,22 @@ class LanguageDAO implements ILanguageDAO {
         return stmt
     }
 
-    private boolean isNewLanguage(Language language) {
+    private void isNewLanguage(Language language) {
         PreparedStatement stmt = sql.connection.prepareStatement(GET_LANGUAGE_BY_NAME)
         stmt.setString(1, language.name)
         ResultSet result = stmt.executeQuery()
+
         if (result.next()) {
-            return false
+            return
         }
-        return true
+        stmt = sql.connection.prepareStatement(INSERT_LANGUAGE, Statement.RETURN_GENERATED_KEYS)
+        stmt.setString(1, language.name)
+        stmt.executeUpdate()
     }
 
     void insertLanguage(Language language, int candidateId) {
         try {
-            if (isNewLanguage(language)) {
-                PreparedStatement stmt = sql.connection.prepareStatement(INSERT_LANGUAGE, Statement.RETURN_GENERATED_KEYS)
-                stmt.setString(1, language.name)
-                stmt.executeUpdate()
-            }
+            this.isNewLanguage(language)
 
             PreparedStatement stmt = sql.connection.prepareStatement(INSERT_CANDIDATE_LANGUAGE, Statement.RETURN_GENERATED_KEYS)
             stmt = this.setCandidateLanguageStatement(stmt, language, candidateId)
@@ -98,11 +97,7 @@ class LanguageDAO implements ILanguageDAO {
 
     void updateLanguage(Language language, int candidateId) {
         try {
-            if (isNewLanguage(language)) {
-                PreparedStatement stmt = sql.connection.prepareStatement(INSERT_LANGUAGE, Statement.RETURN_GENERATED_KEYS)
-                stmt.setString(1, language.name)
-                stmt.executeUpdate()
-            }
+            this.isNewLanguage(language)
 
             PreparedStatement stmt = sql.connection.prepareStatement(UPDATE_CANDIDATE_LANGUAGE)
             stmt = this.setCandidateLanguageStatement(stmt, language, candidateId)

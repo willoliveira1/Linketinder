@@ -66,23 +66,22 @@ class BenefitDAO implements IBenefitDAO {
         return stmt
     }
 
-    private boolean isNewBenefit(Benefit benefit) {
+    private void isNewBenefit(Benefit benefit) {
         PreparedStatement stmt = sql.connection.prepareStatement(GET_BENEFIT_BY_TITLE)
         stmt.setString(1, benefit.title)
         ResultSet result = stmt.executeQuery()
+
         if (result.next()) {
-            return false
+            return
         }
-        return true
+        stmt = sql.connection.prepareStatement(INSERT_BENEFIT, Statement.RETURN_GENERATED_KEYS)
+        stmt.setString(1, benefit.title)
+        stmt.executeUpdate()
     }
 
     void insertBenefit(int companyId, Benefit benefit) {
         try {
-            if (isNewBenefit(benefit)) {
-                PreparedStatement stmt = sql.connection.prepareStatement(INSERT_BENEFIT, Statement.RETURN_GENERATED_KEYS)
-                stmt.setString(1, benefit.title)
-                stmt.executeUpdate()
-            }
+            this.isNewBenefit(benefit)
 
             PreparedStatement stmt = sql.connection.prepareStatement(INSERT_COMPANY_BENEFIT, Statement.RETURN_GENERATED_KEYS)
             stmt = this.setBenefitStatement(stmt, benefit, companyId)
@@ -94,11 +93,7 @@ class BenefitDAO implements IBenefitDAO {
 
     void updateBenefit(int companyId, Benefit benefit) {
         try {
-            if (isNewBenefit(benefit)) {
-                PreparedStatement stmt = sql.connection.prepareStatement(INSERT_BENEFIT, Statement.RETURN_GENERATED_KEYS)
-                stmt.setString(1, benefit.title)
-                stmt.executeUpdate()
-            }
+            this.isNewBenefit(benefit)
 
             PreparedStatement stmt = sql.connection.prepareStatement(UPDATE_COMPANY_BENEFIT, companyId, benefit.id)
             stmt = this.setBenefitStatement(stmt, benefit, companyId)
