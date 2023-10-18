@@ -4,6 +4,7 @@ import com.linketinder.dao.companydao.interfaces.IBenefitDAO
 import com.linketinder.database.DatabaseConnection
 import com.linketinder.database.interfaces.IDBService
 import com.linketinder.database.interfaces.IDatabaseConnection
+import com.linketinder.model.candidate.Language
 import com.linketinder.model.company.Benefit
 import com.linketinder.util.ErrorMessages
 import com.linketinder.util.NotFoundMessages
@@ -19,9 +20,11 @@ class BenefitDAO implements IBenefitDAO {
 
     private final String GET_BENEFITS_BY_COMPANY_ID = "SELECT cb.id, c.id AS company_id, b.title FROM companies AS c, company_benefits AS cb, benefits AS b WHERE c.id = cb.company_id AND b.id = cb.benefit_id AND c.id=?"
     private final String GET_COMPANY_BENEFIT_BY_ID = "SELECT * FROM company_benefits WHERE id=?"
-    private final String INSERT_BENEFIT = "INSERT INTO company_benefits (company_id, benefit_id) VALUES (?,?)"
-    private final String UPDATE_BENEFIT = "UPDATE company_benefits SET company_id=?, benefit_id=? WHERE id=?"
+    private final String INSERT_COMPANY_BENEFIT = "INSERT INTO company_benefits (company_id, benefit_id) VALUES (?,?)"
+    private final String UPDATE_COMPANY_BENEFIT = "UPDATE company_benefits SET company_id=?, benefit_id=? WHERE id=?"
     private final String DELETE_COMPANY_BENEFIT = "DELETE FROM company_benefits WHERE id=?"
+    private final String INSERT_BENEFIT = "INSERT INTO benefits (title) VALUES (?)"
+    private final String GET_BENEFIT_BY_TITLE = "SELECT * FROM benefits WHERE title=?"
 
     IDatabaseConnection databaseFactory
     IDBService dbService
@@ -63,9 +66,24 @@ class BenefitDAO implements IBenefitDAO {
         return stmt
     }
 
+    private void isNewBenefit(Benefit benefit) {
+        PreparedStatement stmt = sql.connection.prepareStatement(GET_BENEFIT_BY_TITLE)
+        stmt.setString(1, benefit.title)
+        ResultSet result = stmt.executeQuery()
+
+        if (result.next()) {
+            return
+        }
+        stmt = sql.connection.prepareStatement(INSERT_BENEFIT, Statement.RETURN_GENERATED_KEYS)
+        stmt.setString(1, benefit.title)
+        stmt.executeUpdate()
+    }
+
     void insertBenefit(int companyId, Benefit benefit) {
         try {
-            PreparedStatement stmt = sql.connection.prepareStatement(INSERT_BENEFIT, Statement.RETURN_GENERATED_KEYS)
+            this.isNewBenefit(benefit)
+
+            PreparedStatement stmt = sql.connection.prepareStatement(INSERT_COMPANY_BENEFIT, Statement.RETURN_GENERATED_KEYS)
             stmt = this.setBenefitStatement(stmt, benefit, companyId)
             stmt.executeUpdate()
         } catch (SQLException e) {
@@ -75,7 +93,9 @@ class BenefitDAO implements IBenefitDAO {
 
     void updateBenefit(int companyId, Benefit benefit) {
         try {
-            PreparedStatement stmt = sql.connection.prepareStatement(UPDATE_BENEFIT, companyId, benefit.id)
+            this.isNewBenefit(benefit)
+
+            PreparedStatement stmt = sql.connection.prepareStatement(UPDATE_COMPANY_BENEFIT, companyId, benefit.id)
             stmt = this.setBenefitStatement(stmt, benefit, companyId)
             stmt.setInt(3, benefit.id)
             stmt.executeUpdate()
