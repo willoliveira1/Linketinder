@@ -19,9 +19,11 @@ class RequiredSkillDAO implements IRequiredSkillDAO {
 
     private final String QUERY_GET_SKILLS_BY_JOB_VACANCY_ID = "SELECT jbs.id, jbs.job_vacancy_id, s.title FROM job_vacancy_skills AS jbs, skills AS s, job_vacancies AS jb WHERE jbs.skill_id = s.id AND jb.id = jbs.job_vacancy_id AND jb.id=?"
     private final String QUERY_GET_SKILL_BY_ID = "SELECT * FROM job_vacancy_skills WHERE id=?"
-    private final String INSERT_SKILL = "INSERT INTO job_vacancy_skills (job_vacancy_id, skill_id) VALUES (?,?)"
-    private final String UPDATE_SKILL = "UPDATE job_vacancy_skills SET job_vacancy_id=?, skill_id=? WHERE id=?"
-    private final String DELETE_SKILL_BY_ID = "DELETE FROM job_vacancy_skills WHERE id=?"
+    private final String INSERT_JOB_VACANCY_SKILL = "INSERT INTO job_vacancy_skills (job_vacancy_id, skill_id) VALUES (?,?)"
+    private final String UPDATE_JOB_VACANCY_SKILL = "UPDATE job_vacancy_skills SET job_vacancy_id=?, skill_id=? WHERE id=?"
+    private final String DELETE_JOB_VACANCY_SKILL_BY_ID = "DELETE FROM job_vacancy_skills WHERE id=?"
+    private final String INSERT_SKILL = "INSERT INTO skills (title) VALUES (?)"
+    private final String GET_SKILL_BY_TITLE = "SELECT * FROM skills WHERE title=?"
 
     IDatabaseConnection databaseFactory
     IDBService dbService
@@ -63,9 +65,25 @@ class RequiredSkillDAO implements IRequiredSkillDAO {
         return stmt
     }
 
+    private boolean isNewSkill(Skill skill) {
+        PreparedStatement stmt = sql.connection.prepareStatement(GET_SKILL_BY_TITLE)
+        stmt.setString(1, skill.title)
+        ResultSet result = stmt.executeQuery()
+        if (result.next()) {
+            return false
+        }
+        return true
+    }
+
     void insertSkill(Skill skill, int jobVacancyId) {
         try {
-            PreparedStatement stmt = sql.connection.prepareStatement(INSERT_SKILL, Statement.RETURN_GENERATED_KEYS)
+            if (isNewSkill(skill)) {
+                PreparedStatement stmt = sql.connection.prepareStatement(INSERT_SKILL, Statement.RETURN_GENERATED_KEYS)
+                stmt.setString(1, skill.title)
+                stmt.executeUpdate()
+            }
+
+            PreparedStatement stmt = sql.connection.prepareStatement(INSERT_JOB_VACANCY_SKILL, Statement.RETURN_GENERATED_KEYS)
             stmt = this.setSkillStatement(stmt, skill, jobVacancyId)
             stmt.executeUpdate()
         } catch (SQLException e) {
@@ -75,7 +93,13 @@ class RequiredSkillDAO implements IRequiredSkillDAO {
 
     void updateSkill(Skill skill, int jobVacancyId) {
         try {
-            PreparedStatement stmt = sql.connection.prepareStatement(UPDATE_SKILL)
+            if (isNewSkill(skill)) {
+                PreparedStatement stmt = sql.connection.prepareStatement(INSERT_SKILL, Statement.RETURN_GENERATED_KEYS)
+                stmt.setString(1, skill.title)
+                stmt.executeUpdate()
+            }
+
+            PreparedStatement stmt = sql.connection.prepareStatement(UPDATE_JOB_VACANCY_SKILL)
             stmt = this.setSkillStatement(stmt, skill, jobVacancyId)
             stmt.setInt(3, skill.id)
             stmt.executeUpdate()
@@ -95,7 +119,7 @@ class RequiredSkillDAO implements IRequiredSkillDAO {
             }
 
             if (skill.id != null) {
-                stmt = sql.connection.prepareStatement(DELETE_SKILL_BY_ID)
+                stmt = sql.connection.prepareStatement(DELETE_JOB_VACANCY_SKILL_BY_ID)
                 stmt.setInt(1, id)
                 stmt.executeUpdate()
                 return

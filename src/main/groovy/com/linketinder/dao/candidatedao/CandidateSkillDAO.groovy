@@ -20,9 +20,11 @@ class CandidateSkillDAO implements ICandidateSkillDAO {
 
     private final String GET_SKILLS_BY_CANDIDATE_ID = "SELECT cs.id, s.title, p.title AS proficiency_title FROM candidates AS c, candidate_skills AS cs, skills AS s, proficiences AS p WHERE c.id = cs.candidate_id AND s.id = cs.skill_id AND p.id = cs.proficiency_id AND c.id=?"
     private final String GET_SKILL_BY_ID = "SELECT * FROM candidate_skills WHERE id=?"
-    private final String INSERT_SKILL = "INSERT INTO candidate_skills (candidate_id, skill_id, proficiency_id) VALUES (?,?,?)"
-    private final String UPDATE_SKILL = "UPDATE candidate_skills SET candidate_id=?, skill_id=?, proficiency_id=? WHERE id=?"
-    private final String DELETE_SKILL = "DELETE FROM candidate_skills WHERE id=?"
+    private final String INSERT_CANDIDATE_SKILL = "INSERT INTO candidate_skills (candidate_id, skill_id, proficiency_id) VALUES (?,?,?)"
+    private final String UPDATE_CANDIDATE_SKILL = "UPDATE candidate_skills SET candidate_id=?, skill_id=?, proficiency_id=? WHERE id=?"
+    private final String DELETE_CANDIDATE_SKILL = "DELETE FROM candidate_skills WHERE id=?"
+    private final String INSERT_SKILL = "INSERT INTO skills (title) VALUES (?)"
+    private final String GET_SKILL_BY_TITLE = "SELECT * FROM skills WHERE title=?"
 
     IDatabaseConnection databaseFactory
     IDBService dbService
@@ -67,9 +69,25 @@ class CandidateSkillDAO implements ICandidateSkillDAO {
         return stmt
     }
 
+    private boolean isNewSkill(Skill skill) {
+        PreparedStatement stmt = sql.connection.prepareStatement(GET_SKILL_BY_TITLE)
+        stmt.setString(1, skill.title)
+        ResultSet result = stmt.executeQuery()
+        if (result.next()) {
+            return false
+        }
+        return true
+    }
+
     void insertSkill(Skill skill, int candidateId) {
         try {
-            PreparedStatement stmt = sql.connection.prepareStatement(INSERT_SKILL, Statement.RETURN_GENERATED_KEYS)
+            if (isNewSkill(skill)) {
+                PreparedStatement stmt = sql.connection.prepareStatement(INSERT_SKILL, Statement.RETURN_GENERATED_KEYS)
+                stmt.setString(1, skill.title)
+                stmt.executeUpdate()
+            }
+
+            PreparedStatement stmt = sql.connection.prepareStatement(INSERT_CANDIDATE_SKILL, Statement.RETURN_GENERATED_KEYS)
             stmt = this.setCandidateSkillStatement(stmt, skill, candidateId)
             stmt.executeUpdate()
         } catch (SQLException e) {
@@ -79,7 +97,13 @@ class CandidateSkillDAO implements ICandidateSkillDAO {
 
     void updateSkill(Skill skill, int candidateId) {
         try {
-            PreparedStatement stmt = sql.connection.prepareStatement(UPDATE_SKILL)
+            if (isNewSkill(skill)) {
+                PreparedStatement stmt = sql.connection.prepareStatement(INSERT_SKILL, Statement.RETURN_GENERATED_KEYS)
+                stmt.setString(1, skill.title)
+                stmt.executeUpdate()
+            }
+
+            PreparedStatement stmt = sql.connection.prepareStatement(UPDATE_CANDIDATE_SKILL)
             stmt = this.setCandidateSkillStatement(stmt, skill, candidateId)
             stmt.setInt(4, skill.id)
             stmt.executeUpdate()
@@ -99,7 +123,7 @@ class CandidateSkillDAO implements ICandidateSkillDAO {
             }
 
             if (skill.id != null) {
-                stmt = sql.connection.prepareStatement(DELETE_SKILL)
+                stmt = sql.connection.prepareStatement(DELETE_CANDIDATE_SKILL)
                 stmt.setInt(1, id)
                 stmt.executeUpdate()
                 return
