@@ -30,7 +30,7 @@ class CompaniesView implements ICompaniesView {
         println service.getById(id)
     }
 
-    List<Benefit> addBenefits() {
+    private List<Benefit> addBenefits() {
         println CompanyTexts.ADD_BENEFIT_TEXT
         List<Benefit> benefits = []
         String input = reader.readLine()
@@ -50,7 +50,7 @@ class CompaniesView implements ICompaniesView {
         return benefits
     }
 
-    void addCompany() {
+    private Company populateCompany() {
         println CompanyTexts.NAME_TEXT
         String name = reader.readLine()
         String email = validation.validateEmail()
@@ -63,31 +63,22 @@ class CompaniesView implements ICompaniesView {
         println CompanyTexts.DESCRIPTION_TEXT
         String description = reader.readLine()
         String cnpj = validation.validateCnpj()
-        List<Benefit> benefits = addBenefits()
+        List<Benefit> benefits = this.addBenefits()
 
         Company company = new Company(null, name, email, city, state, country, cep, description, cnpj,
                 null, benefits)
+        return company
+    }
+
+    void addCompany() {
+        Company company = this.populateCompany()
         service.add(company)
     }
 
     void updateCompany() {
         Integer id = validation.validateId()
-        println CompanyTexts.NAME_TEXT
-        String name = reader.readLine()
-        String email = validation.validateEmail()
-        println CompanyTexts.CITY_TEXT
-        String city = reader.readLine()
-        State state = validation.validateState()
-        println CompanyTexts.COUNTRY_TEXT
-        String country = reader.readLine()
-        String cep = validation.validateCep()
-        println CompanyTexts.DESCRIPTION_TEXT
-        String description = reader.readLine()
-        String cnpj = validation.validateCnpj()
-        List<Benefit> benefits = addBenefits()
-
-        Company updatedCompany = new Company(id, name, email, city, state, country, cep, description, cnpj,
-                null, benefits)
+        Company updatedCompany = this.populateCompany()
+        updatedCompany.id = validation.validateId()
         service.update(id, updatedCompany)
     }
 
