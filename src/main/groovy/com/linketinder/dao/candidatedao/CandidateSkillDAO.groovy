@@ -1,9 +1,9 @@
 package com.linketinder.dao.candidatedao
 
 import com.linketinder.dao.candidatedao.interfaces.ICandidateSkillDAO
-import com.linketinder.database.DatabaseConnection
+import com.linketinder.database.PostgreSqlConnection
 import com.linketinder.database.interfaces.IDBService
-import com.linketinder.database.interfaces.IDatabaseConnection
+import com.linketinder.database.interfaces.IConnection
 import com.linketinder.model.shared.Proficiency
 import com.linketinder.model.shared.Skill
 import com.linketinder.util.ErrorMessages
@@ -26,13 +26,13 @@ class CandidateSkillDAO implements ICandidateSkillDAO {
     private final String INSERT_SKILL = "INSERT INTO skills (title) VALUES (?)"
     private final String GET_SKILL_BY_TITLE = "SELECT * FROM skills WHERE title=?"
 
-    IDatabaseConnection databaseFactory
+    IConnection connection
     IDBService dbService
-    Sql sql = databaseFactory.instance()
+    Sql sql = connection.instance()
 
-    CandidateSkillDAO(IDBService dbService, IDatabaseConnection databaseFactory) {
+    CandidateSkillDAO(IDBService dbService, IConnection connection) {
         this.dbService = dbService
-        this.databaseFactory = databaseFactory
+        this.connection = connection
     }
 
     private List<Skill> populateSkills(String query, int candidateId) {
@@ -55,7 +55,7 @@ class CandidateSkillDAO implements ICandidateSkillDAO {
         try {
             skills = this.populateSkills(GET_SKILLS_BY_CANDIDATE_ID, candidateId)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         return skills
     }
@@ -90,7 +90,7 @@ class CandidateSkillDAO implements ICandidateSkillDAO {
             stmt = this.setCandidateSkillStatement(stmt, skill, candidateId)
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
     }
 
@@ -103,7 +103,7 @@ class CandidateSkillDAO implements ICandidateSkillDAO {
             stmt.setInt(4, skill.id)
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
     }
 
@@ -124,7 +124,7 @@ class CandidateSkillDAO implements ICandidateSkillDAO {
                 return
             }
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         println NotFoundMessages.SKILL
     }

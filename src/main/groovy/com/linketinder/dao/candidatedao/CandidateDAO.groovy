@@ -6,9 +6,9 @@ import com.linketinder.dao.candidatedao.interfaces.ICandidateSkillDAO
 import com.linketinder.dao.candidatedao.interfaces.ICertificateDAO
 import com.linketinder.dao.candidatedao.interfaces.ILanguageDAO
 import com.linketinder.dao.candidatedao.interfaces.IWorkExperienceDAO
-import com.linketinder.database.DatabaseConnection
+import com.linketinder.database.PostgreSqlConnection
 import com.linketinder.database.interfaces.IDBService
-import com.linketinder.database.interfaces.IDatabaseConnection
+import com.linketinder.database.interfaces.IConnection
 import com.linketinder.model.candidate.AcademicExperience
 import com.linketinder.model.candidate.Candidate
 import com.linketinder.model.candidate.Certificate
@@ -41,19 +41,19 @@ class CandidateDAO implements ICandidateDAO {
     private final String DELETE_CANDIDATE = "DELETE FROM candidates WHERE id=?"
 
     IDBService dbService
-    IDatabaseConnection databaseFactory
+    IConnection connection
     ICertificateDAO certificateDAO
     ILanguageDAO languageDAO
     ICandidateSkillDAO skillDAO
     IAcademicExperienceDAO academicExperienceDAO
     IWorkExperienceDAO workExperienceDAO
-    Sql sql = databaseFactory.instance()
+    Sql sql = connection.instance()
 
-    CandidateDAO(IDBService dbService, IDatabaseConnection databaseFactory, ICertificateDAO certificateDAO,
+    CandidateDAO(IDBService dbService, IConnection connection, ICertificateDAO certificateDAO,
                  ILanguageDAO languageDAO, ICandidateSkillDAO skillDAO, IAcademicExperienceDAO academicExperienceDAO,
                  IWorkExperienceDAO workExperienceDAO) {
         this.dbService = dbService
-        this.databaseFactory = databaseFactory
+        this.connection = connection
         this.certificateDAO = certificateDAO
         this.languageDAO = languageDAO
         this.skillDAO = skillDAO
@@ -107,7 +107,7 @@ class CandidateDAO implements ICandidateDAO {
         try {
             candidates = this.populateCandidates(GET_ALL_CANDIDATES)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         return candidates
     }
@@ -117,7 +117,7 @@ class CandidateDAO implements ICandidateDAO {
         try {
             candidate = this.populateCandidate(GET_CANDIDATE_BY_ID, id)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         return candidate
     }
@@ -182,7 +182,7 @@ class CandidateDAO implements ICandidateDAO {
             this.insertAcademicExperiences(candidate)
             this.insertWorkExperiences(candidate)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
     }
 
@@ -299,7 +299,7 @@ class CandidateDAO implements ICandidateDAO {
             this.updateCandidateAcademicExperiences(id, candidate)
             this.updateCandidateWorkExperiences(id, candidate)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
     }
 
@@ -321,7 +321,7 @@ class CandidateDAO implements ICandidateDAO {
                 return
             }
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         println NotFoundMessages.CANDIDATE
     }

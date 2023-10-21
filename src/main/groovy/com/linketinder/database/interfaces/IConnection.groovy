@@ -2,7 +2,7 @@ package com.linketinder.database.interfaces
 
 import groovy.sql.Sql
 
-interface IDatabaseConnection {
+interface IConnection {
 
     Sql createConnection()
     Sql instance()

@@ -2,8 +2,8 @@ package com.linketinder.dao.matchdao
 
 import com.linketinder.dao.matchdao.interfaces.ICandidateMatchDAO
 import com.linketinder.dao.matchdao.interfaces.IMatchDAO
-import com.linketinder.database.DatabaseConnection
-import com.linketinder.database.interfaces.IDatabaseConnection
+import com.linketinder.database.PostgreSqlConnection
+import com.linketinder.database.interfaces.IConnection
 import com.linketinder.model.match.Match
 import com.linketinder.util.ErrorMessages
 import groovy.sql.Sql
@@ -23,12 +23,12 @@ class CandidateMatchDAO implements ICandidateMatchDAO {
     private final String INSERT_CANDIDATE_LIKE = "INSERT INTO matches (candidate_id, job_vacancy_id, company_id) VALUES (?,?,null)"
 
     IMatchDAO matchDAO
-    IDatabaseConnection databaseFactory
-    Sql sql = databaseFactory.instance()
+    IConnection connection
+    Sql sql = connection.instance()
 
-    CandidateMatchDAO(IMatchDAO matchDAO, IDatabaseConnection databaseFactory) {
+    CandidateMatchDAO(IMatchDAO matchDAO, IConnection connection) {
         this.matchDAO = matchDAO
-        this.databaseFactory = databaseFactory
+        this.connection = connection
     }
 
     private int populateCompanyId(String query, int id) {
@@ -47,7 +47,7 @@ class CandidateMatchDAO implements ICandidateMatchDAO {
         try {
             companyId = this.populateCompanyId(GET_COMPANY_ID_BY_JOB_VACANCY_ID, jobVacancyId)
         } catch (SQLException e) {
-            Logger.getLogger(IDatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(IConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         return companyId
     }
@@ -59,7 +59,7 @@ class CandidateMatchDAO implements ICandidateMatchDAO {
             stmt.setInt(2, jobVacancyId)
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseConnection.class.getName())
+            Logger.getLogger(PostgreSqlConnection.class.getName())
                     .log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
     }
@@ -69,7 +69,7 @@ class CandidateMatchDAO implements ICandidateMatchDAO {
         try {
             match = matchDAO.populateMatch(GET_MATCH_BY_CANDIDATE_ID_AND_JOB_VACANCY_ID, candidateId, jobVacancyId)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         boolean likeExist = match.getId() != null
         return likeExist
@@ -86,7 +86,7 @@ class CandidateMatchDAO implements ICandidateMatchDAO {
                 }
             }
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
 
         boolean existentCandidateLike = this.isExistentCandidateLike(candidateId, jobVacancyId)
@@ -102,7 +102,7 @@ class CandidateMatchDAO implements ICandidateMatchDAO {
         try {
             matches = matchDAO.populateMatches(GET_ALL_MATCHES_BY_CANDIDATE_ID, candidateId)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         return matches
     }
