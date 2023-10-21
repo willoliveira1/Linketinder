@@ -1,6 +1,5 @@
 package com.linketinder.database
 
-
 import com.linketinder.database.interfaces.IConnection
 import groovy.sql.Sql
 import java.util.logging.Level
@@ -8,6 +7,18 @@ import java.util.logging.Logger
 import java.sql.SQLException
 
 class PostgreSqlConnection implements IConnection {
+
+    private static PostgreSqlConnection instance
+
+    private PostgreSqlConnection() {
+    }
+
+    static PostgreSqlConnection getInstance() {
+        if (instance == null) {
+            instance = new PostgreSqlConnection()
+        }
+        return instance
+    }
 
     Sql createConnection() {
         String driver = "org.postgresql.Driver"
