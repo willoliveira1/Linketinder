@@ -28,9 +28,8 @@ import com.linketinder.dao.matchdao.interfaces.IMatchDAO
 import com.linketinder.dao.matchdao.MatchDAO
 import com.linketinder.database.ConnectionFactory
 import com.linketinder.database.DBService
-import com.linketinder.database.PostgreSqlConnection
-import com.linketinder.database.interfaces.IDBService
 import com.linketinder.database.interfaces.IConnection
+import com.linketinder.database.interfaces.IDBService
 import com.linketinder.service.CandidateService
 import com.linketinder.service.CompanyService
 import com.linketinder.service.interfaces.ICandidateService
@@ -60,37 +59,37 @@ import com.linketinder.view.MatchesView
 
 class ApplicationContext {
 
-    IConnection connection = ConnectionFactory.createConnection("POSTGRESQL")
-    IDBService dbService = new DBService(connection)
+    IConnection databaseConnection = ConnectionFactory.createConnection("POSTGRESQL")
+    IDBService dbService = new DBService(databaseConnection)
 
-    IAcademicExperienceDAO academicExperienceDAO = new AcademicExperienceDAO(dbService, connection)
-    ICandidateSkillDAO candidateSkillDAO = new CandidateSkillDAO(dbService, connection)
-    ICertificateDAO certificateDAO = new CertificateDAO(connection)
-    ILanguageDAO languageDAO = new LanguageDAO(dbService, connection)
-    IWorkExperienceDAO workExperienceDAO = new WorkExperienceDAO(dbService, connection)
-    IBenefitDAO benefitDAO = new BenefitDAO(dbService, connection)
-    IRequiredSkillDAO requiredSkillDAO = new RequiredSkillDAO(dbService, connection)
+    IAcademicExperienceDAO academicExperienceDAO = new AcademicExperienceDAO(dbService, databaseConnection)
+    ICandidateSkillDAO candidateSkillDAO = new CandidateSkillDAO(dbService, databaseConnection)
+    ICertificateDAO certificateDAO = new CertificateDAO(databaseConnection)
+    ILanguageDAO languageDAO = new LanguageDAO(dbService, databaseConnection)
+    IWorkExperienceDAO workExperienceDAO = new WorkExperienceDAO(dbService, databaseConnection)
+    IBenefitDAO benefitDAO = new BenefitDAO(dbService, databaseConnection)
+    IRequiredSkillDAO requiredSkillDAO = new RequiredSkillDAO(dbService, databaseConnection)
 
-    IJobVacancyDAO jobVacancyDAO = new JobVacancyDAO(dbService, connection, requiredSkillDAO)
+    IJobVacancyDAO jobVacancyDAO = new JobVacancyDAO(dbService, databaseConnection, requiredSkillDAO)
     IJobVacancyValidation jobVacancyValidation = new JobVacancyValidation()
     IJobVacancyService jobVacancyService = new JobVacancyService(jobVacancyDAO)
     IJobVacanciesView jobVacanciesView = new JobVacanciesView(jobVacancyService, jobVacancyValidation)
 
-    ICandidateDAO candidateDAO = new CandidateDAO(dbService, connection, certificateDAO, languageDAO,
+    ICandidateDAO candidateDAO = new CandidateDAO(dbService, databaseConnection, certificateDAO, languageDAO,
             candidateSkillDAO, academicExperienceDAO, workExperienceDAO)
     ICandidateValidation candidateValidation = new CandidateValidation()
     ICandidateService candidateService = new CandidateService(candidateDAO)
     ICandidatesView candidatesView = new CandidatesView(candidateService, candidateValidation)
 
-    ICompanyDAO companyDAO = new CompanyDAO(dbService, connection, benefitDAO, jobVacancyDAO)
+    ICompanyDAO companyDAO = new CompanyDAO(dbService, databaseConnection, benefitDAO, jobVacancyDAO)
     ICompanyValidation companyValidation = new CompanyValidation()
     ICompanyService companyService = new CompanyService(companyDAO)
     ICompaniesView companiesView = new CompaniesView(companyService, companyValidation)
 
-    IMatchDAO matchDAO = new MatchDAO(connection)
+    IMatchDAO matchDAO = new MatchDAO(databaseConnection)
     IMatchValidation matchValidation = new MatchValidation()
-    ICandidateMatchDAO candidateMatchDAO = new CandidateMatchDAO(matchDAO, connection)
-    ICompanyMatchDAO companyMatchDAO = new CompanyMatchDAO(matchDAO, connection)
+    ICandidateMatchDAO candidateMatchDAO = new CandidateMatchDAO(matchDAO, databaseConnection)
+    ICompanyMatchDAO companyMatchDAO = new CompanyMatchDAO(matchDAO, databaseConnection)
     IMatchService matchService = new MatchService(matchDAO, candidateMatchDAO, companyMatchDAO)
     IMatchesView matchesView = new MatchesView(candidatesView, jobVacanciesView, matchService, matchValidation)
 
