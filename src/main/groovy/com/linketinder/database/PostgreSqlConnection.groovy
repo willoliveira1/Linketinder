@@ -1,13 +1,13 @@
 package com.linketinder.database
 
 
-import com.linketinder.database.interfaces.IDatabaseConnection
+import com.linketinder.database.interfaces.IConnection
 import groovy.sql.Sql
 import java.util.logging.Level
 import java.util.logging.Logger
 import java.sql.SQLException
 
-class DatabaseConnection implements IDatabaseConnection {
+class PostgreSqlConnection implements IConnection {
 
     Sql createConnection() {
         String driver = "org.postgresql.Driver"
@@ -21,7 +21,7 @@ class DatabaseConnection implements IDatabaseConnection {
         try {
             return this.createConnection()
         } catch (ClassNotFoundException | SQLException e) {
-            return Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, e)
+            return Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, null, e)
         }
     }
 

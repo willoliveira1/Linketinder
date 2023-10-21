@@ -1,9 +1,9 @@
 package com.linketinder.dao.candidatedao
 
 import com.linketinder.dao.candidatedao.interfaces.ILanguageDAO
-import com.linketinder.database.DatabaseConnection
+import com.linketinder.database.PostgreSqlConnection
 import com.linketinder.database.interfaces.IDBService
-import com.linketinder.database.interfaces.IDatabaseConnection
+import com.linketinder.database.interfaces.IConnection
 import com.linketinder.model.candidate.Language
 import com.linketinder.model.shared.Proficiency
 import com.linketinder.util.ErrorMessages
@@ -26,13 +26,13 @@ class LanguageDAO implements ILanguageDAO {
     private final String INSERT_LANGUAGE = "INSERT INTO languages (name) VALUES (?)"
     private final String GET_LANGUAGE_BY_NAME = "SELECT * FROM languages WHERE name=?"
 
-    IDatabaseConnection databaseFactory
+    IConnection connection
     IDBService dbService
-    Sql sql = databaseFactory.instance()
+    Sql sql = connection.instance()
 
-    LanguageDAO(IDBService dbService, IDatabaseConnection databaseFactory) {
+    LanguageDAO(IDBService dbService, IConnection connection) {
         this.dbService = dbService
-        this.databaseFactory = databaseFactory
+        this.connection = connection
     }
 
     private List<Language> populateLanguages(String query, int candidateId) {
@@ -55,7 +55,7 @@ class LanguageDAO implements ILanguageDAO {
         try {
             languages = populateLanguages(GET_LANGUAGES_BY_CANDIDATE_ID, candidateId)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         return languages
     }
@@ -91,7 +91,7 @@ class LanguageDAO implements ILanguageDAO {
             stmt = this.setCandidateLanguageStatement(stmt, language, candidateId)
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
     }
 
@@ -105,7 +105,7 @@ class LanguageDAO implements ILanguageDAO {
             stmt.setInt(4, languageId)
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
     }
 
@@ -126,7 +126,7 @@ class LanguageDAO implements ILanguageDAO {
                 return
             }
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         println NotFoundMessages.LANGUAGE
     }

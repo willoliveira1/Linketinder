@@ -1,9 +1,9 @@
 package com.linketinder.dao.candidatedao
 
 import com.linketinder.dao.candidatedao.interfaces.IWorkExperienceDAO
-import com.linketinder.database.DatabaseConnection
+import com.linketinder.database.PostgreSqlConnection
 import com.linketinder.database.interfaces.IDBService
-import com.linketinder.database.interfaces.IDatabaseConnection
+import com.linketinder.database.interfaces.IConnection
 import com.linketinder.model.candidate.WorkExperience
 import com.linketinder.model.jobvacancy.ContractType
 import com.linketinder.model.jobvacancy.LocationType
@@ -26,13 +26,13 @@ class WorkExperienceDAO implements IWorkExperienceDAO {
     private final String UPDATE_WORK_EXPERIENCE = "UPDATE work_experiences SET candidate_id=?, title=?, company_name=?, city=?, currently_work=?, description=?, state_id=?, contract_type_id=?, location_id=? WHERE id=?"
     private final String DELETE_WORK_EXPERIENCE = "DELETE FROM work_experiences WHERE id=?"
 
-    IDatabaseConnection databaseFactory
+    IConnection connection
     IDBService dbService
-    Sql sql = databaseFactory.instance()
+    Sql sql = connection.instance()
 
-    WorkExperienceDAO(IDBService dbService, IDatabaseConnection databaseFactory) {
+    WorkExperienceDAO(IDBService dbService, IConnection connection) {
         this.dbService = dbService
-        this.databaseFactory = databaseFactory
+        this.connection = connection
     }
 
     private List<WorkExperience> populateWorkExperiences(String query, int id) {
@@ -61,7 +61,7 @@ class WorkExperienceDAO implements IWorkExperienceDAO {
         try {
             workExperiences = populateWorkExperiences(GET_WORK_EXPERIENCES_BY_CANDIDATE_ID, candidateId)
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         return workExperiences
     }
@@ -89,7 +89,7 @@ class WorkExperienceDAO implements IWorkExperienceDAO {
             stmt = this.setWorkExperienceStatement(stmt, workExperience, candidateId)
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
     }
 
@@ -100,7 +100,7 @@ class WorkExperienceDAO implements IWorkExperienceDAO {
             stmt.setInt(10, workExperience.id)
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
     }
 
@@ -121,7 +121,7 @@ class WorkExperienceDAO implements IWorkExperienceDAO {
                 return
             }
         } catch (SQLException e) {
-            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
         println NotFoundMessages.WORK_EXPERIENCE
     }
