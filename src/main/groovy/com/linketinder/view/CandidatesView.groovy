@@ -166,6 +166,7 @@ class CandidatesView implements ICandidatesView {
     }
 
     private Candidate populateCandidate() {
+        println CandidateTexts.NAME_TEXT
         String name = reader.readLine()
         String email = validation.validateEmail()
         println CandidateTexts.CITY_TEXT
