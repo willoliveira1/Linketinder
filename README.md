@@ -20,6 +20,11 @@ Projeto para desenvolver uma aplicação chamada Linketinder.
 * Utilizado as boas práticas do Clean Code e do SOLID.
    * Refatorado as classes para que os métodos fiquem mais sucintos, sem repetição de código.
    * Feito o desacoplamento das classes utilizando a prática do SOLID.
+ 
+* Utilizado alguns Design Patterns para melhorar a aplicação.
+   * Singleton para manter uma única conexão com o banco de dados durante a execução da aplicação, preservando assim os recursos do sistema.
+   * Abstract Factory para desacoplar o código e facilitar a troca de banco de dados caso for necessário.
+   * Builder para deixar mais limpa a classe ApplicationContext.
   
 ## MER
 <img src="MER.png">
