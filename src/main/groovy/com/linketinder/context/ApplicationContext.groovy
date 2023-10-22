@@ -1,9 +1,9 @@
 package com.linketinder.context
 
-import com.linketinder.context.builder.candidate.*
-import com.linketinder.context.builder.company.*
-import com.linketinder.context.builder.interfaces.*
-import com.linketinder.context.builder.match.MatchesViewBuilder
+import com.linketinder.context.builders.candidate.*
+import com.linketinder.context.builders.company.*
+import com.linketinder.context.builders.interfaces.*
+import com.linketinder.context.builders.match.MatchesViewBuilder
 import com.linketinder.database.*
 import com.linketinder.database.interfaces.*
 import com.linketinder.view.*
