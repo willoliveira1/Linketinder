@@ -7,7 +7,7 @@ abstract class ConnectionFactory {
     static IConnection createConnection(String dbType) {
         switch (dbType) {
             case "POSTGRESQL":
-                return new PostgreSqlConnection()
+                return PostgreSqlConnection.getInstance()
             default:
                 throw new RuntimeException("Invalid database")
         }
