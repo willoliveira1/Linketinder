@@ -1,7 +1,7 @@
 package com.linketinder.database
 
 import com.linketinder.database.interfaces.IDBService
-import com.linketinder.database.interfaces.IDatabaseConnection
+import com.linketinder.database.interfaces.IConnection
 import groovy.sql.Sql
 import java.sql.PreparedStatement
 import java.sql.ResultSet
@@ -9,11 +9,11 @@ import java.sql.SQLDataException
 
 class DBService implements IDBService {
 
-    IDatabaseConnection databaseFactory
-    Sql sql = databaseFactory.instance()
+    IConnection connection
+    Sql sql = connection.instance()
 
-    DBService(IDatabaseConnection databaseFactory) {
-        this.databaseFactory = databaseFactory
+    DBService(IConnection connection) {
+        this.connection = connection
     }
 
     int idFinder(String table, String column, String value) {

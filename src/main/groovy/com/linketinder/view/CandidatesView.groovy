@@ -43,7 +43,7 @@ class CandidatesView implements ICandidatesView {
         println service.getById(id)
     }
 
-    List<AcademicExperience> addAcademicExperiences() {
+    private List<AcademicExperience> addAcademicExperiences() {
         println AcademicExperienceTexts.ADD_ACADEMIC_EXPERIENCE__TEXT
         List<AcademicExperience> academicExperiences = []
         String input = reader.readLine()
@@ -69,7 +69,7 @@ class CandidatesView implements ICandidatesView {
         return academicExperiences
     }
 
-    List<WorkExperience> addWorkExperiences() {
+    private List<WorkExperience> addWorkExperiences() {
         println WorkExperienceTexts.ADD_WORK_EXPERIENCE_TEXT
         List<WorkExperience> workExperiences = []
         String input = reader.readLine()
@@ -101,7 +101,7 @@ class CandidatesView implements ICandidatesView {
         return workExperiences
     }
 
-    List<Language> addLanguages() {
+    private List<Language> addLanguages() {
         println LanguageTexts.ADD_LANGUAGE_TEXT
         List<Language> languages = []
         String input = reader.readLine()
@@ -122,7 +122,7 @@ class CandidatesView implements ICandidatesView {
         return languages
     }
 
-    List<Skill> addSkills() {
+    private List<Skill> addSkills() {
         println SkillTexts.ADD_SKILL_TEXT
         List<Skill> skills = []
         String input = reader.readLine()
@@ -143,7 +143,7 @@ class CandidatesView implements ICandidatesView {
         return skills
     }
 
-    List<Certificate> addCertificates() {
+    private List<Certificate> addCertificates() {
         println CertificateTexts.ADD_CERTIFICATE_TEXT
         List<Certificate> certificates = []
         String input = reader.readLine()
@@ -165,7 +165,7 @@ class CandidatesView implements ICandidatesView {
         return certificates
     }
 
-    void addCandidate() {
+    private Candidate populateCandidate() {
         println CandidateTexts.NAME_TEXT
         String name = reader.readLine()
         String email = validation.validateEmail()
@@ -178,39 +178,26 @@ class CandidatesView implements ICandidatesView {
         println CandidateTexts.DESCRIPTION_TEXT
         String description = reader.readLine()
         String cpf = validation.validateCpf()
-        List<AcademicExperience> academicExperiences = addAcademicExperiences()
-        List<WorkExperience> workExperiences = addWorkExperiences()
-        List<Language> languages = addLanguages()
-        List<Skill> skills = addSkills()
-        List<Certificate> certificates = addCertificates()
+        List<AcademicExperience> academicExperiences = this.addAcademicExperiences()
+        List<WorkExperience> workExperiences = this.addWorkExperiences()
+        List<Language> languages = this.addLanguages()
+        List<Skill> skills = this.addSkills()
+        List<Certificate> certificates = this.addCertificates()
 
         Candidate candidate = new Candidate(null, name, email, city, state, country, cep, description, cpf,
                 academicExperiences, workExperiences, languages, skills, certificates)
+        return candidate
+    }
+
+    void addCandidate() {
+        Candidate candidate = this.populateCandidate()
         service.add(candidate)
     }
 
     void updateCandidate() {
         Integer id = validation.validateId()
-        println CandidateTexts.NAME_TEXT
-        String name = reader.readLine()
-        String email = validation.validateEmail()
-        println CandidateTexts.CITY_TEXT
-        String city = reader.readLine()
-        State state = validation.validateState()
-        println CandidateTexts.COUNTRY_TEXT
-        String country = reader.readLine()
-        String cep = validation.validateCep()
-        println CandidateTexts.DESCRIPTION_TEXT
-        String description = reader.readLine()
-        String cpf = validation.validateCpf()
-        List<AcademicExperience> academicExperiences = addAcademicExperiences()
-        List<WorkExperience> workExperiences = addWorkExperiences()
-        List<Language> languages = addLanguages()
-        List<Skill> skills = addSkills()
-        List<Certificate> certificates = addCertificates()
-
-        Candidate updatedCandidate = new Candidate(id, name, email, city, state, country, cep, description, cpf,
-                academicExperiences, workExperiences, languages, skills, certificates)
+        Candidate updatedCandidate = this.populateCandidate()
+        updatedCandidate.id = id
         service.update(updatedCandidate.id, updatedCandidate)
     }
 
