@@ -7,8 +7,8 @@ import com.linketinder.database.interfaces.*
 
 class RequiredSkillDAOBuilder implements IDAOBuilder<IRequiredSkillDAO> {
 
+    IConnection connection
     IDBService dbService
-    IConnection connectionFactory
 
     @Override
     RequiredSkillDAOBuilder withDBService(IDBService dbService) {
@@ -17,14 +17,14 @@ class RequiredSkillDAOBuilder implements IDAOBuilder<IRequiredSkillDAO> {
     }
 
     @Override
-    RequiredSkillDAOBuilder withConnection(IConnection connectionFactory) {
-        this.connectionFactory = connectionFactory
+    RequiredSkillDAOBuilder withConnection(IConnection connection) {
+        this.connection = connection
         return this
     }
 
     @Override
     IRequiredSkillDAO build() {
-        return new RequiredSkillDAO(dbService, connectionFactory)
+        return new RequiredSkillDAO(this.dbService, this.connection)
     }
 
 }

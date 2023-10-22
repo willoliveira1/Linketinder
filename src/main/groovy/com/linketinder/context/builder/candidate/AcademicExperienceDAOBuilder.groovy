@@ -7,21 +7,21 @@ import com.linketinder.database.interfaces.*
 
 class AcademicExperienceDAOBuilder implements IDAOBuilder<IAcademicExperienceDAO> {
 
+    IConnection connection
     IDBService dbService
-    IConnection connectionFactory
 
     AcademicExperienceDAOBuilder withDBService(IDBService dbService) {
         this.dbService = dbService
         return this
     }
 
-    AcademicExperienceDAOBuilder withConnection(IConnection connectionFactory) {
-        this.connectionFactory = connectionFactory
+    AcademicExperienceDAOBuilder withConnection(IConnection connection) {
+        this.connection = connection
         return this
     }
 
     IAcademicExperienceDAO build() {
-        return new AcademicExperienceDAO(dbService, connectionFactory)
+        return new AcademicExperienceDAO(this.dbService, this.connection)
     }
 
 }

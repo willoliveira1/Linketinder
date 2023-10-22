@@ -7,8 +7,8 @@ import com.linketinder.database.interfaces.*
 
 class WorkExperienceDAOBuilder implements IDAOBuilder<IWorkExperienceDAO> {
 
+    IConnection connection
     IDBService dbService
-    IConnection connectionFactory
 
     @Override
     WorkExperienceDAOBuilder withDBService(IDBService dbService) {
@@ -17,14 +17,14 @@ class WorkExperienceDAOBuilder implements IDAOBuilder<IWorkExperienceDAO> {
     }
 
     @Override
-    WorkExperienceDAOBuilder withConnection(IConnection connectionFactory) {
-        this.connectionFactory = connectionFactory
+    WorkExperienceDAOBuilder withConnection(IConnection connection) {
+        this.connection = connection
         return this
     }
 
     @Override
     IWorkExperienceDAO build() {
-        return new WorkExperienceDAO(dbService, connectionFactory)
+        return new WorkExperienceDAO(this.dbService, this.connection)
     }
 
 }

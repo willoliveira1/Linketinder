@@ -7,7 +7,7 @@ import com.linketinder.database.interfaces.*
 
 class CandidateDAOBuilder implements ICandidateDAOBuilder {
 
-    IConnection connectionFactory
+    IConnection connection
     IDBService dbService
 
     IAcademicExperienceDAO academicExperienceDAO
@@ -23,8 +23,8 @@ class CandidateDAOBuilder implements ICandidateDAOBuilder {
     }
 
     @Override
-    CandidateDAOBuilder withConnection(IConnection connectionFactory) {
-        this.connectionFactory = connectionFactory
+    CandidateDAOBuilder withConnection(IConnection connection) {
+        this.connection = connection
         return this
     }
 
@@ -61,13 +61,13 @@ class CandidateDAOBuilder implements ICandidateDAOBuilder {
     @Override
     ICandidateDAO build() {
         return new CandidateDAO(
-            dbService,
-            connectionFactory,
-            certificateDAO,
-            languageDAO,
-            candidateSkillDAO,
-            academicExperienceDAO,
-            workExperienceDAO
+            this.dbService,
+            this.connection,
+            this.certificateDAO,
+            this.languageDAO,
+            this.candidateSkillDAO,
+            this.academicExperienceDAO,
+            this.workExperienceDAO
         )
     }
 

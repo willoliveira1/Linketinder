@@ -4,7 +4,7 @@ import com.linketinder.database.interfaces.IConnection
 
 interface IBaseDAOBuilder<T> {
 
-    IBaseDAOBuilder<T> withConnection(IConnection connectionFactory)
+    IBaseDAOBuilder<T> withConnection(IConnection connection)
     T build()
 
 }

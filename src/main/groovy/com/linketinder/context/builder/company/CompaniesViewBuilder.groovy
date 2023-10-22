@@ -12,38 +12,38 @@ import com.linketinder.view.interfaces.ICompaniesView
 
 class CompaniesViewBuilder implements ICompaniesViewBuilder {
 
-    IConnection connectionFactory
+    IConnection connection
     IDBService dbService
 
     ICompanyDAO companyDAO
     ICompanyValidation companyValidation
     ICompanyService companyService
 
-    CompaniesViewBuilder(IConnection connectionFactory, IDBService dbService) {
-        this.connectionFactory = connectionFactory
+    CompaniesViewBuilder(IConnection connection, IDBService dbService) {
+        this.connection = connection
         this.dbService = dbService
     }
 
     private void generateCompanyDAO() {
         IRequiredSkillDAO requiredSkillDAO = new RequiredSkillDAOBuilder()
-            .withDBService(dbService)
-            .withConnection(connectionFactory)
+            .withDBService(this.dbService)
+            .withConnection(this.connection)
             .build()
 
         IJobVacancyDAO jobVacancyDAO = new JobVacancyDAOBuilder()
-            .withDBService(dbService)
-            .withConnection(connectionFactory)
+            .withDBService(this.dbService)
+            .withConnection(this.connection)
             .withRequiredSkillDAO(requiredSkillDAO)
             .build()
 
         IBenefitDAO benefitDAO = new BenefitDAOBuilder()
-            .withDBService(dbService)
-            .withConnection(connectionFactory)
+            .withDBService(this.dbService)
+            .withConnection(this.connection)
             .build()
 
         this.companyDAO = new CompanyDAOBuilder()
-            .withDBService(dbService)
-            .withConnection(connectionFactory)
+            .withDBService(this.dbService)
+            .withConnection(this.connection)
             .withBenefitDAO(benefitDAO)
             .withJobVacancyDAO(jobVacancyDAO)
             .withRequiredSkillDAO(requiredSkillDAO)
@@ -55,7 +55,7 @@ class CompaniesViewBuilder implements ICompaniesViewBuilder {
     }
 
     private void generateCompanyService() {
-        this.companyService = new CompanyService(companyDAO)
+        this.companyService = new CompanyService(this.companyDAO)
     }
 
     ICompaniesView build() {

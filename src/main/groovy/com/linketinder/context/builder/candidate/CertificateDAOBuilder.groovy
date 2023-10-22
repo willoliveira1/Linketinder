@@ -7,17 +7,17 @@ import com.linketinder.database.interfaces.IConnection
 
 class CertificateDAOBuilder implements IBaseDAOBuilder<ICertificateDAO> {
 
-    IConnection connectionFactory
+    IConnection connection
 
     @Override
-    CertificateDAOBuilder withConnection(IConnection connectionFactory) {
-        this.connectionFactory = connectionFactory
+    CertificateDAOBuilder withConnection(IConnection connection) {
+        this.connection = connection
         return this
     }
 
     @Override
     ICertificateDAO build() {
-        return new CertificateDAO(connectionFactory)
+        return new CertificateDAO(this.connection)
     }
 
 }

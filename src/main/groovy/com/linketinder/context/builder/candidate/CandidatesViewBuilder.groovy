@@ -12,46 +12,46 @@ import com.linketinder.view.interfaces.ICandidatesView
 
 class CandidatesViewBuilder implements ICandidatesViewBuilder {
 
-    IConnection connectionFactory
+    IConnection connection
     IDBService dbService
 
     ICandidateDAO candidateDAO
     ICandidateValidation candidateValidation
     ICandidateService candidateService
 
-    CandidatesViewBuilder(IConnection connectionFactory, IDBService dbService) {
-        this.connectionFactory = connectionFactory
+    CandidatesViewBuilder(IConnection connection, IDBService dbService) {
+        this.connection = connection
         this.dbService = dbService
     }
 
     private void generateCandidateDAO() {
         IAcademicExperienceDAO academicExperienceDAO = new AcademicExperienceDAOBuilder()
-            .withDBService(dbService)
-            .withConnection(connectionFactory)
+            .withDBService(this.dbService)
+            .withConnection(this.connection)
             .build()
 
         ICandidateSkillDAO candidateSkillDAO = new CandidateSkillDAOBuilder()
-            .withDBService(dbService)
-            .withConnection(connectionFactory)
+            .withDBService(this.dbService)
+            .withConnection(this.connection)
             .build()
 
         ICertificateDAO certificateDAO = new CertificateDAOBuilder()
-            .withConnection(connectionFactory)
+            .withConnection(this.connection)
             .build()
 
         ILanguageDAO languageDAO = new LanguageDAOBuilder()
-            .withDBService(dbService)
-            .withConnection(connectionFactory)
+            .withDBService(this.dbService)
+            .withConnection(this.connection)
             .build()
 
         IWorkExperienceDAO workExperienceDAO = new WorkExperienceDAOBuilder()
-            .withDBService(dbService)
-            .withConnection(connectionFactory)
+            .withDBService(this.dbService)
+            .withConnection(this.connection)
             .build()
 
         this.candidateDAO = new CandidateDAOBuilder()
-            .withDBService(dbService)
-            .withConnection(connectionFactory)
+            .withDBService(this.dbService)
+            .withConnection(this.connection)
             .withAcademicExperienceDAO(academicExperienceDAO)
             .withCandidateSkillDAO(candidateSkillDAO)
             .withCertificateDAO(certificateDAO)
@@ -65,7 +65,7 @@ class CandidatesViewBuilder implements ICandidatesViewBuilder {
     }
 
     private void generateCandidateService() {
-        this.candidateService = new CandidateService(candidateDAO)
+        this.candidateService = new CandidateService(this.candidateDAO)
     }
 
     ICandidatesView build() {

@@ -7,8 +7,8 @@ import com.linketinder.database.interfaces.*
 
 class LanguageDAOBuilder implements IDAOBuilder<ILanguageDAO> {
 
+    IConnection connection
     IDBService dbService
-    IConnection connectionFactory
 
     @Override
     LanguageDAOBuilder withDBService(IDBService dbService) {
@@ -17,14 +17,14 @@ class LanguageDAOBuilder implements IDAOBuilder<ILanguageDAO> {
     }
 
     @Override
-    LanguageDAOBuilder withConnection(IConnection connectionFactory) {
-        this.connectionFactory = connectionFactory
+    LanguageDAOBuilder withConnection(IConnection connection) {
+        this.connection = connection
         return this
     }
 
     @Override
     ILanguageDAO build() {
-        return new LanguageDAO(dbService, connectionFactory)
+        return new LanguageDAO(this.dbService, this.connection)
     }
 
 }

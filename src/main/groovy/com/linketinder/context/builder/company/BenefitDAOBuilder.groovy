@@ -8,8 +8,8 @@ import com.linketinder.database.interfaces.IDBService
 
 class BenefitDAOBuilder implements IDAOBuilder<IBenefitDAO> {
 
+    IConnection connection
     IDBService dbService
-    IConnection connectionFactory
 
     @Override
     BenefitDAOBuilder withDBService(IDBService dbService) {
@@ -18,14 +18,14 @@ class BenefitDAOBuilder implements IDAOBuilder<IBenefitDAO> {
     }
 
     @Override
-    BenefitDAOBuilder withConnection(IConnection connectionFactory) {
-        this.connectionFactory = connectionFactory
+    BenefitDAOBuilder withConnection(IConnection connection) {
+        this.connection = connection
         return this
     }
 
     @Override
     IBenefitDAO build() {
-        return new BenefitDAO(dbService, connectionFactory)
+        return new BenefitDAO(this.dbService, this.connection)
     }
 
 }

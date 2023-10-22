@@ -12,27 +12,27 @@ import com.linketinder.view.interfaces.IJobVacanciesView
 
 class JobVacanciesViewBuilder implements IJobVacanciesViewBuilder {
 
-    IConnection connectionFactory
+    IConnection connection
     IDBService dbService
 
     IJobVacancyDAO jobVacancyDAO
     IJobVacancyValidation jobVacancyValidation
     IJobVacancyService jobVacancyService
 
-    JobVacanciesViewBuilder(IConnection connectionFactory, IDBService dbService) {
-        this.connectionFactory = connectionFactory
+    JobVacanciesViewBuilder(IConnection connection, IDBService dbService) {
+        this.connection = connection
         this.dbService = dbService
     }
 
     private void generateJobVacancyDAO() {
         IRequiredSkillDAO requiredSkillDAO = new RequiredSkillDAOBuilder()
-            .withDBService(dbService)
-            .withConnection(connectionFactory)
+            .withDBService(this.dbService)
+            .withConnection(this.connection)
             .build()
 
         this.jobVacancyDAO = new JobVacancyDAOBuilder()
-            .withDBService(dbService)
-            .withConnection(connectionFactory)
+            .withDBService(this.dbService)
+            .withConnection(this.connection)
             .withRequiredSkillDAO(requiredSkillDAO)
             .build()
     }
@@ -42,7 +42,7 @@ class JobVacanciesViewBuilder implements IJobVacanciesViewBuilder {
     }
 
     private void generateJobVacancyService() {
-        this.jobVacancyService = new JobVacancyService(jobVacancyDAO)
+        this.jobVacancyService = new JobVacancyService(this.jobVacancyDAO)
     }
 
     IJobVacanciesView build() {
