@@ -1,6 +1,8 @@
 package com.linketinder.context.builders.candidate
 
 import com.linketinder.context.builders.interfaces.ICandidatesViewBuilder
+import com.linketinder.controller.CandidateController
+import com.linketinder.controller.interfaces.ICandidateController
 import com.linketinder.dao.candidatedao.interfaces.*
 import com.linketinder.database.interfaces.*
 import com.linketinder.service.CandidateService
@@ -16,8 +18,8 @@ class CandidatesViewBuilder implements ICandidatesViewBuilder {
     IDBService dbService
 
     ICandidateDAO candidateDAO
+    ICandidateController candidateController
     ICandidateValidation candidateValidation
-    ICandidateService candidateService
 
     CandidatesViewBuilder(IConnection connection, IDBService dbService) {
         this.connection = connection
@@ -64,15 +66,16 @@ class CandidatesViewBuilder implements ICandidatesViewBuilder {
         this.candidateValidation = new CandidateValidation()
     }
 
-    private void generateCandidateService() {
-        this.candidateService = new CandidateService(this.candidateDAO)
+    private void generateCandidateController() {
+        ICandidateService candidateService = new CandidateService(this.candidateDAO)
+        this.candidateController = new CandidateController(candidateService)
     }
 
     ICandidatesView build() {
         this.generateCandidateDAO()
         this.generateCandidateValidation()
-        this.generateCandidateService()
-        return new CandidatesView(this.candidateService, this.candidateValidation)
+        this.generateCandidateController()
+        return new CandidatesView(this.candidateController, this.candidateValidation)
     }
 
 }

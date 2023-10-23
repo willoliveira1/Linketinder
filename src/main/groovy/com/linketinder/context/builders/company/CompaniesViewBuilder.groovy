@@ -1,6 +1,8 @@
 package com.linketinder.context.builders.company
 
 import com.linketinder.context.builders.interfaces.ICompaniesViewBuilder
+import com.linketinder.controller.CompanyController
+import com.linketinder.controller.interfaces.ICompanyController
 import com.linketinder.dao.companydao.interfaces.*
 import com.linketinder.database.interfaces.*
 import com.linketinder.service.CompanyService
@@ -16,8 +18,8 @@ class CompaniesViewBuilder implements ICompaniesViewBuilder {
     IDBService dbService
 
     ICompanyDAO companyDAO
+    ICompanyController companyController
     ICompanyValidation companyValidation
-    ICompanyService companyService
 
     CompaniesViewBuilder(IConnection connection, IDBService dbService) {
         this.connection = connection
@@ -54,15 +56,16 @@ class CompaniesViewBuilder implements ICompaniesViewBuilder {
         this.companyValidation = new CompanyValidation()
     }
 
-    private void generateCompanyService() {
-        this.companyService = new CompanyService(this.companyDAO)
+    private void generateCompanyController() {
+        ICompanyService companyService = new CompanyService(this.companyDAO)
+        this.companyController = new CompanyController(companyService)
     }
 
     ICompaniesView build() {
         this.generateCompanyDAO()
         this.generateCompanyValidation()
-        this.generateCompanyService()
-        return new CompaniesView(this.companyService, this.companyValidation)
+        this.generateCompanyController()
+        return new CompaniesView(this.companyController, this.companyValidation)
     }
 
 }
