@@ -1,40 +1,39 @@
 package com.linketinder.view
 
-import com.linketinder.model.company.Benefit
-import com.linketinder.model.company.Company
+import com.linketinder.controller.interfaces.ICompanyController
+import com.linketinder.model.company.*
 import com.linketinder.model.shared.State
-import com.linketinder.service.interfaces.ICompanyService
 import com.linketinder.util.viewtexts.CompanyTexts
 import com.linketinder.validation.interfaces.ICompanyValidation
 import com.linketinder.view.interfaces.ICompaniesView
 
 class CompaniesView implements ICompaniesView {
 
-    ICompanyService service
+    ICompanyController controller
     ICompanyValidation validation
     Readable reader = System.in.newReader()
 
-    CompaniesView(ICompanyService service, ICompanyValidation validation) {
-        this.service = service
+    CompaniesView(ICompanyController controller, ICompanyValidation validation) {
+        this.controller = controller
         this.validation = validation
     }
 
     void getAllCompanies() {
         println CompanyTexts.ALL_COMPANIES_TEXT
-        List<Company> companies = service.getAll()
+        List<Company> companies = this.controller.getAll()
         companies.each {println it}
     }
 
     void getCompanyById() {
-        Integer id = validation.validateId()
-        println service.getById(id)
+        Integer id = this.validation.validateId()
+        println this.controller.getById(id)
     }
 
     private List<Benefit> addBenefits() {
         println CompanyTexts.ADD_BENEFIT_TEXT
         List<Benefit> benefits = []
         String input = reader.readLine()
-        Boolean addMore = validation.validateAddMore(input)
+        Boolean addMore = this.validation.validateAddMore(input)
 
         while (addMore) {
             println CompanyTexts.BENEFIT_TEXT
@@ -45,7 +44,7 @@ class CompaniesView implements ICompaniesView {
 
             println CompanyTexts.ADD_MORE_BENEFIT_TEXT
             input = reader.readLine()
-            addMore = validation.validateAddMore(input)
+            addMore = this.validation.validateAddMore(input)
         }
         return benefits
     }
@@ -53,16 +52,16 @@ class CompaniesView implements ICompaniesView {
     private Company populateCompany() {
         println CompanyTexts.NAME_TEXT
         String name = reader.readLine()
-        String email = validation.validateEmail()
+        String email = this.validation.validateEmail()
         println CompanyTexts.CITY_TEXT
         String city = reader.readLine()
-        State state = validation.validateState()
+        State state = this.validation.validateState()
         println CompanyTexts.COUNTRY_TEXT
         String country = reader.readLine()
-        String cep = validation.validateCep()
+        String cep = this.validation.validateCep()
         println CompanyTexts.DESCRIPTION_TEXT
         String description = reader.readLine()
-        String cnpj = validation.validateCnpj()
+        String cnpj = this.validation.validateCnpj()
         List<Benefit> benefits = this.addBenefits()
 
         Company company = new Company(null, name, email, city, state, country, cep, description, cnpj,
@@ -72,19 +71,19 @@ class CompaniesView implements ICompaniesView {
 
     void addCompany() {
         Company company = this.populateCompany()
-        service.add(company)
+        this.controller.add(company)
     }
 
     void updateCompany() {
-        Integer id = validation.validateId()
+        Integer id = this.validation.validateId()
         Company updatedCompany = this.populateCompany()
-        updatedCompany.id = validation.validateId()
-        service.update(id, updatedCompany)
+        updatedCompany.id = this.validation.validateId()
+        this.controller.update(id, updatedCompany)
     }
 
     void removeCompany() {
-        Integer id = validation.validateId()
-        service.delete(id)
+        Integer id = this.validation.validateId()
+        this.controller.delete(id)
     }
 
 }

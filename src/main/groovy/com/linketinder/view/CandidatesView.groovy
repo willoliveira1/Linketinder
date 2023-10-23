@@ -1,53 +1,40 @@
 package com.linketinder.view
 
-import com.linketinder.model.candidate.AcademicExperience
-import com.linketinder.model.candidate.Candidate
-import com.linketinder.model.candidate.Certificate
-import com.linketinder.model.candidate.CourseStatus
-import com.linketinder.model.candidate.Language
-import com.linketinder.model.candidate.WorkExperience
-import com.linketinder.model.jobvacancy.ContractType
-import com.linketinder.model.jobvacancy.LocationType
-import com.linketinder.model.shared.Proficiency
-import com.linketinder.model.shared.Skill
-import com.linketinder.model.shared.State
-import com.linketinder.service.interfaces.ICandidateService
-import com.linketinder.util.viewtexts.AcademicExperienceTexts
-import com.linketinder.util.viewtexts.CandidateTexts
-import com.linketinder.util.viewtexts.CertificateTexts
-import com.linketinder.util.viewtexts.LanguageTexts
-import com.linketinder.util.viewtexts.SkillTexts
-import com.linketinder.util.viewtexts.WorkExperienceTexts
+import com.linketinder.controller.interfaces.ICandidateController
+import com.linketinder.model.candidate.*
+import com.linketinder.model.jobvacancy.*
+import com.linketinder.model.shared.*
+import com.linketinder.util.viewtexts.*
 import com.linketinder.validation.interfaces.ICandidateValidation
 import com.linketinder.view.interfaces.ICandidatesView
 
 class CandidatesView implements ICandidatesView {
 
-    ICandidateService service
+    ICandidateController controller
     ICandidateValidation validation
     Readable reader = System.in.newReader()
 
-    CandidatesView(ICandidateService service, ICandidateValidation validation) {
-        this.service = service
+    CandidatesView(ICandidateController controller, ICandidateValidation validation) {
+        this.controller = controller
         this.validation = validation
     }
 
     void getAllCandidates() {
         println CandidateTexts.ALL_CANDIDATES_TEXT
-        List<Candidate> candidates = service.getAll()
+        List<Candidate> candidates = this.controller.getAll()
         candidates.each {println it}
     }
 
     void getCandidateById() {
-        Integer id = validation.validateId()
-        println service.getById(id)
+        Integer id = this.validation.validateId()
+        println this.controller.getById(id)
     }
 
     private List<AcademicExperience> addAcademicExperiences() {
         println AcademicExperienceTexts.ADD_ACADEMIC_EXPERIENCE__TEXT
         List<AcademicExperience> academicExperiences = []
         String input = reader.readLine()
-        Boolean addMore = validation.validateAddMore(input)
+        Boolean addMore = this.validation.validateAddMore(input)
 
         while (addMore) {
             println AcademicExperienceTexts.EDUCATIONAl_INSTITUTION_TEXT
@@ -56,7 +43,7 @@ class CandidatesView implements ICandidatesView {
             String degreeType = reader.readLine()
             println AcademicExperienceTexts.FIELD_OF_STUDY_TEXT
             String fieldOfStudy = reader.readLine()
-            CourseStatus status = validation.validateCourseStatus()
+            CourseStatus status = this.validation.validateCourseStatus()
 
             AcademicExperience experience = new AcademicExperience(null, educationalInstitution, degreeType,
                     fieldOfStudy, status)
@@ -64,7 +51,7 @@ class CandidatesView implements ICandidatesView {
 
             println AcademicExperienceTexts.ADD_MORE_ACADEMIC_EXPERIENCE_TEXT
             input = reader.readLine()
-            addMore = validation.validateAddMore(input)
+            addMore = this.validation.validateAddMore(input)
         }
         return academicExperiences
     }
@@ -73,19 +60,19 @@ class CandidatesView implements ICandidatesView {
         println WorkExperienceTexts.ADD_WORK_EXPERIENCE_TEXT
         List<WorkExperience> workExperiences = []
         String input = reader.readLine()
-        Boolean addMore = validation.validateAddMore(input)
+        Boolean addMore = this.validation.validateAddMore(input)
 
         while (addMore) {
             println WorkExperienceTexts.TITLE_TEXT
             String title = reader.readLine()
             println WorkExperienceTexts.COMPANY_TEXT
             String companyName = reader.readLine()
-            ContractType contractType = validation.validateContractType()
-            LocationType locationType = validation.validateLocationType()
+            ContractType contractType = this.validation.validateContractType()
+            LocationType locationType = this.validation.validateLocationType()
             println WorkExperienceTexts.COMPANY_CITY_TEXT
             String city = reader.readLine()
-            State state = validation.validateState()
-            boolean currentlyWork = validation.validateCurrentlyWork()
+            State state = this.validation.validateState()
+            boolean currentlyWork = this.validation.validateCurrentlyWork()
 
             println WorkExperienceTexts.DESCRIPTION_TEXT
             String description = reader.readLine()
@@ -96,7 +83,7 @@ class CandidatesView implements ICandidatesView {
 
             println WorkExperienceTexts.ADD_MORE_WORK_EXPERIENCE_TEXT
             input = reader.readLine()
-            addMore = validation.validateAddMore(input)
+            addMore = this.validation.validateAddMore(input)
         }
         return workExperiences
     }
@@ -105,19 +92,19 @@ class CandidatesView implements ICandidatesView {
         println LanguageTexts.ADD_LANGUAGE_TEXT
         List<Language> languages = []
         String input = reader.readLine()
-        Boolean addMore = validation.validateAddMore(input)
+        Boolean addMore = this.validation.validateAddMore(input)
 
         while (addMore) {
             println LanguageTexts.NAME_TEXT
             String name = reader.readLine()
-            Proficiency proficiency = validation.validateProficiency()
+            Proficiency proficiency = this.validation.validateProficiency()
 
             Language language = new Language(null, name, proficiency)
             languages.add(language)
 
             println LanguageTexts.ADD_MORE_LANGUGAGE_TEXT
             input = reader.readLine()
-            addMore = validation.validateAddMore(input)
+            addMore = this.validation.validateAddMore(input)
         }
         return languages
     }
@@ -126,19 +113,19 @@ class CandidatesView implements ICandidatesView {
         println SkillTexts.ADD_SKILL_TEXT
         List<Skill> skills = []
         String input = reader.readLine()
-        Boolean addMore = validation.validateAddMore(input)
+        Boolean addMore = this.validation.validateAddMore(input)
 
         while (addMore) {
             println SkillTexts.TITLE_TEXT
             String title = reader.readLine()
-            Proficiency proficiency = validation.validateProficiency()
+            Proficiency proficiency = this.validation.validateProficiency()
 
             Skill skill = new Skill(null, title, proficiency)
             skills.add(skill)
 
             println SkillTexts.ADD_MORE_SKILL_TEXT
             input = reader.readLine()
-            addMore = validation.validateAddMore(input)
+            addMore = this.validation.validateAddMore(input)
         }
         return skills
     }
@@ -147,7 +134,7 @@ class CandidatesView implements ICandidatesView {
         println CertificateTexts.ADD_CERTIFICATE_TEXT
         List<Certificate> certificates = []
         String input = reader.readLine()
-        Boolean addMore = validation.validateAddMore(input)
+        Boolean addMore = this.validation.validateAddMore(input)
 
         while (addMore) {
             println CertificateTexts.TITLE_TEXT
@@ -160,7 +147,7 @@ class CandidatesView implements ICandidatesView {
 
             println CertificateTexts.ADD_MORE_CERTIFICATE_TEXT
             input = reader.readLine()
-            addMore = validation.validateAddMore(input)
+            addMore = this.validation.validateAddMore(input)
         }
         return certificates
     }
@@ -168,16 +155,16 @@ class CandidatesView implements ICandidatesView {
     private Candidate populateCandidate() {
         println CandidateTexts.NAME_TEXT
         String name = reader.readLine()
-        String email = validation.validateEmail()
+        String email = this.validation.validateEmail()
         println CandidateTexts.CITY_TEXT
         String city = reader.readLine()
-        State state = validation.validateState()
+        State state = this.validation.validateState()
         println CandidateTexts.COUNTRY_TEXT
         String country = reader.readLine()
-        String cep = validation.validateCep()
+        String cep = this.validation.validateCep()
         println CandidateTexts.DESCRIPTION_TEXT
         String description = reader.readLine()
-        String cpf = validation.validateCpf()
+        String cpf = this.validation.validateCpf()
         List<AcademicExperience> academicExperiences = this.addAcademicExperiences()
         List<WorkExperience> workExperiences = this.addWorkExperiences()
         List<Language> languages = this.addLanguages()
@@ -191,19 +178,19 @@ class CandidatesView implements ICandidatesView {
 
     void addCandidate() {
         Candidate candidate = this.populateCandidate()
-        service.add(candidate)
+        this.controller.add(candidate)
     }
 
     void updateCandidate() {
-        Integer id = validation.validateId()
+        Integer id = this.validation.validateId()
         Candidate updatedCandidate = this.populateCandidate()
         updatedCandidate.id = id
-        service.update(updatedCandidate.id, updatedCandidate)
+        this.controller.update(updatedCandidate.id, updatedCandidate)
     }
 
     void removeCandidate() {
-        Integer id = validation.validateId()
-        service.delete(id)
+        Integer id = this.validation.validateId()
+        this.controller.delete(id)
     }
 
 }

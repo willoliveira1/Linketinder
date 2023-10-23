@@ -1,6 +1,8 @@
 package com.linketinder.context.builders.company
 
 import com.linketinder.context.builders.interfaces.IJobVacanciesViewBuilder
+import com.linketinder.controller.JobVacancyController
+import com.linketinder.controller.interfaces.IJobVacancyController
 import com.linketinder.dao.companydao.interfaces.*
 import com.linketinder.database.interfaces.*
 import com.linketinder.service.JobVacancyService
@@ -16,8 +18,8 @@ class JobVacanciesViewBuilder implements IJobVacanciesViewBuilder {
     IDBService dbService
 
     IJobVacancyDAO jobVacancyDAO
+    IJobVacancyController jobVacancyController
     IJobVacancyValidation jobVacancyValidation
-    IJobVacancyService jobVacancyService
 
     JobVacanciesViewBuilder(IConnection connection, IDBService dbService) {
         this.connection = connection
@@ -41,15 +43,16 @@ class JobVacanciesViewBuilder implements IJobVacanciesViewBuilder {
         this.jobVacancyValidation = new JobVacancyValidation()
     }
 
-    private void generateJobVacancyService() {
-        this.jobVacancyService = new JobVacancyService(this.jobVacancyDAO)
+    private void generateJobVacancyController() {
+        IJobVacancyService jobVacancyService = new JobVacancyService(this.jobVacancyDAO)
+        this.jobVacancyController = new JobVacancyController(jobVacancyService)
     }
 
     IJobVacanciesView build() {
         this.generateJobVacancyDAO()
         this.generateJobVacancyValidation()
-        this.generateJobVacancyService()
-        return new JobVacanciesView(this.jobVacancyService, this.jobVacancyValidation)
+        this.generateJobVacancyController()
+        return new JobVacanciesView(this.jobVacancyController, this.jobVacancyValidation)
     }
 
 }
