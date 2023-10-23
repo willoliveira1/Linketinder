@@ -25,6 +25,7 @@ Projeto para desenvolver uma aplicação chamada Linketinder.
    * Singleton para manter uma única conexão com o banco de dados durante a execução da aplicação, preservando assim os recursos do sistema.
    * Abstract Factory para desacoplar o código e facilitar a troca de banco de dados caso for necessário.
    * Builder para deixar mais limpa a classe ApplicationContext.
+   * MVC para melhorar a divisão de responsabilidades.
   
 ## MER
 <img src="MER.png">
