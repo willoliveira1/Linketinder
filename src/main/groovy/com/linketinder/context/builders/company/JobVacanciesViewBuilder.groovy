@@ -44,12 +44,12 @@ class JobVacanciesViewBuilder implements IJobVacanciesViewBuilder {
     }
 
     private void generateJobVacancyController() {
+        this.generateJobVacancyDAO()
         IJobVacancyService jobVacancyService = new JobVacancyService(this.jobVacancyDAO)
         this.jobVacancyController = new JobVacancyController(jobVacancyService)
     }
 
     IJobVacanciesView build() {
-        this.generateJobVacancyDAO()
         this.generateJobVacancyValidation()
         this.generateJobVacancyController()
         return new JobVacanciesView(this.jobVacancyController, this.jobVacancyValidation)

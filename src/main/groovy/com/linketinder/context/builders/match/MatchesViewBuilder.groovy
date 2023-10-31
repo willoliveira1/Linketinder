@@ -52,12 +52,12 @@ class MatchesViewBuilder implements IMatchesViewBuilder {
     }
 
     private void generateMatchController() {
+        this.generateDAOs()
         IMatchService matchService = new MatchService(this.matchDAO, this.candidateMatchDAO, this.companyMatchDAO)
         this.matchController = new MatchController(matchService)
     }
 
     IMatchesView build() {
-        this.generateDAOs()
         this.generateMatchValidation()
         this.generateMatchController()
         return new MatchesView(

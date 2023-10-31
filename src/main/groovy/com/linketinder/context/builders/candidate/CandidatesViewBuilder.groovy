@@ -67,12 +67,12 @@ class CandidatesViewBuilder implements ICandidatesViewBuilder {
     }
 
     private void generateCandidateController() {
+        this.generateCandidateDAO()
         ICandidateService candidateService = new CandidateService(this.candidateDAO)
         this.candidateController = new CandidateController(candidateService)
     }
 
     ICandidatesView build() {
-        this.generateCandidateDAO()
         this.generateCandidateValidation()
         this.generateCandidateController()
         return new CandidatesView(this.candidateController, this.candidateValidation)
