@@ -57,12 +57,12 @@ class CompaniesViewBuilder implements ICompaniesViewBuilder {
     }
 
     private void generateCompanyController() {
+        this.generateCompanyDAO()
         ICompanyService companyService = new CompanyService(this.companyDAO)
         this.companyController = new CompanyController(companyService)
     }
 
     ICompaniesView build() {
-        this.generateCompanyDAO()
         this.generateCompanyValidation()
         this.generateCompanyController()
         return new CompaniesView(this.companyController, this.companyValidation)
