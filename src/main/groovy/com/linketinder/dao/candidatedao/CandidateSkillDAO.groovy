@@ -1,6 +1,7 @@
 package com.linketinder.dao.candidatedao
 
 import com.linketinder.dao.candidatedao.interfaces.ICandidateSkillDAO
+import com.linketinder.dao.candidatedao.queries.CandidateSkillQueries
 import com.linketinder.database.PostgreSqlConnection
 import com.linketinder.database.interfaces.IDBService
 import com.linketinder.database.interfaces.IConnection
@@ -17,14 +18,6 @@ import java.util.logging.Level
 import java.util.logging.Logger
 
 class CandidateSkillDAO implements ICandidateSkillDAO {
-
-    private final String GET_SKILLS_BY_CANDIDATE_ID = "SELECT cs.id, s.title, p.title AS proficiency_title FROM candidates AS c, candidate_skills AS cs, skills AS s, proficiences AS p WHERE c.id = cs.candidate_id AND s.id = cs.skill_id AND p.id = cs.proficiency_id AND c.id=?"
-    private final String GET_SKILL_BY_ID = "SELECT * FROM candidate_skills WHERE id=?"
-    private final String INSERT_CANDIDATE_SKILL = "INSERT INTO candidate_skills (candidate_id, skill_id, proficiency_id) VALUES (?,?,?)"
-    private final String UPDATE_CANDIDATE_SKILL = "UPDATE candidate_skills SET candidate_id=?, skill_id=?, proficiency_id=? WHERE id=?"
-    private final String DELETE_CANDIDATE_SKILL = "DELETE FROM candidate_skills WHERE id=?"
-    private final String INSERT_SKILL = "INSERT INTO skills (title) VALUES (?)"
-    private final String GET_SKILL_BY_TITLE = "SELECT * FROM skills WHERE title=?"
 
     IConnection connection
     IDBService dbService
@@ -53,7 +46,7 @@ class CandidateSkillDAO implements ICandidateSkillDAO {
     List<Skill> getSkillsByCandidateId(int candidateId) {
         List<Skill> skills = new ArrayList<>()
         try {
-            skills = this.populateSkills(GET_SKILLS_BY_CANDIDATE_ID, candidateId)
+            skills = this.populateSkills(CandidateSkillQueries.GET_SKILLS_BY_CANDIDATE_ID, candidateId)
         } catch (SQLException e) {
             Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
@@ -70,14 +63,14 @@ class CandidateSkillDAO implements ICandidateSkillDAO {
     }
 
     private void isNewSkill(Skill skill) {
-        PreparedStatement stmt = sql.connection.prepareStatement(GET_SKILL_BY_TITLE)
+        PreparedStatement stmt = sql.connection.prepareStatement(CandidateSkillQueries.GET_SKILL_BY_TITLE)
         stmt.setString(1, skill.title)
         ResultSet result = stmt.executeQuery()
 
         if (result.next()) {
             return
         }
-        stmt = sql.connection.prepareStatement(INSERT_SKILL, Statement.RETURN_GENERATED_KEYS)
+        stmt = sql.connection.prepareStatement(CandidateSkillQueries.INSERT_SKILL, Statement.RETURN_GENERATED_KEYS)
         stmt.setString(1, skill.title)
         stmt.executeUpdate()
     }
@@ -86,7 +79,8 @@ class CandidateSkillDAO implements ICandidateSkillDAO {
         try {
             this.isNewSkill(skill)
 
-            PreparedStatement stmt = sql.connection.prepareStatement(INSERT_CANDIDATE_SKILL, Statement.RETURN_GENERATED_KEYS)
+            PreparedStatement stmt = sql.connection.prepareStatement(
+                    CandidateSkillQueries.INSERT_CANDIDATE_SKILL, Statement.RETURN_GENERATED_KEYS)
             stmt = this.setCandidateSkillStatement(stmt, skill, candidateId)
             stmt.executeUpdate()
         } catch (SQLException e) {
@@ -98,7 +92,7 @@ class CandidateSkillDAO implements ICandidateSkillDAO {
         try {
             this.isNewSkill(skill)
 
-            PreparedStatement stmt = sql.connection.prepareStatement(UPDATE_CANDIDATE_SKILL)
+            PreparedStatement stmt = sql.connection.prepareStatement(CandidateSkillQueries.UPDATE_CANDIDATE_SKILL)
             stmt = this.setCandidateSkillStatement(stmt, skill, candidateId)
             stmt.setInt(4, skill.id)
             stmt.executeUpdate()
@@ -110,7 +104,7 @@ class CandidateSkillDAO implements ICandidateSkillDAO {
     void deleteSkill(int id) {
         Skill skill = new Skill()
         try {
-            PreparedStatement stmt = sql.connection.prepareStatement(GET_SKILL_BY_ID)
+            PreparedStatement stmt = sql.connection.prepareStatement(CandidateSkillQueries.GET_SKILL_BY_ID)
             stmt.setInt(1, id)
             ResultSet result = stmt.executeQuery()
             while (result.next()) {
@@ -118,7 +112,7 @@ class CandidateSkillDAO implements ICandidateSkillDAO {
             }
 
             if (skill.id != null) {
-                stmt = sql.connection.prepareStatement(DELETE_CANDIDATE_SKILL)
+                stmt = sql.connection.prepareStatement(CandidateSkillQueries.DELETE_CANDIDATE_SKILL)
                 stmt.setInt(1, id)
                 stmt.executeUpdate()
                 return

@@ -1,6 +1,7 @@
 package com.linketinder.dao.companydao
 
 import com.linketinder.dao.companydao.interfaces.IRequiredSkillDAO
+import com.linketinder.dao.companydao.queries.RequiredSkillQueries
 import com.linketinder.database.PostgreSqlConnection
 import com.linketinder.database.interfaces.IDBService
 import com.linketinder.database.interfaces.IConnection
@@ -16,14 +17,6 @@ import java.util.logging.Level
 import java.util.logging.Logger
 
 class RequiredSkillDAO implements IRequiredSkillDAO {
-
-    private final String QUERY_GET_SKILLS_BY_JOB_VACANCY_ID = "SELECT jbs.id, jbs.job_vacancy_id, s.title FROM job_vacancy_skills AS jbs, skills AS s, job_vacancies AS jb WHERE jbs.skill_id = s.id AND jb.id = jbs.job_vacancy_id AND jb.id=?"
-    private final String QUERY_GET_SKILL_BY_ID = "SELECT * FROM job_vacancy_skills WHERE id=?"
-    private final String INSERT_JOB_VACANCY_SKILL = "INSERT INTO job_vacancy_skills (job_vacancy_id, skill_id) VALUES (?,?)"
-    private final String UPDATE_JOB_VACANCY_SKILL = "UPDATE job_vacancy_skills SET job_vacancy_id=?, skill_id=? WHERE id=?"
-    private final String DELETE_JOB_VACANCY_SKILL_BY_ID = "DELETE FROM job_vacancy_skills WHERE id=?"
-    private final String INSERT_SKILL = "INSERT INTO skills (title) VALUES (?)"
-    private final String GET_SKILL_BY_TITLE = "SELECT * FROM skills WHERE title=?"
 
     IConnection connection
     IDBService dbService
@@ -51,7 +44,7 @@ class RequiredSkillDAO implements IRequiredSkillDAO {
     List<Skill> getSkillsByJobVacancyId(int jobVacancyId) {
         List<Skill> skills = new ArrayList<>()
         try {
-            skills = this.populateSkills(QUERY_GET_SKILLS_BY_JOB_VACANCY_ID, jobVacancyId)
+            skills = this.populateSkills(RequiredSkillQueries.GET_SKILLS_BY_JOB_VACANCY_ID, jobVacancyId)
         } catch (SQLException e) {
             Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
@@ -66,14 +59,14 @@ class RequiredSkillDAO implements IRequiredSkillDAO {
     }
 
     private void isNewSkill(Skill skill) {
-        PreparedStatement stmt = sql.connection.prepareStatement(GET_SKILL_BY_TITLE)
+        PreparedStatement stmt = sql.connection.prepareStatement(RequiredSkillQueries.GET_SKILL_BY_TITLE)
         stmt.setString(1, skill.title)
         ResultSet result = stmt.executeQuery()
 
         if (result.next()) {
             return
         }
-        stmt = sql.connection.prepareStatement(INSERT_SKILL, Statement.RETURN_GENERATED_KEYS)
+        stmt = sql.connection.prepareStatement(RequiredSkillQueries.INSERT_SKILL, Statement.RETURN_GENERATED_KEYS)
         stmt.setString(1, skill.title)
         stmt.executeUpdate()
     }
@@ -82,7 +75,8 @@ class RequiredSkillDAO implements IRequiredSkillDAO {
         try {
             this.isNewSkill(skill)
 
-            PreparedStatement stmt = sql.connection.prepareStatement(INSERT_JOB_VACANCY_SKILL, Statement.RETURN_GENERATED_KEYS)
+            PreparedStatement stmt = sql.connection.prepareStatement(RequiredSkillQueries.INSERT_JOB_VACANCY_SKILL,
+                    Statement.RETURN_GENERATED_KEYS)
             stmt = this.setSkillStatement(stmt, skill, jobVacancyId)
             stmt.executeUpdate()
         } catch (SQLException e) {
@@ -94,7 +88,7 @@ class RequiredSkillDAO implements IRequiredSkillDAO {
         try {
             this.isNewSkill(skill)
 
-            PreparedStatement stmt = sql.connection.prepareStatement(UPDATE_JOB_VACANCY_SKILL)
+            PreparedStatement stmt = sql.connection.prepareStatement(RequiredSkillQueries.UPDATE_JOB_VACANCY_SKILL)
             stmt = this.setSkillStatement(stmt, skill, jobVacancyId)
             stmt.setInt(3, skill.id)
             stmt.executeUpdate()
@@ -106,7 +100,7 @@ class RequiredSkillDAO implements IRequiredSkillDAO {
     void deleteSkill(int id) {
         Skill skill = new Skill()
         try {
-            PreparedStatement stmt = sql.connection.prepareStatement(QUERY_GET_SKILL_BY_ID)
+            PreparedStatement stmt = sql.connection.prepareStatement(RequiredSkillQueries.GET_SKILL_BY_ID)
             stmt.setInt(1, id)
             ResultSet result = stmt.executeQuery()
             while (result.next()) {
@@ -114,7 +108,7 @@ class RequiredSkillDAO implements IRequiredSkillDAO {
             }
 
             if (skill.id != null) {
-                stmt = sql.connection.prepareStatement(DELETE_JOB_VACANCY_SKILL_BY_ID)
+                stmt = sql.connection.prepareStatement(RequiredSkillQueries.DELETE_JOB_VACANCY_SKILL_BY_ID)
                 stmt.setInt(1, id)
                 stmt.executeUpdate()
                 return

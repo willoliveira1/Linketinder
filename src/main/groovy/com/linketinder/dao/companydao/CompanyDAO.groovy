@@ -3,6 +3,7 @@ package com.linketinder.dao.companydao
 import com.linketinder.dao.companydao.interfaces.IBenefitDAO
 import com.linketinder.dao.companydao.interfaces.ICompanyDAO
 import com.linketinder.dao.companydao.interfaces.IJobVacancyDAO
+import com.linketinder.dao.companydao.queries.CompanyQueries
 import com.linketinder.database.PostgreSqlConnection
 import com.linketinder.database.interfaces.IDBService
 import com.linketinder.database.interfaces.IConnection
@@ -22,13 +23,6 @@ import java.util.logging.Level
 import java.util.logging.Logger
 
 class CompanyDAO implements ICompanyDAO {
-
-    private final String GET_ALL_COMPANIES = "SELECT c.id, c.name, c.email, c.city, s.acronym AS state, c.country, c.cep, c.description, c.cnpj FROM companies AS c, states AS s WHERE c.state_id = s.id ORDER BY c.id"
-    private final String GET_COMPANY_BY_ID = "SELECT c.id, c.name, c.email, c.city, s.acronym AS state, c.country, c.cep, c.description, c.cnpj FROM companies AS c, states AS s WHERE c.state_id = s.id AND c.id=?"
-    private final String GET_COMPANY_BENEFITS_BY_COMPANY_ID = "SELECT id FROM company_benefits WHERE company_id=?"
-    private final String INSERT_COMPANY = "INSERT INTO companies (name, email, city, state_id, country, cep, description, cnpj) VALUES (?,?,?,?,?,?,?,?)"
-    private final String UPDATE_COMPANY = "UPDATE companies SET name=?, email=?, city=?, state_id=?, country=?, cep=?, description=?, cnpj=? WHERE id=?"
-    private final String DELETE_COMPANY = "DELETE FROM companies WHERE id=?"
 
     IDBService dbService
     IConnection connection
@@ -85,7 +79,7 @@ class CompanyDAO implements ICompanyDAO {
     List<Company> getAllCompanies() {
         List<Company> companies = new ArrayList<>()
         try {
-            companies = this.populateCompanies(GET_ALL_COMPANIES)
+            companies = this.populateCompanies(CompanyQueries.GET_ALL_COMPANIES)
         } catch (SQLException e) {
             Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
@@ -95,7 +89,7 @@ class CompanyDAO implements ICompanyDAO {
     Company getCompanyById(int id) {
         Person company = new Company()
         try {
-            company = this.populateCompany(GET_COMPANY_BY_ID, id)
+            company = this.populateCompany(CompanyQueries.GET_COMPANY_BY_ID, id)
         } catch (SQLException e) {
             Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
@@ -129,7 +123,8 @@ class CompanyDAO implements ICompanyDAO {
 
     void insertCompany(Company company) {
         try {
-            PreparedStatement stmt = sql.connection.prepareStatement(INSERT_COMPANY, Statement.RETURN_GENERATED_KEYS)
+            PreparedStatement stmt = sql.connection.prepareStatement(CompanyQueries.INSERT_COMPANY,
+                    Statement.RETURN_GENERATED_KEYS)
             stmt = this.setCompanyStatement(stmt, company)
             stmt.executeUpdate()
 
@@ -147,7 +142,7 @@ class CompanyDAO implements ICompanyDAO {
 
     private void updateCompanyBenefits(int id, Company company) {
         List<Integer> benefitsIds = new ArrayList<>()
-        sql.eachRow(GET_COMPANY_BENEFITS_BY_COMPANY_ID, [id]) {row ->
+        sql.eachRow(CompanyQueries.GET_COMPANY_BENEFITS_BY_COMPANY_ID, [id]) {row ->
             benefitsIds << row.getInt("id")
         }
 
@@ -167,7 +162,7 @@ class CompanyDAO implements ICompanyDAO {
 
     void updateCompany(int id, Company company) {
         try {
-            PreparedStatement stmt = sql.connection.prepareStatement(UPDATE_COMPANY)
+            PreparedStatement stmt = sql.connection.prepareStatement(CompanyQueries.UPDATE_COMPANY)
             stmt = this.setCompanyStatement(stmt, company)
             stmt.executeUpdate()
 
@@ -180,7 +175,7 @@ class CompanyDAO implements ICompanyDAO {
     void deleteCompanyById(int id) {
         Person company = new Company()
         try {
-            PreparedStatement stmt = sql.connection.prepareStatement(GET_COMPANY_BY_ID)
+            PreparedStatement stmt = sql.connection.prepareStatement(CompanyQueries.GET_COMPANY_BY_ID)
             stmt.setInt(1, id)
             ResultSet result = stmt.executeQuery()
             while (result.next()) {
@@ -188,7 +183,7 @@ class CompanyDAO implements ICompanyDAO {
             }
 
             if (company.id != null) {
-                stmt = sql.connection.prepareStatement(DELETE_COMPANY)
+                stmt = sql.connection.prepareStatement(CompanyQueries.DELETE_COMPANY)
                 stmt.setInt(1, id)
                 stmt.executeUpdate()
                 return

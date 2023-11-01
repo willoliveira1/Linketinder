@@ -1,6 +1,7 @@
 package com.linketinder.dao.candidatedao
 
 import com.linketinder.dao.candidatedao.interfaces.IWorkExperienceDAO
+import com.linketinder.dao.candidatedao.queries.WorkExperienceQueries
 import com.linketinder.database.PostgreSqlConnection
 import com.linketinder.database.interfaces.IDBService
 import com.linketinder.database.interfaces.IConnection
@@ -19,12 +20,6 @@ import java.util.logging.Level
 import java.util.logging.Logger
 
 class WorkExperienceDAO implements IWorkExperienceDAO {
-
-    private final String GET_WORK_EXPERIENCES_BY_CANDIDATE_ID = "SELECT we.id, we.title, we.company_name, ct.title AS contract_type_title, lt.title AS location_type_title, we.city, s.acronym, we.currently_work, we.description FROM candidates AS c, work_experiences AS we, states AS s, contract_types AS ct, location_types AS lt WHERE c.id = we.candidate_id AND we.contract_type_id = ct.id AND we.location_id = lt.id AND we.state_id = s.id AND c.id=?"
-    private final String GET_WORK_EXPERIENCES_ID = "SELECT * FROM work_experiences WHERE id=?"
-    private final String INSERT_WORK_EXPERIENCE = "INSERT INTO work_experiences (candidate_id, title, company_name, city, currently_work, description, state_id, contract_type_id, location_id) VALUES (?,?,?,?,?,?,?,?,?)"
-    private final String UPDATE_WORK_EXPERIENCE = "UPDATE work_experiences SET candidate_id=?, title=?, company_name=?, city=?, currently_work=?, description=?, state_id=?, contract_type_id=?, location_id=? WHERE id=?"
-    private final String DELETE_WORK_EXPERIENCE = "DELETE FROM work_experiences WHERE id=?"
 
     IConnection connection
     IDBService dbService
@@ -59,7 +54,8 @@ class WorkExperienceDAO implements IWorkExperienceDAO {
     List<WorkExperience> getWorkExperiencesByCandidateId(int candidateId) {
         List<WorkExperience> workExperiences = new ArrayList<>()
         try {
-            workExperiences = populateWorkExperiences(GET_WORK_EXPERIENCES_BY_CANDIDATE_ID, candidateId)
+            workExperiences = populateWorkExperiences(WorkExperienceQueries.GET_WORK_EXPERIENCES_BY_CANDIDATE_ID,
+                    candidateId)
         } catch (SQLException e) {
             Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
@@ -85,7 +81,8 @@ class WorkExperienceDAO implements IWorkExperienceDAO {
 
     void insertWorkExperience(WorkExperience workExperience, int candidateId) {
         try {
-            PreparedStatement stmt = sql.connection.prepareStatement(INSERT_WORK_EXPERIENCE, Statement.RETURN_GENERATED_KEYS)
+            PreparedStatement stmt = sql.connection.prepareStatement(WorkExperienceQueries.INSERT_WORK_EXPERIENCE,
+                    Statement.RETURN_GENERATED_KEYS)
             stmt = this.setWorkExperienceStatement(stmt, workExperience, candidateId)
             stmt.executeUpdate()
         } catch (SQLException e) {
@@ -95,7 +92,7 @@ class WorkExperienceDAO implements IWorkExperienceDAO {
 
     void updateWorkExperience(WorkExperience workExperience, int candidateId) {
         try {
-            PreparedStatement stmt = sql.connection.prepareStatement(UPDATE_WORK_EXPERIENCE)
+            PreparedStatement stmt = sql.connection.prepareStatement(WorkExperienceQueries.UPDATE_WORK_EXPERIENCE)
             stmt = this.setWorkExperienceStatement(stmt, workExperience, candidateId)
             stmt.setInt(10, workExperience.id)
             stmt.executeUpdate()
@@ -107,7 +104,7 @@ class WorkExperienceDAO implements IWorkExperienceDAO {
     void deleteWorkExperience(int id) {
         WorkExperience workExperience = new WorkExperience()
         try {
-            PreparedStatement stmt = sql.connection.prepareStatement(GET_WORK_EXPERIENCES_ID)
+            PreparedStatement stmt = sql.connection.prepareStatement(WorkExperienceQueries.GET_WORK_EXPERIENCES_ID)
             stmt.setInt(1, id)
             ResultSet result = stmt.executeQuery()
             while (result.next()) {
@@ -115,7 +112,7 @@ class WorkExperienceDAO implements IWorkExperienceDAO {
             }
 
             if (workExperience.id != null) {
-                stmt = sql.connection.prepareStatement(DELETE_WORK_EXPERIENCE)
+                stmt = sql.connection.prepareStatement(WorkExperienceQueries.DELETE_WORK_EXPERIENCE)
                 stmt.setInt(1, id)
                 stmt.executeUpdate()
                 return

@@ -3,6 +3,7 @@ package com.linketinder.dao.companydao
 
 import com.linketinder.dao.companydao.interfaces.IJobVacancyDAO
 import com.linketinder.dao.companydao.interfaces.IRequiredSkillDAO
+import com.linketinder.dao.companydao.queries.JobVacancyQueries
 import com.linketinder.database.PostgreSqlConnection
 import com.linketinder.database.interfaces.IDBService
 import com.linketinder.database.interfaces.IConnection
@@ -21,15 +22,6 @@ import java.util.logging.Level
 import java.util.logging.Logger
 
 class JobVacancyDAO implements IJobVacancyDAO {
-
-    private final String GET_ALL_JOB_VACANCIES = "SELECT jv.id, jv.title, jv.description, jv.salary, ct.title AS contract_type, lt.title AS location_type FROM job_vacancies AS jv, companies AS c, contract_types AS ct, location_types AS lt WHERE jv.company_id= c.id AND jv.contract_type_id = ct.id AND jv.location_type_id = lt.id"
-    private final String GET_JOB_VACANCY_BY_COMPANY_ID = "SELECT jv.id, jv.title, jv.description, jv.salary, ct.title AS contract_type, lt.title AS location_type FROM job_vacancies AS jv, companies AS c, contract_types AS ct, location_types AS lt WHERE jv.company_id= c.id AND jv.contract_type_id = ct.id AND jv.location_type_id = lt.id AND c.id=?"
-    private final String GET_JOB_VACANCY_BY_ID = "SELECT jv.id, jv.title, jv.description, jv.salary, ct.title AS contract_type, lt.title AS location_type FROM job_vacancies AS jv, companies AS c, contract_types AS ct, location_types AS lt WHERE jv.company_id= c.id AND jv.contract_type_id = ct.id AND jv.location_type_id = lt.id AND jv.id=?"
-    private final String GET_SKILL_BY_JOB_VACANCY_ID = "SELECT id FROM job_vacancy_skills WHERE job_vacancy_id=?"
-    private final String GET_COMPANY_ID = "SELECT company_id FROM job_vacancies WHERE id=?"
-    private final String INSERT_JOB_VACANCY = "INSERT INTO job_vacancies (company_id, title, description, salary, contract_type_id, location_type_id) VALUES (?,?,?,?,?,?)"
-    private final String UPDATE_JOB_VACANCY = "UPDATE job_vacancies SET company_id=?, title=?, description=?, salary=?, contract_type_id=?, location_type_id=? WHERE id=?"
-    private final String DELETE_JOB_VACANCY = "DELETE FROM job_vacancies WHERE id=?"
 
     IDBService dbService
     IConnection connection
@@ -82,7 +74,7 @@ class JobVacancyDAO implements IJobVacancyDAO {
     List<JobVacancy> getAllJobVacancies() {
         List<JobVacancy> jobVacancies = new ArrayList<>()
         try {
-            jobVacancies = this.populateJobVacancies(GET_ALL_JOB_VACANCIES)
+            jobVacancies = this.populateJobVacancies(JobVacancyQueries.GET_ALL_JOB_VACANCIES)
         } catch (SQLException e) {
             Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
@@ -92,7 +84,7 @@ class JobVacancyDAO implements IJobVacancyDAO {
     List<JobVacancy> getJobVacancyByCompanyId(int companyId) {
         List<JobVacancy> jobVacancies = new ArrayList<>()
         try {
-            jobVacancies = this.populateJobVacancies(GET_JOB_VACANCY_BY_COMPANY_ID, companyId)
+            jobVacancies = this.populateJobVacancies(JobVacancyQueries.GET_JOB_VACANCY_BY_COMPANY_ID, companyId)
         } catch (SQLException e) {
             Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
@@ -102,7 +94,7 @@ class JobVacancyDAO implements IJobVacancyDAO {
     JobVacancy getJobVacancyById(int id) {
         JobVacancy jobVacancy = new JobVacancy()
         try {
-            jobVacancy = this.populateJobVacancy(GET_JOB_VACANCY_BY_ID, id)
+            jobVacancy = this.populateJobVacancy(JobVacancyQueries.GET_JOB_VACANCY_BY_ID, id)
         } catch (SQLException e) {
             Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
@@ -131,7 +123,8 @@ class JobVacancyDAO implements IJobVacancyDAO {
 
     void insertJobVacancy(int companyId, JobVacancy jobVacancy) {
         try {
-            PreparedStatement stmt = sql.connection.prepareStatement(INSERT_JOB_VACANCY, Statement.RETURN_GENERATED_KEYS)
+            PreparedStatement stmt = sql.connection.prepareStatement(JobVacancyQueries.INSERT_JOB_VACANCY,
+                    Statement.RETURN_GENERATED_KEYS)
             stmt = this.setJobVancancyStatement(stmt, jobVacancy, companyId)
             stmt.executeUpdate()
 
@@ -148,7 +141,7 @@ class JobVacancyDAO implements IJobVacancyDAO {
 
     private void updateRequiredSkills(JobVacancy jobVacancy) {
         List<Integer> skillsId = new ArrayList<>()
-        sql.eachRow(GET_SKILL_BY_JOB_VACANCY_ID, [jobVacancy.id]) {
+        sql.eachRow(JobVacancyQueries.GET_SKILL_BY_JOB_VACANCY_ID, [jobVacancy.id]) {
             row -> skillsId << row.getInt("id")
         }
 
@@ -167,7 +160,7 @@ class JobVacancyDAO implements IJobVacancyDAO {
     }
 
     private int getCompanyId(JobVacancy jobVacancy) {
-        PreparedStatement stmt = sql.connection.prepareStatement(GET_COMPANY_ID)
+        PreparedStatement stmt = sql.connection.prepareStatement(JobVacancyQueries.GET_COMPANY_ID)
         stmt.setInt(1, jobVacancy.id)
         ResultSet result = stmt.executeQuery()
         while (result.next()) {
@@ -178,7 +171,7 @@ class JobVacancyDAO implements IJobVacancyDAO {
     void updateJobVacancy(JobVacancy jobVacancy) {
         int companyId = getCompanyId(jobVacancy)
         try {
-            PreparedStatement stmt = sql.connection.prepareStatement(UPDATE_JOB_VACANCY)
+            PreparedStatement stmt = sql.connection.prepareStatement(JobVacancyQueries.UPDATE_JOB_VACANCY)
             stmt = this.setJobVancancyStatement(stmt, jobVacancy, companyId)
             stmt.setInt(7, jobVacancy.id)
             stmt.executeUpdate()
@@ -192,7 +185,7 @@ class JobVacancyDAO implements IJobVacancyDAO {
     void deleteJobVacancy(int id) {
         JobVacancy jobVacancy = new JobVacancy()
         try {
-            PreparedStatement stmt = sql.connection.prepareStatement(GET_JOB_VACANCY_BY_ID)
+            PreparedStatement stmt = sql.connection.prepareStatement(JobVacancyQueries.GET_JOB_VACANCY_BY_ID)
             stmt.setInt(1, id)
             ResultSet result = stmt.executeQuery()
             while (result.next()) {
@@ -200,7 +193,7 @@ class JobVacancyDAO implements IJobVacancyDAO {
             }
 
             if (jobVacancy.id != null) {
-                stmt = sql.connection.prepareStatement(DELETE_JOB_VACANCY)
+                stmt = sql.connection.prepareStatement(JobVacancyQueries.DELETE_JOB_VACANCY)
                 stmt.setInt(1, id)
                 stmt.executeUpdate()
                 return

@@ -1,6 +1,7 @@
 package com.linketinder.dao.matchdao
 
 import com.linketinder.dao.matchdao.interfaces.IMatchDAO
+import com.linketinder.dao.matchdao.queries.MatchQueries
 import com.linketinder.database.interfaces.IConnection
 import com.linketinder.model.match.Match
 import com.linketinder.util.ErrorMessages
@@ -12,9 +13,6 @@ import java.util.logging.Level
 import java.util.logging.Logger
 
 class MatchDAO implements IMatchDAO {
-
-    private final String GET_ALL_MATCHES = "SELECT id, candidate_id, company_id, job_vacancy_id FROM matches WHERE company_id IS NOT NULL AND job_vacancy_id IS NOT NULL ORDER BY id"
-    private final String UPDATE_MATCH = "UPDATE matches SET candidate_id=?, company_id=?, job_vacancy_id=? WHERE id=?"
 
     IConnection connection
     Sql sql = connection.instance()
@@ -73,7 +71,7 @@ class MatchDAO implements IMatchDAO {
 
     void updateMatch(Match match) {
         try {
-            PreparedStatement stmt = sql.connection.prepareStatement(UPDATE_MATCH)
+            PreparedStatement stmt = sql.connection.prepareStatement(MatchQueries.UPDATE_MATCH)
             stmt.setInt(1, match.candidateId)
             stmt.setInt(2, match.companyId)
             stmt.setInt(3, match.jobVacancyId)
@@ -87,7 +85,7 @@ class MatchDAO implements IMatchDAO {
     List<Match> getAllMatches() {
         List<Match> matches = new ArrayList<>()
         try {
-            matches = this.populateMatches(GET_ALL_MATCHES)
+            matches = this.populateMatches(MatchQueries.GET_ALL_MATCHES)
         } catch (SQLException e) {
             Logger.getLogger(IConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }

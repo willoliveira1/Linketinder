@@ -6,6 +6,7 @@ import com.linketinder.dao.candidatedao.interfaces.ICandidateSkillDAO
 import com.linketinder.dao.candidatedao.interfaces.ICertificateDAO
 import com.linketinder.dao.candidatedao.interfaces.ILanguageDAO
 import com.linketinder.dao.candidatedao.interfaces.IWorkExperienceDAO
+import com.linketinder.dao.candidatedao.queries.CandidateQueries
 import com.linketinder.database.PostgreSqlConnection
 import com.linketinder.database.interfaces.IDBService
 import com.linketinder.database.interfaces.IConnection
@@ -28,17 +29,6 @@ import java.util.logging.Level
 import java.util.logging.Logger
 
 class CandidateDAO implements ICandidateDAO {
-
-    private final String GET_ALL_CANDIDATES = "SELECT c.id, c.name, c.email, c.city, s.acronym AS state, c.country, c.cep, c.description, c.cpf FROM candidates AS c, states AS s WHERE c.state_id = s.id ORDER BY c.id"
-    private final String GET_CANDIDATE_BY_ID = "SELECT c.id, c.name, c.email, c.city, s.acronym AS state, c.country, c.cep, c.description, c.cpf FROM candidates AS c, states AS s WHERE c.state_id = s.id AND c.id=?"
-    private final String GET_ACADEMIC_EXPERIENCE_ID_BY_CANDIDATE_ID = "SELECT id FROM academic_experiences WHERE candidate_id=?"
-    private final String GET_CERTIFICATE_ID_BY_CANDIDATE_ID = "SELECT id FROM certificates WHERE candidate_id=?"
-    private final String GET_LANGUAGE_ID_BY_CANDIDATE_ID = "SELECT id FROM candidate_languages WHERE candidate_id=?"
-    private final String GET_SKILL_ID_BY_CANDIDATE_ID = "SELECT id FROM candidate_skills WHERE candidate_id=?"
-    private final String GET_WORK_EXPERIENCE_ID_BY_CANDIDATE_ID = "SELECT id FROM work_experiences WHERE candidate_id=?"
-    private final String INSERT_CANDIDATE = "INSERT INTO candidates (name, email, city, state_id, country, cep, description, cpf) VALUES (?,?,?,?,?,?,?,?)"
-    private final String UPDATE_CANDIDATE = "UPDATE candidates SET name=?, email=?, city=?, state_id=?, country=?, cep=?, description=?, cpf=? WHERE id=?"
-    private final String DELETE_CANDIDATE = "DELETE FROM candidates WHERE id=?"
 
     IDBService dbService
     IConnection connection
@@ -105,7 +95,7 @@ class CandidateDAO implements ICandidateDAO {
     List<Candidate> getAllCandidates() {
         List<Candidate> candidates = new ArrayList<>()
         try {
-            candidates = this.populateCandidates(GET_ALL_CANDIDATES)
+            candidates = this.populateCandidates(CandidateQueries.GET_ALL_CANDIDATES)
         } catch (SQLException e) {
             Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
@@ -115,7 +105,7 @@ class CandidateDAO implements ICandidateDAO {
     Candidate getCandidateById(int id) {
         Person candidate = new Candidate()
         try {
-            candidate = this.populateCandidate(GET_CANDIDATE_BY_ID, id)
+            candidate = this.populateCandidate(CandidateQueries.GET_CANDIDATE_BY_ID, id)
         } catch (SQLException e) {
             Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
@@ -167,7 +157,8 @@ class CandidateDAO implements ICandidateDAO {
 
     void insertCandidate(Candidate candidate) {
         try {
-            PreparedStatement stmt = sql.connection.prepareStatement(INSERT_CANDIDATE, Statement.RETURN_GENERATED_KEYS)
+            PreparedStatement stmt = sql.connection.prepareStatement(CandidateQueries.INSERT_CANDIDATE,
+                    Statement.RETURN_GENERATED_KEYS)
             stmt = this.setCandidateStatement(stmt, candidate)
             stmt.executeUpdate()
 
@@ -188,7 +179,7 @@ class CandidateDAO implements ICandidateDAO {
 
     private void updateCandidateCertificates(int id, Candidate candidate) {
         List<Integer> certificatesIds = new ArrayList<>()
-        sql.eachRow(GET_CERTIFICATE_ID_BY_CANDIDATE_ID, [id]) {row ->
+        sql.eachRow(CandidateQueries.GET_CERTIFICATE_ID_BY_CANDIDATE_ID, [id]) {row ->
             certificatesIds << row.getInt("id")
         }
 
@@ -208,7 +199,7 @@ class CandidateDAO implements ICandidateDAO {
 
     private void updateCandidateLanguages(int id, Candidate candidate) {
         List<Integer> languagesIds = new ArrayList<>()
-        sql.eachRow(GET_LANGUAGE_ID_BY_CANDIDATE_ID, [id]) {row ->
+        sql.eachRow(CandidateQueries.GET_LANGUAGE_ID_BY_CANDIDATE_ID, [id]) {row ->
             languagesIds << row.getInt("id")
         }
 
@@ -228,7 +219,7 @@ class CandidateDAO implements ICandidateDAO {
 
     private void updateCandidateSkills(int id, Candidate candidate) {
         List<Integer> skillsIds = new ArrayList<>()
-        sql.eachRow(GET_SKILL_ID_BY_CANDIDATE_ID, [id]) {row ->
+        sql.eachRow(CandidateQueries.GET_SKILL_ID_BY_CANDIDATE_ID, [id]) {row ->
             skillsIds << row.getInt("id")
         }
 
@@ -248,7 +239,7 @@ class CandidateDAO implements ICandidateDAO {
 
     private void updateCandidateAcademicExperiences(int id, Candidate candidate) {
         List<Integer> academicExperiencesIds = new ArrayList<>()
-        sql.eachRow(GET_ACADEMIC_EXPERIENCE_ID_BY_CANDIDATE_ID, [id]) {row ->
+        sql.eachRow(CandidateQueries.GET_ACADEMIC_EXPERIENCE_ID_BY_CANDIDATE_ID, [id]) {row ->
             academicExperiencesIds << row.getInt("id")
         }
 
@@ -269,7 +260,7 @@ class CandidateDAO implements ICandidateDAO {
 
     private void updateCandidateWorkExperiences(int id, Candidate candidate) {
         List<Integer> workExperiencesIds = new ArrayList<>()
-        sql.eachRow(GET_WORK_EXPERIENCE_ID_BY_CANDIDATE_ID, [id]) {row ->
+        sql.eachRow(CandidateQueries.GET_WORK_EXPERIENCE_ID_BY_CANDIDATE_ID, [id]) {row ->
             workExperiencesIds << row.getInt("id")
         }
 
@@ -289,7 +280,7 @@ class CandidateDAO implements ICandidateDAO {
 
     void updateCandidate(int id, Candidate candidate) {
         try {
-            PreparedStatement stmt = sql.connection.prepareStatement(UPDATE_CANDIDATE)
+            PreparedStatement stmt = sql.connection.prepareStatement(CandidateQueries.UPDATE_CANDIDATE)
             stmt = this.setCandidateStatement(stmt, candidate)
             stmt.executeUpdate()
 
@@ -306,7 +297,7 @@ class CandidateDAO implements ICandidateDAO {
     void deleteCandidateById(int id) {
         Person candidate = new Candidate()
         try {
-            PreparedStatement stmt = sql.connection.prepareStatement(GET_CANDIDATE_BY_ID)
+            PreparedStatement stmt = sql.connection.prepareStatement(CandidateQueries.GET_CANDIDATE_BY_ID)
             stmt.setInt(1, id)
             ResultSet result = stmt.executeQuery()
             while (result.next()) {
@@ -314,7 +305,7 @@ class CandidateDAO implements ICandidateDAO {
             }
 
             if (candidate.id != null) {
-                stmt = sql.connection.prepareStatement(DELETE_CANDIDATE)
+                stmt = sql.connection.prepareStatement(CandidateQueries.DELETE_CANDIDATE)
                 stmt.setInt(1, id)
                 stmt.executeUpdate()
                 println "Candidato Removido"
