@@ -1,6 +1,7 @@
 package com.linketinder.dao.candidatedao
 
 import com.linketinder.dao.candidatedao.interfaces.ICertificateDAO
+import com.linketinder.dao.candidatedao.queries.CertificateQueries
 import com.linketinder.database.PostgreSqlConnection
 import com.linketinder.database.interfaces.IConnection
 import com.linketinder.model.candidate.Certificate
@@ -15,12 +16,6 @@ import java.util.logging.Level
 import java.util.logging.Logger
 
 class CertificateDAO implements ICertificateDAO {
-
-    private final String GET_CERTIFICATES_BY_CANDIDATE_ID = "SELECT id, candidate_id, title, duration FROM certificates WHERE candidate_id=? ORDER BY title"
-    private final String GET_CERTIFICATE_BY_ID = "SELECT * FROM certificates WHERE id=?"
-    private final String INSERT_CERTIFICATE = "INSERT INTO certificates (candidate_id, title, duration) VALUES (?,?,?)"
-    private final String UPDATE_CERTIFICATE = "UPDATE certificates SET candidate_id=?, title=?, duration=? WHERE id=?"
-    private final String DELETE_CERTIFICATE = "DELETE FROM certificates WHERE id=?"
 
     IConnection connection
     Sql sql = connection.instance()
@@ -47,7 +42,7 @@ class CertificateDAO implements ICertificateDAO {
     List<Certificate> getCertificatesByCandidateId(int candidateId) {
         List<Certificate> certificates = new ArrayList<>()
         try {
-            certificates = populateCertificates(GET_CERTIFICATES_BY_CANDIDATE_ID, candidateId)
+            certificates = populateCertificates(CertificateQueries.GET_CERTIFICATES_BY_CANDIDATE_ID, candidateId)
         } catch (SQLException e) {
             Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
@@ -63,7 +58,8 @@ class CertificateDAO implements ICertificateDAO {
 
     void insertCertificate(Certificate certificate, int candidateId) {
         try {
-            PreparedStatement stmt = sql.connection.prepareStatement(INSERT_CERTIFICATE, Statement.RETURN_GENERATED_KEYS)
+            PreparedStatement stmt = sql.connection.prepareStatement(CertificateQueries.INSERT_CERTIFICATE,
+                    Statement.RETURN_GENERATED_KEYS)
             stmt = this.setCertificateStatement(stmt, certificate, candidateId)
             stmt.executeUpdate()
         } catch (SQLException e) {
@@ -73,7 +69,7 @@ class CertificateDAO implements ICertificateDAO {
 
     void updateCertificate(Certificate certificate, int candidateId) {
         try {
-            PreparedStatement stmt = sql.connection.prepareStatement(UPDATE_CERTIFICATE)
+            PreparedStatement stmt = sql.connection.prepareStatement(CertificateQueries.UPDATE_CERTIFICATE)
             stmt = this.setCertificateStatement(stmt, certificate, candidateId)
             stmt.setInt(4, certificate.id)
             stmt.executeUpdate()
@@ -85,7 +81,7 @@ class CertificateDAO implements ICertificateDAO {
     void deleteCertificate(int id) {
         Certificate certificate = new Certificate()
         try {
-            PreparedStatement stmt = sql.connection.prepareStatement(GET_CERTIFICATE_BY_ID)
+            PreparedStatement stmt = sql.connection.prepareStatement(CertificateQueries.GET_CERTIFICATE_BY_ID)
             stmt.setInt(1, id)
             ResultSet result = stmt.executeQuery()
             while (result.next()) {
@@ -93,7 +89,7 @@ class CertificateDAO implements ICertificateDAO {
             }
 
             if (certificate.id != null) {
-                stmt = sql.connection.prepareStatement(DELETE_CERTIFICATE)
+                stmt = sql.connection.prepareStatement(CertificateQueries.DELETE_CERTIFICATE)
                 stmt.setInt(1, id)
                 stmt.executeUpdate()
                 return

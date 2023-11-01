@@ -1,6 +1,7 @@
 package com.linketinder.dao.candidatedao
 
 import com.linketinder.dao.candidatedao.interfaces.ILanguageDAO
+import com.linketinder.dao.candidatedao.queries.LanguageQueries
 import com.linketinder.database.PostgreSqlConnection
 import com.linketinder.database.interfaces.IDBService
 import com.linketinder.database.interfaces.IConnection
@@ -17,14 +18,6 @@ import java.util.logging.Level
 import java.util.logging.Logger
 
 class LanguageDAO implements ILanguageDAO {
-
-    private final String GET_LANGUAGES_BY_CANDIDATE_ID = "SELECT cl.id, l.name, p.title FROM candidates AS c, candidate_languages AS cl, languages AS l, proficiences AS p WHERE c.id = cl.candidate_id AND l.id = cl.language_id AND p.id = cl.proficiency_id AND c.id=?"
-    private final String GET_LANGUAGES_BY_ID = "SELECT * FROM candidate_languages WHERE id=?"
-    private final String INSERT_CANDIDATE_LANGUAGE = "INSERT INTO candidate_languages (candidate_id, language_id, proficiency_id) VALUES (?,?,?)"
-    private final String UPDATE_CANDIDATE_LANGUAGE = "UPDATE candidate_languages SET candidate_id=?, language_id=?, proficiency_id=? WHERE id=?"
-    private final String DELETE_CANDIDATE_LANGUAGE = "DELETE FROM candidate_languages WHERE id=?"
-    private final String INSERT_LANGUAGE = "INSERT INTO languages (name) VALUES (?)"
-    private final String GET_LANGUAGE_BY_NAME = "SELECT * FROM languages WHERE name=?"
 
     IConnection connection
     IDBService dbService
@@ -53,7 +46,7 @@ class LanguageDAO implements ILanguageDAO {
     List<Language> getLanguagesByCandidateId(int candidateId) {
         List<Language> languages = new ArrayList<>()
         try {
-            languages = populateLanguages(GET_LANGUAGES_BY_CANDIDATE_ID, candidateId)
+            languages = populateLanguages(LanguageQueries.GET_LANGUAGES_BY_CANDIDATE_ID, candidateId)
         } catch (SQLException e) {
             Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
@@ -71,14 +64,14 @@ class LanguageDAO implements ILanguageDAO {
     }
 
     private void isNewLanguage(Language language) {
-        PreparedStatement stmt = sql.connection.prepareStatement(GET_LANGUAGE_BY_NAME)
+        PreparedStatement stmt = sql.connection.prepareStatement(LanguageQueries.GET_LANGUAGE_BY_NAME)
         stmt.setString(1, language.name)
         ResultSet result = stmt.executeQuery()
 
         if (result.next()) {
             return
         }
-        stmt = sql.connection.prepareStatement(INSERT_LANGUAGE, Statement.RETURN_GENERATED_KEYS)
+        stmt = sql.connection.prepareStatement(LanguageQueries.INSERT_LANGUAGE, Statement.RETURN_GENERATED_KEYS)
         stmt.setString(1, language.name)
         stmt.executeUpdate()
     }
@@ -87,7 +80,8 @@ class LanguageDAO implements ILanguageDAO {
         try {
             this.isNewLanguage(language)
 
-            PreparedStatement stmt = sql.connection.prepareStatement(INSERT_CANDIDATE_LANGUAGE, Statement.RETURN_GENERATED_KEYS)
+            PreparedStatement stmt = sql.connection.prepareStatement(LanguageQueries.INSERT_CANDIDATE_LANGUAGE,
+                    Statement.RETURN_GENERATED_KEYS)
             stmt = this.setCandidateLanguageStatement(stmt, language, candidateId)
             stmt.executeUpdate()
         } catch (SQLException e) {
@@ -99,7 +93,7 @@ class LanguageDAO implements ILanguageDAO {
         try {
             this.isNewLanguage(language)
 
-            PreparedStatement stmt = sql.connection.prepareStatement(UPDATE_CANDIDATE_LANGUAGE)
+            PreparedStatement stmt = sql.connection.prepareStatement(LanguageQueries.UPDATE_CANDIDATE_LANGUAGE)
             stmt = this.setCandidateLanguageStatement(stmt, language, candidateId)
             int languageId = dbService.idFinder("languages", "name", language.getName())
             stmt.setInt(4, languageId)
@@ -112,7 +106,7 @@ class LanguageDAO implements ILanguageDAO {
     void deleteLanguage(int id) {
         Language language = new Language()
         try {
-            PreparedStatement stmt = sql.connection.prepareStatement(GET_LANGUAGES_BY_ID)
+            PreparedStatement stmt = sql.connection.prepareStatement(LanguageQueries.GET_LANGUAGES_BY_ID)
             stmt.setInt(1, id)
             ResultSet result = stmt.executeQuery()
             while (result.next()) {
@@ -120,7 +114,7 @@ class LanguageDAO implements ILanguageDAO {
             }
 
             if (language.id != null) {
-                stmt = sql.connection.prepareStatement(DELETE_CANDIDATE_LANGUAGE)
+                stmt = sql.connection.prepareStatement(LanguageQueries.DELETE_CANDIDATE_LANGUAGE)
                 stmt.setInt(1, id)
                 stmt.executeUpdate()
                 return

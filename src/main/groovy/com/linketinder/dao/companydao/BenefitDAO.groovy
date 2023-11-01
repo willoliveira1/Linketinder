@@ -1,6 +1,7 @@
 package com.linketinder.dao.companydao
 
 import com.linketinder.dao.companydao.interfaces.IBenefitDAO
+import com.linketinder.dao.companydao.queries.BenefitQueries
 import com.linketinder.database.PostgreSqlConnection
 import com.linketinder.database.interfaces.IDBService
 import com.linketinder.database.interfaces.IConnection
@@ -16,14 +17,6 @@ import java.util.logging.Level
 import java.util.logging.Logger
 
 class BenefitDAO implements IBenefitDAO {
-
-    private final String GET_BENEFITS_BY_COMPANY_ID = "SELECT cb.id, c.id AS company_id, b.title FROM companies AS c, company_benefits AS cb, benefits AS b WHERE c.id = cb.company_id AND b.id = cb.benefit_id AND c.id=?"
-    private final String GET_COMPANY_BENEFIT_BY_ID = "SELECT * FROM company_benefits WHERE id=?"
-    private final String INSERT_COMPANY_BENEFIT = "INSERT INTO company_benefits (company_id, benefit_id) VALUES (?,?)"
-    private final String UPDATE_COMPANY_BENEFIT = "UPDATE company_benefits SET company_id=?, benefit_id=? WHERE id=?"
-    private final String DELETE_COMPANY_BENEFIT = "DELETE FROM company_benefits WHERE id=?"
-    private final String INSERT_BENEFIT = "INSERT INTO benefits (title) VALUES (?)"
-    private final String GET_BENEFIT_BY_TITLE = "SELECT * FROM benefits WHERE title=?"
 
     IConnection connection
     IDBService dbService
@@ -51,7 +44,7 @@ class BenefitDAO implements IBenefitDAO {
     List<Benefit> getBenefitsByCompanyId(int companyId) {
         List<Benefit> benefits = new ArrayList<>()
         try {
-            benefits = this.populateBenefits(GET_BENEFITS_BY_COMPANY_ID, companyId)
+            benefits = this.populateBenefits(BenefitQueries.GET_BENEFITS_BY_COMPANY_ID, companyId)
         } catch (SQLException e) {
             Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
@@ -66,14 +59,14 @@ class BenefitDAO implements IBenefitDAO {
     }
 
     private void isNewBenefit(Benefit benefit) {
-        PreparedStatement stmt = sql.connection.prepareStatement(GET_BENEFIT_BY_TITLE)
+        PreparedStatement stmt = sql.connection.prepareStatement(BenefitQueries.GET_BENEFIT_BY_TITLE)
         stmt.setString(1, benefit.title)
         ResultSet result = stmt.executeQuery()
 
         if (result.next()) {
             return
         }
-        stmt = sql.connection.prepareStatement(INSERT_BENEFIT, Statement.RETURN_GENERATED_KEYS)
+        stmt = sql.connection.prepareStatement(BenefitQueries.INSERT_BENEFIT, Statement.RETURN_GENERATED_KEYS)
         stmt.setString(1, benefit.title)
         stmt.executeUpdate()
     }
@@ -82,7 +75,8 @@ class BenefitDAO implements IBenefitDAO {
         try {
             this.isNewBenefit(benefit)
 
-            PreparedStatement stmt = sql.connection.prepareStatement(INSERT_COMPANY_BENEFIT, Statement.RETURN_GENERATED_KEYS)
+            PreparedStatement stmt = sql.connection.prepareStatement(BenefitQueries.INSERT_COMPANY_BENEFIT,
+                    Statement.RETURN_GENERATED_KEYS)
             stmt = this.setBenefitStatement(stmt, benefit, companyId)
             stmt.executeUpdate()
         } catch (SQLException e) {
@@ -94,7 +88,8 @@ class BenefitDAO implements IBenefitDAO {
         try {
             this.isNewBenefit(benefit)
 
-            PreparedStatement stmt = sql.connection.prepareStatement(UPDATE_COMPANY_BENEFIT, companyId, benefit.id)
+            PreparedStatement stmt = sql.connection.prepareStatement(BenefitQueries.UPDATE_COMPANY_BENEFIT,
+                    companyId, benefit.id)
             stmt = this.setBenefitStatement(stmt, benefit, companyId)
             stmt.setInt(3, benefit.id)
             stmt.executeUpdate()
@@ -106,14 +101,14 @@ class BenefitDAO implements IBenefitDAO {
     void deleteBenefit(int id) {
         Benefit benefit = new Benefit()
         try {
-            PreparedStatement stmt = sql.connection.prepareStatement(GET_COMPANY_BENEFIT_BY_ID)
+            PreparedStatement stmt = sql.connection.prepareStatement(BenefitQueries.GET_COMPANY_BENEFIT_BY_ID)
             stmt.setInt(1, id)
             ResultSet result = stmt.executeQuery()
             while (result.next()) {
                 benefit.setId(result.getInt("id"))
             }
             if (benefit.id != null) {
-                stmt = sql.connection.prepareStatement(DELETE_COMPANY_BENEFIT)
+                stmt = sql.connection.prepareStatement(BenefitQueries.DELETE_COMPANY_BENEFIT)
                 stmt.setInt(1, id)
                 stmt.executeUpdate()
                 return

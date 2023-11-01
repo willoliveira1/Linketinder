@@ -1,13 +1,11 @@
 package com.linketinder.dao.candidatedao
 
 import com.linketinder.dao.candidatedao.interfaces.IAcademicExperienceDAO
+import com.linketinder.dao.candidatedao.queries.AcademicExperienceQueries
 import com.linketinder.database.PostgreSqlConnection
-import com.linketinder.database.interfaces.IDBService
-import com.linketinder.database.interfaces.IConnection
-import com.linketinder.model.candidate.CourseStatus
-import com.linketinder.model.candidate.AcademicExperience
-import com.linketinder.util.ErrorMessages
-import com.linketinder.util.NotFoundMessages
+import com.linketinder.database.interfaces.*
+import com.linketinder.model.candidate.*
+import com.linketinder.util.*
 import groovy.sql.Sql
 import java.sql.PreparedStatement
 import java.sql.ResultSet
@@ -17,12 +15,6 @@ import java.util.logging.Level
 import java.util.logging.Logger
 
 class AcademicExperienceDAO implements IAcademicExperienceDAO {
-
-    private final String GET_ACADEMIC_EXPERIENCES_BY_CANDIDATE_ID = "SELECT a.id, a.educational_institution, a.degree_type, a.field_of_study, cs.title FROM candidates AS c, academic_experiences AS a, course_status AS cs WHERE c.id = a.candidate_id AND a.course_status_id = cs.id AND c.id=?"
-    private final String GET_ACADEMIC_EXPERIENCE_BY_ID = "SELECT * FROM academic_experiences WHERE id=?"
-    private final String INSERT_ACADEMIC_EXPERIENCE = "INSERT INTO academic_experiences (candidate_id, educational_institution, degree_type, field_of_study, course_status_id) VALUES (?,?,?,?,?)"
-    private final String UPDATE_ACADEMIC_EXPERIENCE = "UPDATE academic_experiences SET candidate_id=?, educational_institution=?, degree_type=?, field_of_study=?, course_status_id=? WHERE id=?"
-    private final String DELETE_ACADEMIC_EXPERIENCE = "DELETE FROM academic_experiences WHERE id=?"
 
     IConnection connection
     IDBService dbService
@@ -53,7 +45,8 @@ class AcademicExperienceDAO implements IAcademicExperienceDAO {
     List<AcademicExperience> getAcademicExperiencesByCandidateId(int candidateId) {
         List<AcademicExperience> academicExperiences = new ArrayList<>()
         try {
-            academicExperiences = this.populateAcademicExperiences(GET_ACADEMIC_EXPERIENCES_BY_CANDIDATE_ID, candidateId)
+            academicExperiences = this.populateAcademicExperiences(
+                    AcademicExperienceQueries.GET_ACADEMIC_EXPERIENCES_BY_CANDIDATE_ID, candidateId)
         } catch (SQLException e) {
             Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
         }
@@ -74,8 +67,8 @@ class AcademicExperienceDAO implements IAcademicExperienceDAO {
 
     void insertAcademicExperience(AcademicExperience academicExperience, int candidateId) {
         try {
-            PreparedStatement stmt = sql.connection.prepareStatement(INSERT_ACADEMIC_EXPERIENCE, 
-                    Statement.RETURN_GENERATED_KEYS)
+            PreparedStatement stmt = sql.connection.prepareStatement(
+                    AcademicExperienceQueries.INSERT_ACADEMIC_EXPERIENCE, Statement.RETURN_GENERATED_KEYS)
             stmt = this.setAcademicExperienceStatement(stmt, academicExperience, candidateId)
             stmt.executeUpdate()
         } catch (SQLException e) {
@@ -85,7 +78,7 @@ class AcademicExperienceDAO implements IAcademicExperienceDAO {
 
     void updateAcademicExperience(AcademicExperience academicExperience, int candidateId) {
         try {
-            PreparedStatement stmt = sql.connection.prepareStatement(UPDATE_ACADEMIC_EXPERIENCE)
+            PreparedStatement stmt = sql.connection.prepareStatement(AcademicExperienceQueries.UPDATE_ACADEMIC_EXPERIENCE)
             stmt = this.setAcademicExperienceStatement(stmt, academicExperience, candidateId)
             stmt.setInt(6, academicExperience.id)
             stmt.executeUpdate()
@@ -97,7 +90,8 @@ class AcademicExperienceDAO implements IAcademicExperienceDAO {
     void deleteAcademicExperience(int id) {
         AcademicExperience academicExperience = new AcademicExperience()
         try {
-            PreparedStatement stmt = sql.connection.prepareStatement(GET_ACADEMIC_EXPERIENCE_BY_ID)
+            PreparedStatement stmt = sql.connection.prepareStatement(
+                    AcademicExperienceQueries.GET_ACADEMIC_EXPERIENCE_BY_ID)
             stmt.setInt(1, id)
             ResultSet result = stmt.executeQuery()
             while (result.next()) {
@@ -105,7 +99,7 @@ class AcademicExperienceDAO implements IAcademicExperienceDAO {
             }
 
             if (academicExperience.id != null) {
-                stmt = sql.connection.prepareStatement(DELETE_ACADEMIC_EXPERIENCE)
+                stmt = sql.connection.prepareStatement(AcademicExperienceQueries.DELETE_ACADEMIC_EXPERIENCE)
                 stmt.setInt(1, id)
                 stmt.executeUpdate()
                 return
