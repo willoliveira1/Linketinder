@@ -8,7 +8,7 @@ interface IJobVacancyService {
     List<JobVacancy> getAllByCompanyId(int id)
     JobVacancy getById(Integer id)
     void add(Integer companyId, JobVacancy jobVacancy)
-    void update(JobVacancy jobVacancy)
+    void update(int id, JobVacancy jobVacancy)
     void delete(Integer id)
 
 }

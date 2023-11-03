@@ -96,7 +96,7 @@ class CompanyDAO implements ICompanyDAO {
         return company
     }
 
-    private setCompanyStatement(PreparedStatement stmt, Company company) {
+    private setCompanyStatement(PreparedStatement stmt, Company company, boolean isUpdate) {
         int stateId = dbService.idFinder("states", "acronym", company.getState().toString())
         stmt.setString(1, company.name)
         stmt.setString(2, company.getEmail())
@@ -106,6 +106,9 @@ class CompanyDAO implements ICompanyDAO {
         stmt.setString(6, company.getCep())
         stmt.setString(7, company.getDescription())
         stmt.setString(8, company.getCnpj())
+        if (isUpdate) {
+            stmt.setInt(9, company.getId())
+        }
         return stmt
     }
 
@@ -125,7 +128,7 @@ class CompanyDAO implements ICompanyDAO {
         try {
             PreparedStatement stmt = sql.connection.prepareStatement(CompanyQueries.INSERT_COMPANY,
                     Statement.RETURN_GENERATED_KEYS)
-            stmt = this.setCompanyStatement(stmt, company)
+            stmt = this.setCompanyStatement(stmt, company, false)
             stmt.executeUpdate()
 
             ResultSet getCompanyId = stmt.getGeneratedKeys()
@@ -153,17 +156,18 @@ class CompanyDAO implements ICompanyDAO {
 
         company.benefits.each {benefit ->
             if (persistedCompanyBenefits.contains(benefit.id)) {
-                benefitDAO.updateBenefit(id, benefit)
+                benefitDAO.updateBenefit(id, benefit as Benefit)
             } else {
-                benefitDAO.insertBenefit(id, benefit)
+                benefitDAO.insertBenefit(id, benefit as Benefit)
             }
         }
     }
 
     void updateCompany(int id, Company company) {
+        company.id = id
         try {
             PreparedStatement stmt = sql.connection.prepareStatement(CompanyQueries.UPDATE_COMPANY)
-            stmt = this.setCompanyStatement(stmt, company)
+            stmt = this.setCompanyStatement(stmt, company, true)
             stmt.executeUpdate()
 
             this.updateCompanyBenefits(id, company)

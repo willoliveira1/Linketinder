@@ -28,8 +28,8 @@ class JobVacancyService implements IJobVacancyService {
         jobVacancyDAO.insertJobVacancy(companyId, jobVacancy)
     }
 
-    void update(JobVacancy jobVacancy) {
-        jobVacancyDAO.updateJobVacancy(jobVacancy)
+    void update(int id, JobVacancy jobVacancy) {
+        jobVacancyDAO.updateJobVacancy(id, jobVacancy)
     }
 
     void delete(Integer id) {

@@ -152,9 +152,9 @@ class JobVacancyDAO implements IJobVacancyDAO {
 
         jobVacancy.requiredSkills.each {skill ->
             if (persistedSkills.contains(skill.id)) {
-                requiredSkillDAO.updateSkill(skill, jobVacancy.id)
+                requiredSkillDAO.updateSkill(skill as Skill, jobVacancy.id)
             } else {
-                requiredSkillDAO.insertSkill(skill, jobVacancy.id)
+                requiredSkillDAO.insertSkill(skill as Skill, jobVacancy.id)
             }
         }
     }
@@ -168,7 +168,8 @@ class JobVacancyDAO implements IJobVacancyDAO {
         }
     }
 
-    void updateJobVacancy(JobVacancy jobVacancy) {
+    void updateJobVacancy(int id, JobVacancy jobVacancy) {
+        jobVacancy.id = id
         int companyId = getCompanyId(jobVacancy)
         try {
             PreparedStatement stmt = sql.connection.prepareStatement(JobVacancyQueries.UPDATE_JOB_VACANCY)

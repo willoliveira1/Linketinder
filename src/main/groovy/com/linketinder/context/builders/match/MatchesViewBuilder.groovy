@@ -1,7 +1,7 @@
 package com.linketinder.context.builders.match
 
 import com.linketinder.context.builders.interfaces.IMatchesViewBuilder
-import com.linketinder.controller.MatchController
+import com.linketinder.controller.MatchesController
 import com.linketinder.controller.interfaces.IMatchController
 import com.linketinder.dao.matchdao.interfaces.*
 import com.linketinder.database.interfaces.IConnection
@@ -20,6 +20,7 @@ class MatchesViewBuilder implements IMatchesViewBuilder {
 
     ICandidateMatchDAO candidateMatchDAO
     ICompanyMatchDAO companyMatchDAO
+
     IMatchDAO matchDAO
     IMatchController matchController
     IMatchValidation matchValidation
@@ -54,7 +55,7 @@ class MatchesViewBuilder implements IMatchesViewBuilder {
     private void generateMatchController() {
         this.generateDAOs()
         IMatchService matchService = new MatchService(this.matchDAO, this.candidateMatchDAO, this.companyMatchDAO)
-        this.matchController = new MatchController(matchService)
+        this.matchController = new MatchesController(matchService)
     }
 
     IMatchesView build() {
