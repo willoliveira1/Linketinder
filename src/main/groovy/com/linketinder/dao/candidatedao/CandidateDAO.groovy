@@ -99,8 +99,14 @@ class CandidateDAO implements ICandidateDAO {
         return candidate
     }
 
+    private int getStateIdByTitle(String stateTitle) {
+        PreparedStatement stmt = sql.connection.prepareStatement(CandidateQueries.GET_STATE_ID_BY_TITLE)
+        stmt.setString(1, stateTitle)
+        return QueryHelper.idFinder(stmt)
+    }
+
     private PreparedStatement setCandidateStatement(PreparedStatement stmt, Candidate candidate) {
-        int stateId = dbService.idFinder("states", "acronym", candidate.getState().toString())
+        int stateId = this.getStateIdByTitle(candidate.getState().toString())
         stmt.setString(1, candidate.name)
         stmt.setString(2, candidate.getEmail())
         stmt.setString(3, candidate.getCity())

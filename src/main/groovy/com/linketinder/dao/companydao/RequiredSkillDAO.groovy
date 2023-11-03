@@ -3,15 +3,12 @@ package com.linketinder.dao.companydao
 import com.linketinder.dao.companydao.interfaces.IRequiredSkillDAO
 import com.linketinder.dao.companydao.queries.RequiredSkillQueries
 import com.linketinder.database.PostgreSqlConnection
-import com.linketinder.database.interfaces.IDBService
-import com.linketinder.database.interfaces.IConnection
+import com.linketinder.database.interfaces.*
 import com.linketinder.model.shared.Skill
-import com.linketinder.util.ErrorMessages
-import com.linketinder.util.NotFoundMessages
+import com.linketinder.util.*
 import groovy.sql.Sql
 import java.sql.PreparedStatement
 import java.sql.ResultSet
-import java.sql.SQLDataException
 import java.sql.SQLException
 import java.sql.Statement
 import java.util.logging.Level
@@ -55,11 +52,7 @@ class RequiredSkillDAO implements IRequiredSkillDAO {
     private int getSkillIdByTitle(String skillTitle) {
         PreparedStatement stmt = sql.connection.prepareStatement(RequiredSkillQueries.GET_SKILL_ID_BY_TITLE)
         stmt.setString(1, skillTitle)
-        ResultSet result = stmt.executeQuery()
-        while (result.next()) {
-            return result.getInt("id")
-        }
-        throw new SQLDataException("Id não encontrado.")
+        return QueryHelper.idFinder(stmt)
     }
 
     private PreparedStatement setSkillStatement(PreparedStatement stmt, Skill skill, int jobVacancyId) {

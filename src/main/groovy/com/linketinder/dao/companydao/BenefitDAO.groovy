@@ -9,7 +9,6 @@ import com.linketinder.util.*
 import groovy.sql.Sql
 import java.sql.PreparedStatement
 import java.sql.ResultSet
-import java.sql.SQLDataException
 import java.sql.SQLException
 import java.sql.Statement
 import java.util.logging.Level
@@ -53,11 +52,7 @@ class BenefitDAO implements IBenefitDAO {
     private int getBenefitIdByTitle(String benefitTitle) {
         PreparedStatement stmt = sql.connection.prepareStatement(BenefitQueries.GET_BENEFIT_ID_BY_TITLE)
         stmt.setString(1, benefitTitle)
-        ResultSet result = stmt.executeQuery()
-        while (result.next()) {
-            return result.getInt("id")
-        }
-        throw new SQLDataException("Id não encontrado.")
+        return QueryHelper.idFinder(stmt)
     }
 
     private PreparedStatement setBenefitStatement(PreparedStatement stmt, Benefit benefit, int companyId) {

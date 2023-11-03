@@ -3,12 +3,10 @@ package com.linketinder.dao.candidatedao
 import com.linketinder.dao.candidatedao.interfaces.ILanguageDAO
 import com.linketinder.dao.candidatedao.queries.LanguageQueries
 import com.linketinder.database.PostgreSqlConnection
-import com.linketinder.database.interfaces.IDBService
-import com.linketinder.database.interfaces.IConnection
+import com.linketinder.database.interfaces.*
 import com.linketinder.model.candidate.Language
 import com.linketinder.model.shared.Proficiency
-import com.linketinder.util.ErrorMessages
-import com.linketinder.util.NotFoundMessages
+import com.linketinder.util.*
 import groovy.sql.Sql
 import java.sql.PreparedStatement
 import java.sql.ResultSet
@@ -53,10 +51,21 @@ class LanguageDAO implements ILanguageDAO {
         return languages
     }
 
+    private int getLanguageIdByName(String languageTitle) {
+        PreparedStatement stmt = sql.connection.prepareStatement(LanguageQueries.GET_LANGUAGE_ID_BY_NAME)
+        stmt.setString(1, languageTitle)
+        return QueryHelper.idFinder(stmt)
+    }
+
+    private int getProficiencyIdByTitle(String proficiencyTitle) {
+        PreparedStatement stmt = sql.connection.prepareStatement(LanguageQueries.GET_PROFICIENCY_ID_BY_TITLE)
+        stmt.setString(1, proficiencyTitle)
+        return QueryHelper.idFinder(stmt)
+    }
+
     private PreparedStatement setCandidateLanguageStatement(PreparedStatement stmt, Language language, int candidateId) {
-        int languageId = dbService.idFinder("languages", "name", language.getName())
-        int proficiencyId = dbService.idFinder("proficiences", "title",
-                language.getProficiency().toString())
+        int languageId = this.getLanguageIdByName(language.getName())
+        int proficiencyId = this.getProficiencyIdByTitle(language.getProficiency().toString())
         stmt.setInt(1, candidateId)
         stmt.setInt(2, languageId)
         stmt.setInt(3, proficiencyId)
@@ -95,7 +104,7 @@ class LanguageDAO implements ILanguageDAO {
 
             PreparedStatement stmt = sql.connection.prepareStatement(LanguageQueries.UPDATE_CANDIDATE_LANGUAGE)
             stmt = this.setCandidateLanguageStatement(stmt, language, candidateId)
-            int languageId = dbService.idFinder("languages", "name", language.getName())
+            int languageId = this.getLanguageIdByName(language.getName())
             stmt.setInt(4, languageId)
             stmt.executeUpdate()
         } catch (SQLException e) {

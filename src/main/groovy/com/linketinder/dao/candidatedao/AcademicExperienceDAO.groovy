@@ -53,10 +53,15 @@ class AcademicExperienceDAO implements IAcademicExperienceDAO {
         return academicExperiences
     }
 
+    private int getCourseStatusIdByTitle(String courseStatusTitle) {
+        PreparedStatement stmt = sql.connection.prepareStatement(AcademicExperienceQueries.GET_COURSE_STATUS_ID_BY_TITLE)
+        stmt.setString(1, courseStatusTitle)
+        return QueryHelper.idFinder(stmt)
+    }
+
     private PreparedStatement setAcademicExperienceStatement(PreparedStatement stmt,
                                                              AcademicExperience academicExperience, int candidateId) {
-        int courseStatusId = dbService.idFinder("course_status", "title",
-                academicExperience.getStatus().toString())
+        int courseStatusId = this.getCourseStatusIdByTitle(academicExperience.getStatus().toString())
         stmt.setInt(1, candidateId)
         stmt.setString(2, academicExperience.educationalInstitution)
         stmt.setString(3, academicExperience.degreeType)

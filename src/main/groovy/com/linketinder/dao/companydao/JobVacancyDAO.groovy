@@ -10,7 +10,6 @@ import com.linketinder.util.*
 import groovy.sql.Sql
 import java.sql.PreparedStatement
 import java.sql.ResultSet
-import java.sql.SQLDataException
 import java.sql.SQLException
 import java.sql.Statement
 import java.util.logging.Level
@@ -105,21 +104,13 @@ class JobVacancyDAO implements IJobVacancyDAO {
     private int getContractTypeIdByTitle(String contractTypeTitle) {
         PreparedStatement stmt = sql.connection.prepareStatement(JobVacancyQueries.GET_CONTRACT_TYPE_ID_BY_TITLE)
         stmt.setString(1, contractTypeTitle)
-        ResultSet result = stmt.executeQuery()
-        while (result.next()) {
-            return result.getInt("id")
-        }
-        throw new SQLDataException("Id não encontrado.")
+        return QueryHelper.idFinder(stmt)
     }
 
     private int getLocationTypeIdByTitle(String locationTypeTitle) {
         PreparedStatement stmt = sql.connection.prepareStatement(JobVacancyQueries.GET_LOCATION_TYPE_ID_BY_TITLE)
         stmt.setString(1, locationTypeTitle)
-        ResultSet result = stmt.executeQuery()
-        while (result.next()) {
-            return result.getInt("id")
-        }
-        throw new SQLDataException("Id não encontrado.")
+        return QueryHelper.idFinder(stmt)
     }
 
     private PreparedStatement setJobVancancyStatement(PreparedStatement stmt, JobVacancy jobVacancy, int companyId ) {

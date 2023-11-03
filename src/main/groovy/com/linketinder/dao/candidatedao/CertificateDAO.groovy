@@ -5,8 +5,7 @@ import com.linketinder.dao.candidatedao.queries.CertificateQueries
 import com.linketinder.database.PostgreSqlConnection
 import com.linketinder.database.interfaces.IConnection
 import com.linketinder.model.candidate.Certificate
-import com.linketinder.util.ErrorMessages
-import com.linketinder.util.NotFoundMessages
+import com.linketinder.util.*
 import groovy.sql.Sql
 import java.sql.PreparedStatement
 import java.sql.ResultSet

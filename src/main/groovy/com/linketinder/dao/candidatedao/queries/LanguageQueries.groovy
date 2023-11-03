@@ -17,6 +17,18 @@ class LanguageQueries {
             WHERE id=?;
     """
 
+    static final String GET_LANGUAGE_ID_BY_NAME = """
+        SELECT id 
+            FROM languages 
+            WHERE name=?;
+    """
+
+    static final String GET_PROFICIENCY_ID_BY_TITLE = """
+        SELECT id 
+            FROM proficiences
+            WHERE title=?;
+    """
+
     static final String INSERT_CANDIDATE_LANGUAGE = """
         INSERT INTO candidate_languages (candidate_id, language_id, proficiency_id) 
             VALUES (?,?,?);

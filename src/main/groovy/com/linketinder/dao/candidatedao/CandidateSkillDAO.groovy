@@ -3,12 +3,9 @@ package com.linketinder.dao.candidatedao
 import com.linketinder.dao.candidatedao.interfaces.ICandidateSkillDAO
 import com.linketinder.dao.candidatedao.queries.CandidateSkillQueries
 import com.linketinder.database.PostgreSqlConnection
-import com.linketinder.database.interfaces.IDBService
-import com.linketinder.database.interfaces.IConnection
-import com.linketinder.model.shared.Proficiency
-import com.linketinder.model.shared.Skill
-import com.linketinder.util.ErrorMessages
-import com.linketinder.util.NotFoundMessages
+import com.linketinder.database.interfaces.*
+import com.linketinder.model.shared.*
+import com.linketinder.util.*
 import groovy.sql.Sql
 import java.sql.PreparedStatement
 import java.sql.ResultSet
@@ -53,9 +50,21 @@ class CandidateSkillDAO implements ICandidateSkillDAO {
         return skills
     }
 
+    private int getSkillIdByTitle(String skillTitle) {
+        PreparedStatement stmt = sql.connection.prepareStatement(CandidateSkillQueries.GET_SKILL_ID_BY_TITLE)
+        stmt.setString(1, skillTitle)
+        return QueryHelper.idFinder(stmt)
+    }
+
+    private int getProficiencyIdByTitle(String proficiencyTitle) {
+        PreparedStatement stmt = sql.connection.prepareStatement(CandidateSkillQueries.GET_PROFICIENCY_ID_BY_TITLE)
+        stmt.setString(1, proficiencyTitle)
+        return QueryHelper.idFinder(stmt)
+    }
+
     private PreparedStatement setCandidateSkillStatement(PreparedStatement stmt, Skill skill, int candidateId) {
-        int skillId = dbService.idFinder("skills", "title", skill.getTitle())
-        int proficiencyId = dbService.idFinder("proficiences", "title", skill.getProficiency().toString())
+        int skillId = this.getSkillIdByTitle(skill.getTitle())
+        int proficiencyId = this.getProficiencyIdByTitle(skill.getProficiency().toString())
         stmt.setInt(1, candidateId)
         stmt.setInt(2, skillId)
         stmt.setInt(3, proficiencyId)

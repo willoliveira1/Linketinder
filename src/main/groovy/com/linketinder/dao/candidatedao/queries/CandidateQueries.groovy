@@ -46,6 +46,12 @@ class CandidateQueries {
             WHERE candidate_id=?;
     """
 
+    static final String GET_STATE_ID_BY_TITLE = """
+        SELECT id 
+            FROM states 
+            WHERE acronym=?;
+    """
+
     static final String INSERT_CANDIDATE = """
         INSERT INTO candidates (name, email, city, state_id, country, cep, description, cpf) 
             VALUES (?,?,?,?,?,?,?,?);
