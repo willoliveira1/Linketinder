@@ -4,8 +4,7 @@ Projeto para desenvolver uma aplicação chamada Linketinder.
 
 ## Features
 * Criado aplicação em Groovy.
-* CRUD de Candidatos e Empresas.
-* Criado persistência em .json para manter os Candidatos e Empresas salvas e facilitar o uso.
+* CRUD de Candidatos, Empresas e Vagas.
 * Criado frontend em Typescript, HTML e CSS.
 * Feito a modelagem do Banco de Dados, gerado no dbDesigner (https://www.dbdesigner.net/).
 * Criado Banco de Dados PostgreSQL, estrutura esta no create-and-populate-database.sql.
@@ -16,6 +15,7 @@ Projeto para desenvolver uma aplicação chamada Linketinder.
 * Adicionado Regex as validações.
 * Adicionado funcionalidade de Curtida e Match.
 * Adicionada persistência do Match no BD.
+* Transformado projeto em uma REST API utilizando Tomcat e Servlets.
 
 * Utilizado as boas práticas do Clean Code e do SOLID.
    * Refatorado as classes para que os métodos fiquem mais sucintos, sem repetição de código.
@@ -31,10 +31,10 @@ Projeto para desenvolver uma aplicação chamada Linketinder.
 <img src="MER.png">
 
 ### Como executar
-O arquivo que tem o método main para a execução do projeto está em:
+Para executar a API é necessário executar o servidor do Tomcat.
 
-* Pasta: src/main/groovy/com/linketinder
-* Arquivo: Main.groovy
+### REST API com Tomcat e Servlets
+Foi feito uma API sem frameworks, utilizando Tomcat 8.5.95 e Javax Servlet.
 
 ## Tecnologias
 * Groovy
