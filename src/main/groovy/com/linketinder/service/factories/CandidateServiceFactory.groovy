@@ -2,8 +2,7 @@ package com.linketinder.service.factories
 
 import com.linketinder.context.builders.candidate.*
 import com.linketinder.dao.candidatedao.interfaces.*
-import com.linketinder.database.ConnectionFactory
-import com.linketinder.database.DBService
+import com.linketinder.database.*
 import com.linketinder.database.interfaces.*
 import com.linketinder.service.CandidateService
 import com.linketinder.service.interfaces.ICandidateService

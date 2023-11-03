@@ -1,8 +1,6 @@
 package com.linketinder.service
 
-import com.linketinder.dao.matchdao.interfaces.ICandidateMatchDAO
-import com.linketinder.dao.matchdao.interfaces.ICompanyMatchDAO
-import com.linketinder.dao.matchdao.interfaces.IMatchDAO
+import com.linketinder.dao.matchdao.interfaces.*
 import com.linketinder.model.match.Match
 import com.linketinder.service.interfaces.IMatchService
 
