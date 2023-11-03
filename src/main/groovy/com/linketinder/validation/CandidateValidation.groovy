@@ -28,7 +28,7 @@ class CandidateValidation implements ICandidateValidation {
         }
     }
 
-    static void execute(Candidate candidate) {
+    void execute(Candidate candidate) {
         this.validateEmail(candidate.email)
         this.validateCep(candidate.cep)
         this.validateCpf(candidate.cpf)

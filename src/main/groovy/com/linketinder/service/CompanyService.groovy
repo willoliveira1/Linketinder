@@ -5,7 +5,7 @@ import com.linketinder.dao.companydao.interfaces.ICompanyDAO
 import com.linketinder.model.company.Company
 import com.linketinder.service.interfaces.ICompanyService
 import com.linketinder.util.*
-import com.linketinder.validation.CompanyValidation
+import com.linketinder.validation.interfaces.ICompanyValidation
 import groovy.json.JsonSlurper
 import javax.servlet.AsyncContext
 import javax.servlet.ServletException
@@ -16,12 +16,15 @@ import java.util.logging.Logger
 
 class CompanyService implements ICompanyService {
 
-    ICompanyDAO companyDAO
     Gson gson = new Gson()
     JsonSlurper jsonSlurper = new JsonSlurper()
 
-    CompanyService(ICompanyDAO companyDAO) {
+    ICompanyDAO companyDAO
+    ICompanyValidation validation
+
+    CompanyService(ICompanyDAO companyDAO, ICompanyValidation validation) {
         this.companyDAO = companyDAO
+        this.validation = validation
     }
 
     void get(HttpServletRequest req, HttpServletResponse resp) {
@@ -67,7 +70,7 @@ class CompanyService implements ICompanyService {
         req.setCharacterEncoding("UTF-8")
         AsyncContext asyncContext = req.startAsync()
         Company company = jsonSlurper.parse(req.getReader()) as Company
-        CompanyValidation.execute(company)
+        validation.execute(company)
 
         Thread task = new Thread({
             try {
@@ -86,7 +89,7 @@ class CompanyService implements ICompanyService {
         req.setCharacterEncoding("UTF-8")
         AsyncContext asyncContext = req.startAsync()
         Company company = jsonSlurper.parse(req.getReader()) as Company
-        CompanyValidation.execute(company)
+        validation.execute(company)
 
         Thread task = new Thread({
             if (path.size() > PathSizes.BAR_SIZE) {

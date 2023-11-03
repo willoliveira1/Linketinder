@@ -5,7 +5,7 @@ import com.linketinder.dao.candidatedao.interfaces.ICandidateDAO
 import com.linketinder.model.candidate.Candidate
 import com.linketinder.service.interfaces.ICandidateService
 import com.linketinder.util.*
-import com.linketinder.validation.CandidateValidation
+import com.linketinder.validation.interfaces.ICandidateValidation
 import groovy.json.JsonSlurper
 import javax.servlet.AsyncContext
 import javax.servlet.ServletException
@@ -16,12 +16,15 @@ import java.util.logging.Logger
 
 class CandidateService implements ICandidateService {
 
-    ICandidateDAO candidateDAO
     Gson gson = new Gson()
     JsonSlurper jsonSlurper = new JsonSlurper()
 
-    CandidateService(ICandidateDAO candidateDAO) {
+    ICandidateDAO candidateDAO
+    ICandidateValidation validation
+
+    CandidateService(ICandidateDAO candidateDAO, ICandidateValidation validation) {
         this.candidateDAO = candidateDAO
+        this.validation = validation
     }
 
     void get(HttpServletRequest req, HttpServletResponse resp) {
@@ -67,7 +70,7 @@ class CandidateService implements ICandidateService {
         req.setCharacterEncoding("UTF-8")
         AsyncContext asyncContext = req.startAsync()
         Candidate candidate = jsonSlurper.parse(req.getReader()) as Candidate
-        CandidateValidation.execute(candidate)
+        validation.execute(candidate)
 
         Thread task = new Thread({
             try {
@@ -86,7 +89,7 @@ class CandidateService implements ICandidateService {
         req.setCharacterEncoding("UTF-8")
         AsyncContext asyncContext = req.startAsync()
         Candidate candidate = jsonSlurper.parse(req.getReader()) as Candidate
-        CandidateValidation.execute(candidate)
+        validation.execute(candidate)
 
         Thread task = new Thread({
             if (path.size() > PathSizes.BAR_SIZE) {

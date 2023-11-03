@@ -28,7 +28,7 @@ class CompanyValidation implements ICompanyValidation {
         }
     }
 
-    static void execute(Company company) {
+    void execute(Company company) {
         this.validateEmail(company.email)
         this.validateCep(company.cep)
         this.validateCnpj(company.cnpj)

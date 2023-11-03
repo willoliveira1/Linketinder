@@ -1,6 +1,8 @@
 package com.linketinder.validation.interfaces
 
-interface ICandidateValidation extends IPersonValidation {
+import com.linketinder.model.candidate.Candidate
+
+interface ICandidateValidation extends IPersonValidation<Candidate> {
 
     void validateCpf(String cpf)
 

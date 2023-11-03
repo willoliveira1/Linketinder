@@ -1,21 +1,20 @@
 package com.linketinder.service.factories
 
-import com.linketinder.builders.candidate.AcademicExperienceDAOBuilder
-import com.linketinder.builders.candidate.CandidateDAOBuilder
-import com.linketinder.builders.candidate.CandidateSkillDAOBuilder
-import com.linketinder.builders.candidate.CertificateDAOBuilder
-import com.linketinder.builders.candidate.LanguageDAOBuilder
-import com.linketinder.builders.candidate.WorkExperienceDAOBuilder
+import com.linketinder.builders.candidate.*
 import com.linketinder.dao.candidatedao.interfaces.*
 import com.linketinder.database.*
 import com.linketinder.database.interfaces.*
 import com.linketinder.service.CandidateService
 import com.linketinder.service.interfaces.ICandidateService
+import com.linketinder.validation.CandidateValidation
+import com.linketinder.validation.interfaces.ICandidateValidation
 
 class CandidateServiceFactory {
 
     static ICandidateService createCandidateService() {
         IConnection connection = ConnectionFactory.createConnection("POSTGRESQL")
+
+        ICandidateValidation validation = new CandidateValidation()
 
         IAcademicExperienceDAO academicExperienceDAO = new AcademicExperienceDAOBuilder()
                 .withConnection(connection)
@@ -46,7 +45,7 @@ class CandidateServiceFactory {
                 .withWorkExperienceDAO(workExperienceDAO)
                 .build()
 
-        return new CandidateService(candidateDAO)
+        return new CandidateService(candidateDAO, validation)
     }
 
 }
