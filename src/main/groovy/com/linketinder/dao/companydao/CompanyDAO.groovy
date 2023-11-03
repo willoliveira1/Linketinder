@@ -1,22 +1,17 @@
 package com.linketinder.dao.companydao
 
-import com.linketinder.dao.companydao.interfaces.IBenefitDAO
-import com.linketinder.dao.companydao.interfaces.ICompanyDAO
-import com.linketinder.dao.companydao.interfaces.IJobVacancyDAO
+import com.linketinder.dao.companydao.interfaces.*
 import com.linketinder.dao.companydao.queries.CompanyQueries
 import com.linketinder.database.PostgreSqlConnection
-import com.linketinder.database.interfaces.IDBService
-import com.linketinder.database.interfaces.IConnection
-import com.linketinder.model.company.Benefit
-import com.linketinder.model.company.Company
+import com.linketinder.database.interfaces.*
+import com.linketinder.model.company.*
 import com.linketinder.model.jobvacancy.JobVacancy
-import com.linketinder.model.shared.Person
-import com.linketinder.model.shared.State
-import com.linketinder.util.ErrorMessages
-import com.linketinder.util.NotFoundMessages
+import com.linketinder.model.shared.*
+import com.linketinder.util.*
 import groovy.sql.Sql
 import java.sql.PreparedStatement
 import java.sql.ResultSet
+import java.sql.SQLDataException
 import java.sql.SQLException
 import java.sql.Statement
 import java.util.logging.Level
@@ -96,8 +91,18 @@ class CompanyDAO implements ICompanyDAO {
         return company
     }
 
+    private int getStateIdByTitle(String stateTitle) {
+        PreparedStatement stmt = sql.connection.prepareStatement(CompanyQueries.GET_STATE_ID_BY_TITLE)
+        stmt.setString(1, stateTitle)
+        ResultSet result = stmt.executeQuery()
+        while (result.next()) {
+            return result.getInt("id")
+        }
+        throw new SQLDataException("Id não encontrado.")
+    }
+
     private setCompanyStatement(PreparedStatement stmt, Company company, boolean isUpdate) {
-        int stateId = dbService.idFinder("states", "acronym", company.getState().toString())
+        int stateId = this.getStateIdByTitle(company.getState().toString())
         stmt.setString(1, company.name)
         stmt.setString(2, company.getEmail())
         stmt.setString(3, company.getCity())

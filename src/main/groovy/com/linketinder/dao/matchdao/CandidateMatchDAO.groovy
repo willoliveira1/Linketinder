@@ -1,7 +1,6 @@
 package com.linketinder.dao.matchdao
 
-import com.linketinder.dao.matchdao.interfaces.ICandidateMatchDAO
-import com.linketinder.dao.matchdao.interfaces.IMatchDAO
+import com.linketinder.dao.matchdao.interfaces.*
 import com.linketinder.dao.matchdao.queries.CandidateMatchQueries
 import com.linketinder.database.PostgreSqlConnection
 import com.linketinder.database.interfaces.IConnection

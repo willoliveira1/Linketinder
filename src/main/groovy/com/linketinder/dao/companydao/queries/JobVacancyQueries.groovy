@@ -40,6 +40,18 @@ class JobVacancyQueries {
             WHERE id=?;
     """
 
+    static final String GET_CONTRACT_TYPE_ID_BY_TITLE = """
+        SELECT id 
+            FROM contract_types 
+            WHERE title=?;
+    """
+
+    static final String GET_LOCATION_TYPE_ID_BY_TITLE = """
+        SELECT id 
+            FROM location_types 
+            WHERE title=?;
+    """
+
     static final String INSERT_JOB_VACANCY = """
         INSERT INTO job_vacancies (company_id, title, description, salary, contract_type_id, location_type_id) 
             VALUES (?,?,?,?,?,?);

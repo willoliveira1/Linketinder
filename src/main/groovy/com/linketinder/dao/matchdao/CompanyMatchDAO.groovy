@@ -1,14 +1,12 @@
 package com.linketinder.dao.matchdao
 
-import com.linketinder.dao.matchdao.interfaces.ICompanyMatchDAO
-import com.linketinder.dao.matchdao.interfaces.IMatchDAO
+import com.linketinder.dao.matchdao.interfaces.*
 import com.linketinder.dao.matchdao.queries.CompanyMatchQueries
 import com.linketinder.database.PostgreSqlConnection
 import com.linketinder.database.interfaces.IConnection
 import com.linketinder.model.match.Match
 import com.linketinder.util.ErrorMessages
 import groovy.sql.Sql
-
 import java.sql.PreparedStatement
 import java.sql.SQLException
 import java.sql.Statement

@@ -11,6 +11,7 @@ import com.linketinder.util.NotFoundMessages
 import groovy.sql.Sql
 import java.sql.PreparedStatement
 import java.sql.ResultSet
+import java.sql.SQLDataException
 import java.sql.SQLException
 import java.sql.Statement
 import java.util.logging.Level
@@ -51,8 +52,18 @@ class RequiredSkillDAO implements IRequiredSkillDAO {
         return skills
     }
 
+    private int getSkillIdByTitle(String skillTitle) {
+        PreparedStatement stmt = sql.connection.prepareStatement(RequiredSkillQueries.GET_SKILL_ID_BY_TITLE)
+        stmt.setString(1, skillTitle)
+        ResultSet result = stmt.executeQuery()
+        while (result.next()) {
+            return result.getInt("id")
+        }
+        throw new SQLDataException("Id não encontrado.")
+    }
+
     private PreparedStatement setSkillStatement(PreparedStatement stmt, Skill skill, int jobVacancyId) {
-        int skillId = dbService.idFinder("skills", "title", skill.getTitle())
+        int skillId = this.getSkillIdByTitle(skill.getTitle())
         stmt.setInt(1, jobVacancyId)
         stmt.setInt(2, skillId)
         return stmt

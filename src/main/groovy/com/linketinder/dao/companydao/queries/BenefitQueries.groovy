@@ -22,6 +22,12 @@ class BenefitQueries {
             WHERE title=?;
     """
 
+    static final String GET_BENEFIT_ID_BY_TITLE = """
+        SELECT id 
+            FROM benefits 
+            WHERE title=?;
+    """
+
     static final String INSERT_COMPANY_BENEFIT = """
         INSERT INTO company_benefits (company_id, benefit_id) 
             VALUES (?,?);
