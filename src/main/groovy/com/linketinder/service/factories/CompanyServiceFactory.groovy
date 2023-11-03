@@ -11,26 +11,21 @@ class CompanyServiceFactory {
 
     static ICompanyService createCompanyService() {
         IConnection connection = ConnectionFactory.createConnection("POSTGRESQL")
-        IDBService dbService = new DBService(connection)
 
         IRequiredSkillDAO requiredSkillDAO = new RequiredSkillDAOBuilder()
-                .withDBService(dbService)
                 .withConnection(connection)
                 .build()
 
         IJobVacancyDAO jobVacancyDAO = new JobVacancyDAOBuilder()
-                .withDBService(dbService)
                 .withConnection(connection)
                 .withRequiredSkillDAO(requiredSkillDAO)
                 .build()
 
         IBenefitDAO benefitDAO = new BenefitDAOBuilder()
-                .withDBService(dbService)
                 .withConnection(connection)
                 .build()
 
         ICompanyDAO companyDAO = new CompanyDAOBuilder()
-                .withDBService(dbService)
                 .withConnection(connection)
                 .withBenefitDAO(benefitDAO)
                 .withJobVacancyDAO(jobVacancyDAO)

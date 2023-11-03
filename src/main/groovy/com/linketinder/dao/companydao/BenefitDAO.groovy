@@ -17,11 +17,9 @@ import java.util.logging.Logger
 class BenefitDAO implements IBenefitDAO {
 
     IConnection connection
-    IDBService dbService
     Sql sql = connection.instance()
 
-    BenefitDAO(IDBService dbService, IConnection connection) {
-        this.dbService = dbService
+    BenefitDAO(IConnection connection) {
         this.connection = connection
     }
 

@@ -17,11 +17,9 @@ import java.util.logging.Logger
 class RequiredSkillDAO implements IRequiredSkillDAO {
 
     IConnection connection
-    IDBService dbService
     Sql sql = connection.instance()
 
-    RequiredSkillDAO(IDBService dbService, IConnection connection) {
-        this.dbService = dbService
+    RequiredSkillDAO(IConnection connection) {
         this.connection = connection
     }
 

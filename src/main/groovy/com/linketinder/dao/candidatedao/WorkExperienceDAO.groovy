@@ -19,11 +19,9 @@ import java.util.logging.Logger
 class WorkExperienceDAO implements IWorkExperienceDAO {
 
     IConnection connection
-    IDBService dbService
     Sql sql = connection.instance()
 
-    WorkExperienceDAO(IDBService dbService, IConnection connection) {
-        this.dbService = dbService
+    WorkExperienceDAO(IConnection connection) {
         this.connection = connection
     }
 

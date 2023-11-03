@@ -1,20 +1,13 @@
 package com.linketinder.context.builders.candidate
 
-import com.linketinder.context.builders.interfaces.IDAOBuilder
+import com.linketinder.context.builders.interfaces.IBaseDAOBuilder
 import com.linketinder.dao.candidatedao.LanguageDAO
 import com.linketinder.dao.candidatedao.interfaces.ILanguageDAO
 import com.linketinder.database.interfaces.*
 
-class LanguageDAOBuilder implements IDAOBuilder<ILanguageDAO> {
+class LanguageDAOBuilder implements IBaseDAOBuilder<ILanguageDAO> {
 
     IConnection connection
-    IDBService dbService
-
-    @Override
-    LanguageDAOBuilder withDBService(IDBService dbService) {
-        this.dbService = dbService
-        return this
-    }
 
     @Override
     LanguageDAOBuilder withConnection(IConnection connection) {
@@ -24,7 +17,7 @@ class LanguageDAOBuilder implements IDAOBuilder<ILanguageDAO> {
 
     @Override
     ILanguageDAO build() {
-        return new LanguageDAO(this.dbService, this.connection)
+        return new LanguageDAO(this.connection)
     }
 
 }

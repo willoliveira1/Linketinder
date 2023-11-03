@@ -1,20 +1,13 @@
 package com.linketinder.context.builders.candidate
 
-import com.linketinder.context.builders.interfaces.IDAOBuilder
+import com.linketinder.context.builders.interfaces.IBaseDAOBuilder
 import com.linketinder.dao.candidatedao.WorkExperienceDAO
 import com.linketinder.dao.candidatedao.interfaces.IWorkExperienceDAO
 import com.linketinder.database.interfaces.*
 
-class WorkExperienceDAOBuilder implements IDAOBuilder<IWorkExperienceDAO> {
+class WorkExperienceDAOBuilder implements IBaseDAOBuilder<IWorkExperienceDAO> {
 
     IConnection connection
-    IDBService dbService
-
-    @Override
-    WorkExperienceDAOBuilder withDBService(IDBService dbService) {
-        this.dbService = dbService
-        return this
-    }
 
     @Override
     WorkExperienceDAOBuilder withConnection(IConnection connection) {
@@ -24,7 +17,7 @@ class WorkExperienceDAOBuilder implements IDAOBuilder<IWorkExperienceDAO> {
 
     @Override
     IWorkExperienceDAO build() {
-        return new WorkExperienceDAO(this.dbService, this.connection)
+        return new WorkExperienceDAO(this.connection)
     }
 
 }

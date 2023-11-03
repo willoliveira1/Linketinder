@@ -1,21 +1,13 @@
 package com.linketinder.context.builders.company
 
-import com.linketinder.context.builders.interfaces.IDAOBuilder
+import com.linketinder.context.builders.interfaces.IBaseDAOBuilder
 import com.linketinder.dao.companydao.BenefitDAO
 import com.linketinder.dao.companydao.interfaces.IBenefitDAO
 import com.linketinder.database.interfaces.IConnection
-import com.linketinder.database.interfaces.IDBService
 
-class BenefitDAOBuilder implements IDAOBuilder<IBenefitDAO> {
+class BenefitDAOBuilder implements IBaseDAOBuilder<IBenefitDAO> {
 
     IConnection connection
-    IDBService dbService
-
-    @Override
-    BenefitDAOBuilder withDBService(IDBService dbService) {
-        this.dbService = dbService
-        return this
-    }
 
     @Override
     BenefitDAOBuilder withConnection(IConnection connection) {
@@ -25,7 +17,7 @@ class BenefitDAOBuilder implements IDAOBuilder<IBenefitDAO> {
 
     @Override
     IBenefitDAO build() {
-        return new BenefitDAO(this.dbService, this.connection)
+        return new BenefitDAO(this.connection)
     }
 
 }

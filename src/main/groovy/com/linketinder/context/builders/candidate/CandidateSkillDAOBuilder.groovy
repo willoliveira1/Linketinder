@@ -1,20 +1,13 @@
 package com.linketinder.context.builders.candidate
 
-import com.linketinder.context.builders.interfaces.IDAOBuilder
+import com.linketinder.context.builders.interfaces.IBaseDAOBuilder
 import com.linketinder.dao.candidatedao.CandidateSkillDAO
 import com.linketinder.dao.candidatedao.interfaces.ICandidateSkillDAO
 import com.linketinder.database.interfaces.*
 
-class CandidateSkillDAOBuilder implements IDAOBuilder<ICandidateSkillDAO> {
+class CandidateSkillDAOBuilder implements IBaseDAOBuilder<ICandidateSkillDAO> {
 
     IConnection connection
-    IDBService dbService
-
-    @Override
-    CandidateSkillDAOBuilder withDBService(IDBService dbService) {
-        this.dbService = dbService
-        return this
-    }
 
     @Override
     CandidateSkillDAOBuilder withConnection(IConnection connection) {
@@ -24,7 +17,7 @@ class CandidateSkillDAOBuilder implements IDAOBuilder<ICandidateSkillDAO> {
 
     @Override
     ICandidateSkillDAO build() {
-        return new CandidateSkillDAO(this.dbService, this.connection)
+        return new CandidateSkillDAO(this.connection)
     }
 
 }

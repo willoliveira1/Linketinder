@@ -17,7 +17,6 @@ import java.util.logging.Logger
 
 class CandidateDAO implements ICandidateDAO {
 
-    IDBService dbService
     IConnection connection
     ICertificateDAO certificateDAO
     ILanguageDAO languageDAO
@@ -26,10 +25,9 @@ class CandidateDAO implements ICandidateDAO {
     IWorkExperienceDAO workExperienceDAO
     Sql sql = connection.instance()
 
-    CandidateDAO(IDBService dbService, IConnection connection, ICertificateDAO certificateDAO,
+    CandidateDAO(IConnection connection, ICertificateDAO certificateDAO,
                  ILanguageDAO languageDAO, ICandidateSkillDAO skillDAO, IAcademicExperienceDAO academicExperienceDAO,
                  IWorkExperienceDAO workExperienceDAO) {
-        this.dbService = dbService
         this.connection = connection
         this.certificateDAO = certificateDAO
         this.languageDAO = languageDAO

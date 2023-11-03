@@ -2,12 +2,12 @@ package com.linketinder.context.builders.interfaces
 
 import com.linketinder.dao.candidatedao.interfaces.*
 
-interface ICandidateDAOBuilder extends IDAOBuilder<ICandidateDAO> {
+interface ICandidateDAOBuilder extends IBaseDAOBuilder<ICandidateDAO> {
 
-    IDAOBuilder<ICandidateDAO> withAcademicExperienceDAO(IAcademicExperienceDAO academicExperienceDAO)
-    IDAOBuilder<ICandidateDAO> withCandidateSkillDAO(ICandidateSkillDAO candidateSkillDAO)
-    IDAOBuilder<ICandidateDAO> withLanguageDAO(ILanguageDAO languageDAO)
-    IDAOBuilder<ICandidateDAO> withWorkExperienceDAO(IWorkExperienceDAO workExperienceDAO)
-    IDAOBuilder<ICandidateDAO> withCertificateDAO(ICertificateDAO certificateDAO)
+    IBaseDAOBuilder<ICandidateDAO> withAcademicExperienceDAO(IAcademicExperienceDAO academicExperienceDAO)
+    IBaseDAOBuilder<ICandidateDAO> withCandidateSkillDAO(ICandidateSkillDAO candidateSkillDAO)
+    IBaseDAOBuilder<ICandidateDAO> withLanguageDAO(ILanguageDAO languageDAO)
+    IBaseDAOBuilder<ICandidateDAO> withWorkExperienceDAO(IWorkExperienceDAO workExperienceDAO)
+    IBaseDAOBuilder<ICandidateDAO> withCertificateDAO(ICertificateDAO certificateDAO)
 
 }

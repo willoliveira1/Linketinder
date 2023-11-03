@@ -8,17 +8,10 @@ import com.linketinder.database.interfaces.*
 class CompanyDAOBuilder implements ICompanyDAOBuilder {
 
     IConnection connection
-    IDBService dbService
 
     IBenefitDAO benefitDAO
     IJobVacancyDAO jobVacancyDAO
     IRequiredSkillDAO requiredSkillDAO
-
-    @Override
-    CompanyDAOBuilder withDBService(IDBService dbService) {
-        this.dbService = dbService
-        return this
-    }
 
     @Override
     CompanyDAOBuilder withConnection(IConnection connection) {
@@ -47,7 +40,6 @@ class CompanyDAOBuilder implements ICompanyDAOBuilder {
     @Override
     ICompanyDAO build() {
         return new CompanyDAO(
-            this.dbService,
             this.connection,
             this.benefitDAO,
             this.jobVacancyDAO

@@ -7,15 +7,8 @@ import com.linketinder.database.interfaces.*
 
 class JobVacancyDAOBuilder implements IJobVacancyDAOBuilder {
 
-    IDBService dbService
     IConnection connection
     IRequiredSkillDAO requiredSkillDAO
-
-    @Override
-    JobVacancyDAOBuilder withDBService(IDBService dbService) {
-        this.dbService = dbService
-        return this
-    }
 
     @Override
     JobVacancyDAOBuilder withConnection(IConnection connection) {
@@ -31,6 +24,6 @@ class JobVacancyDAOBuilder implements IJobVacancyDAOBuilder {
 
     @Override
     IJobVacancyDAO build() {
-        return new JobVacancyDAO(this.dbService, this.connection, this.requiredSkillDAO)
+        return new JobVacancyDAO(this.connection, this.requiredSkillDAO)
     }
 }

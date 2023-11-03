@@ -18,11 +18,9 @@ import java.util.logging.Logger
 class LanguageDAO implements ILanguageDAO {
 
     IConnection connection
-    IDBService dbService
     Sql sql = connection.instance()
 
-    LanguageDAO(IDBService dbService, IConnection connection) {
-        this.dbService = dbService
+    LanguageDAO(IConnection connection) {
         this.connection = connection
     }
 

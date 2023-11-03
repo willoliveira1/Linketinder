@@ -1,20 +1,13 @@
 package com.linketinder.context.builders.company
 
-import com.linketinder.context.builders.interfaces.IDAOBuilder
+import com.linketinder.context.builders.interfaces.IBaseDAOBuilder
 import com.linketinder.dao.companydao.RequiredSkillDAO
 import com.linketinder.dao.companydao.interfaces.IRequiredSkillDAO
 import com.linketinder.database.interfaces.*
 
-class RequiredSkillDAOBuilder implements IDAOBuilder<IRequiredSkillDAO> {
+class RequiredSkillDAOBuilder implements IBaseDAOBuilder<IRequiredSkillDAO> {
 
     IConnection connection
-    IDBService dbService
-
-    @Override
-    RequiredSkillDAOBuilder withDBService(IDBService dbService) {
-        this.dbService = dbService
-        return this
-    }
 
     @Override
     RequiredSkillDAOBuilder withConnection(IConnection connection) {
@@ -24,7 +17,7 @@ class RequiredSkillDAOBuilder implements IDAOBuilder<IRequiredSkillDAO> {
 
     @Override
     IRequiredSkillDAO build() {
-        return new RequiredSkillDAO(this.dbService, this.connection)
+        return new RequiredSkillDAO(this.connection)
     }
 
 }

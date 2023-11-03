@@ -17,13 +17,11 @@ import java.util.logging.Logger
 
 class JobVacancyDAO implements IJobVacancyDAO {
 
-    IDBService dbService
     IConnection connection
     IRequiredSkillDAO requiredSkillDAO
     Sql sql = connection.instance()
 
-    JobVacancyDAO(IDBService dbService, IConnection connection, IRequiredSkillDAO requiredSkillDAO) {
-        this.dbService = dbService
+    JobVacancyDAO(IConnection connection, IRequiredSkillDAO requiredSkillDAO) {
         this.connection = connection
         this.requiredSkillDAO = requiredSkillDAO
     }

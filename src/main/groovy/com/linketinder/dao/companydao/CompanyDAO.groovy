@@ -18,15 +18,13 @@ import java.util.logging.Logger
 
 class CompanyDAO implements ICompanyDAO {
 
-    IDBService dbService
     IConnection connection
     IBenefitDAO benefitDAO
     IJobVacancyDAO jobVacancyDAO
     Sql sql = connection.instance()
 
-    CompanyDAO(IDBService dbService, IConnection connection, IBenefitDAO benefitDAO,
+    CompanyDAO(IConnection connection, IBenefitDAO benefitDAO,
                IJobVacancyDAO jobVacancyDAO) {
-        this.dbService = dbService
         this.connection = connection
         this.benefitDAO = benefitDAO
         this.jobVacancyDAO = jobVacancyDAO

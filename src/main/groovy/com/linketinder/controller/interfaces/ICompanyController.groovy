@@ -1,6 +1,9 @@
 package com.linketinder.controller.interfaces
 
-import com.linketinder.model.company.Company
 
-interface ICompanyController extends IController<Company> {
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
+
+interface ICompanyController {
+
 }

@@ -17,11 +17,9 @@ import java.util.logging.Logger
 class AcademicExperienceDAO implements IAcademicExperienceDAO {
 
     IConnection connection
-    IDBService dbService
     Sql sql = connection.instance()
 
-    AcademicExperienceDAO(IDBService dbService, IConnection connection) {
-        this.dbService = dbService
+    AcademicExperienceDAO(IConnection connection) {
         this.connection = connection
     }
 

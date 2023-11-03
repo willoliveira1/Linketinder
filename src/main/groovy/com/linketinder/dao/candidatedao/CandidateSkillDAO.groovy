@@ -17,11 +17,9 @@ import java.util.logging.Logger
 class CandidateSkillDAO implements ICandidateSkillDAO {
 
     IConnection connection
-    IDBService dbService
     Sql sql = connection.instance()
 
-    CandidateSkillDAO(IDBService dbService, IConnection connection) {
-        this.dbService = dbService
+    CandidateSkillDAO(IConnection connection) {
         this.connection = connection
     }
 
