@@ -78,7 +78,7 @@ class MatchDAO implements IMatchDAO {
             stmt.setInt(4, match.id)
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(IConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(IConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
     }
 
@@ -87,7 +87,7 @@ class MatchDAO implements IMatchDAO {
         try {
             matches = this.populateMatches(MatchQueries.GET_ALL_MATCHES)
         } catch (SQLException e) {
-            Logger.getLogger(IConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(IConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
         return matches
     }

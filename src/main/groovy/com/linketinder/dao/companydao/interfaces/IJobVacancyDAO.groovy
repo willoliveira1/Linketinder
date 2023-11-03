@@ -8,7 +8,7 @@ interface IJobVacancyDAO {
     List<JobVacancy> getJobVacancyByCompanyId(int companyId)
     JobVacancy getJobVacancyById(int id)
     void insertJobVacancy(int companyId, JobVacancy jobVacancy)
-    void updateJobVacancy(JobVacancy jobVacancy)
+    void updateJobVacancy(int id, JobVacancy jobVacancy)
     void deleteJobVacancy(int id)
 
 }

@@ -3,11 +3,9 @@ package com.linketinder.dao.companydao
 import com.linketinder.dao.companydao.interfaces.IRequiredSkillDAO
 import com.linketinder.dao.companydao.queries.RequiredSkillQueries
 import com.linketinder.database.PostgreSqlConnection
-import com.linketinder.database.interfaces.IDBService
-import com.linketinder.database.interfaces.IConnection
+import com.linketinder.database.interfaces.*
 import com.linketinder.model.shared.Skill
-import com.linketinder.util.ErrorMessages
-import com.linketinder.util.NotFoundMessages
+import com.linketinder.util.*
 import groovy.sql.Sql
 import java.sql.PreparedStatement
 import java.sql.ResultSet
@@ -19,11 +17,9 @@ import java.util.logging.Logger
 class RequiredSkillDAO implements IRequiredSkillDAO {
 
     IConnection connection
-    IDBService dbService
     Sql sql = connection.instance()
 
-    RequiredSkillDAO(IDBService dbService, IConnection connection) {
-        this.dbService = dbService
+    RequiredSkillDAO(IConnection connection) {
         this.connection = connection
     }
 
@@ -46,13 +42,19 @@ class RequiredSkillDAO implements IRequiredSkillDAO {
         try {
             skills = this.populateSkills(RequiredSkillQueries.GET_SKILLS_BY_JOB_VACANCY_ID, jobVacancyId)
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
         return skills
     }
 
+    private int getSkillIdByTitle(String skillTitle) {
+        PreparedStatement stmt = sql.connection.prepareStatement(RequiredSkillQueries.GET_SKILL_ID_BY_TITLE)
+        stmt.setString(1, skillTitle)
+        return QueryHelper.idFinder(stmt)
+    }
+
     private PreparedStatement setSkillStatement(PreparedStatement stmt, Skill skill, int jobVacancyId) {
-        int skillId = dbService.idFinder("skills", "title", skill.getTitle())
+        int skillId = this.getSkillIdByTitle(skill.getTitle())
         stmt.setInt(1, jobVacancyId)
         stmt.setInt(2, skillId)
         return stmt
@@ -80,7 +82,7 @@ class RequiredSkillDAO implements IRequiredSkillDAO {
             stmt = this.setSkillStatement(stmt, skill, jobVacancyId)
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
     }
 
@@ -93,7 +95,7 @@ class RequiredSkillDAO implements IRequiredSkillDAO {
             stmt.setInt(3, skill.id)
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
     }
 
@@ -114,7 +116,7 @@ class RequiredSkillDAO implements IRequiredSkillDAO {
                 return
             }
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
         println NotFoundMessages.SKILL
     }

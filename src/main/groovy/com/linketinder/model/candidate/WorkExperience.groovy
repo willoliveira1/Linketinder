@@ -1,7 +1,6 @@
 package com.linketinder.model.candidate
 
-import com.linketinder.model.jobvacancy.ContractType
-import com.linketinder.model.jobvacancy.LocationType
+import com.linketinder.model.jobvacancy.*
 import com.linketinder.model.shared.State
 import groovy.transform.TupleConstructor
 

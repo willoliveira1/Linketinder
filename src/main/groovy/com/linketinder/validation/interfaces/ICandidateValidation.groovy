@@ -1,17 +1,9 @@
 package com.linketinder.validation.interfaces
 
-import com.linketinder.model.candidate.CourseStatus
-import com.linketinder.model.jobvacancy.ContractType
-import com.linketinder.model.jobvacancy.LocationType
-import com.linketinder.model.shared.Proficiency
+import com.linketinder.model.candidate.Candidate
 
-interface ICandidateValidation extends IPersonValidation {
+interface ICandidateValidation extends IPersonValidation<Candidate> {
 
-    String validateCpf()
-    CourseStatus validateCourseStatus()
-    ContractType validateContractType()
-    LocationType validateLocationType()
-    Proficiency validateProficiency()
-    boolean validateCurrentlyWork()
+    void validateCpf(String cpf)
 
 }

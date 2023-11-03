@@ -1,19 +1,13 @@
 package com.linketinder.dao.companydao
 
-import com.linketinder.dao.companydao.interfaces.IBenefitDAO
-import com.linketinder.dao.companydao.interfaces.ICompanyDAO
-import com.linketinder.dao.companydao.interfaces.IJobVacancyDAO
+import com.linketinder.dao.companydao.interfaces.*
 import com.linketinder.dao.companydao.queries.CompanyQueries
 import com.linketinder.database.PostgreSqlConnection
-import com.linketinder.database.interfaces.IDBService
-import com.linketinder.database.interfaces.IConnection
-import com.linketinder.model.company.Benefit
-import com.linketinder.model.company.Company
+import com.linketinder.database.interfaces.*
+import com.linketinder.model.company.*
 import com.linketinder.model.jobvacancy.JobVacancy
-import com.linketinder.model.shared.Person
-import com.linketinder.model.shared.State
-import com.linketinder.util.ErrorMessages
-import com.linketinder.util.NotFoundMessages
+import com.linketinder.model.shared.*
+import com.linketinder.util.*
 import groovy.sql.Sql
 import java.sql.PreparedStatement
 import java.sql.ResultSet
@@ -24,15 +18,13 @@ import java.util.logging.Logger
 
 class CompanyDAO implements ICompanyDAO {
 
-    IDBService dbService
     IConnection connection
     IBenefitDAO benefitDAO
     IJobVacancyDAO jobVacancyDAO
     Sql sql = connection.instance()
 
-    CompanyDAO(IDBService dbService, IConnection connection, IBenefitDAO benefitDAO,
+    CompanyDAO(IConnection connection, IBenefitDAO benefitDAO,
                IJobVacancyDAO jobVacancyDAO) {
-        this.dbService = dbService
         this.connection = connection
         this.benefitDAO = benefitDAO
         this.jobVacancyDAO = jobVacancyDAO
@@ -81,7 +73,7 @@ class CompanyDAO implements ICompanyDAO {
         try {
             companies = this.populateCompanies(CompanyQueries.GET_ALL_COMPANIES)
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
         return companies
     }
@@ -91,13 +83,19 @@ class CompanyDAO implements ICompanyDAO {
         try {
             company = this.populateCompany(CompanyQueries.GET_COMPANY_BY_ID, id)
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
         return company
     }
 
-    private setCompanyStatement(PreparedStatement stmt, Company company) {
-        int stateId = dbService.idFinder("states", "acronym", company.getState().toString())
+    private int getStateIdByTitle(String stateTitle) {
+        PreparedStatement stmt = sql.connection.prepareStatement(CompanyQueries.GET_STATE_ID_BY_TITLE)
+        stmt.setString(1, stateTitle)
+        return QueryHelper.idFinder(stmt)
+    }
+
+    private setCompanyStatement(PreparedStatement stmt, Company company, boolean isUpdate) {
+        int stateId = this.getStateIdByTitle(company.getState().toString())
         stmt.setString(1, company.name)
         stmt.setString(2, company.getEmail())
         stmt.setString(3, company.getCity())
@@ -106,6 +104,9 @@ class CompanyDAO implements ICompanyDAO {
         stmt.setString(6, company.getCep())
         stmt.setString(7, company.getDescription())
         stmt.setString(8, company.getCnpj())
+        if (isUpdate) {
+            stmt.setInt(9, company.getId())
+        }
         return stmt
     }
 
@@ -125,7 +126,7 @@ class CompanyDAO implements ICompanyDAO {
         try {
             PreparedStatement stmt = sql.connection.prepareStatement(CompanyQueries.INSERT_COMPANY,
                     Statement.RETURN_GENERATED_KEYS)
-            stmt = this.setCompanyStatement(stmt, company)
+            stmt = this.setCompanyStatement(stmt, company, false)
             stmt.executeUpdate()
 
             ResultSet getCompanyId = stmt.getGeneratedKeys()
@@ -136,7 +137,7 @@ class CompanyDAO implements ICompanyDAO {
             this.insertJobVacancies(company)
             this.insertBenefits(company)
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
     }
 
@@ -153,22 +154,23 @@ class CompanyDAO implements ICompanyDAO {
 
         company.benefits.each {benefit ->
             if (persistedCompanyBenefits.contains(benefit.id)) {
-                benefitDAO.updateBenefit(id, benefit)
+                benefitDAO.updateBenefit(id, benefit as Benefit)
             } else {
-                benefitDAO.insertBenefit(id, benefit)
+                benefitDAO.insertBenefit(id, benefit as Benefit)
             }
         }
     }
 
     void updateCompany(int id, Company company) {
+        company.id = id
         try {
             PreparedStatement stmt = sql.connection.prepareStatement(CompanyQueries.UPDATE_COMPANY)
-            stmt = this.setCompanyStatement(stmt, company)
+            stmt = this.setCompanyStatement(stmt, company, true)
             stmt.executeUpdate()
 
             this.updateCompanyBenefits(id, company)
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
     }
 
@@ -189,7 +191,7 @@ class CompanyDAO implements ICompanyDAO {
                 return
             }
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
         println NotFoundMessages.COMPANY
     }

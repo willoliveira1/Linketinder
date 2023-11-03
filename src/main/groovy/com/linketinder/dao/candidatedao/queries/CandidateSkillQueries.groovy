@@ -17,6 +17,18 @@ class CandidateSkillQueries {
             WHERE id=?;
     """
 
+    static final String GET_SKILL_ID_BY_TITLE = """
+        SELECT id 
+            FROM skills 
+            WHERE title=?;
+    """
+
+    static final String GET_PROFICIENCY_ID_BY_TITLE = """
+        SELECT id 
+            FROM proficiences 
+            WHERE title=?;
+    """
+
     static final String INSERT_CANDIDATE_SKILL = """
         INSERT INTO candidate_skills (candidate_id, skill_id, proficiency_id) 
             VALUES (?,?,?);

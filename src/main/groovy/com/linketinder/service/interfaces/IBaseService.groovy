@@ -1,11 +1,13 @@
 package com.linketinder.service.interfaces
 
-interface IBaseService<T> {
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 
-    List<T> getAll()
-    T getById(Integer id)
-    void add(T t)
-    void update(Integer id, T t)
-    void delete(Integer id)
+interface IBaseService {
+
+    void get(HttpServletRequest req, HttpServletResponse resp)
+    void add(HttpServletRequest req, HttpServletResponse resp)
+    void update(HttpServletRequest req, HttpServletResponse resp)
+    void delete(HttpServletRequest req, HttpServletResponse resp)
 
 }

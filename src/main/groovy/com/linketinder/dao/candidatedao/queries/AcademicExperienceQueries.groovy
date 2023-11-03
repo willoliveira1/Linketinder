@@ -16,6 +16,12 @@ class AcademicExperienceQueries {
             WHERE id=?;
     """
 
+    static final String GET_COURSE_STATUS_ID_BY_TITLE = """
+        SELECT id 
+            FROM course_status 
+            WHERE title=?;
+    """
+
     static final String INSERT_ACADEMIC_EXPERIENCE = """
         INSERT INTO academic_experiences (candidate_id, educational_institution, degree_type, field_of_study, course_status_id) 
             VALUES (?,?,?,?,?);

@@ -1,14 +1,12 @@
 package com.linketinder.dao.matchdao
 
-import com.linketinder.dao.matchdao.interfaces.ICompanyMatchDAO
-import com.linketinder.dao.matchdao.interfaces.IMatchDAO
+import com.linketinder.dao.matchdao.interfaces.*
 import com.linketinder.dao.matchdao.queries.CompanyMatchQueries
 import com.linketinder.database.PostgreSqlConnection
 import com.linketinder.database.interfaces.IConnection
 import com.linketinder.model.match.Match
 import com.linketinder.util.ErrorMessages
 import groovy.sql.Sql
-
 import java.sql.PreparedStatement
 import java.sql.SQLException
 import java.sql.Statement
@@ -34,7 +32,7 @@ class CompanyMatchDAO implements ICompanyMatchDAO {
             stmt.setInt(2, companyId)
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
     }
 
@@ -44,7 +42,7 @@ class CompanyMatchDAO implements ICompanyMatchDAO {
             match = matchDAO.populateMatch(CompanyMatchQueries.GET_MATCH_BY_CANDIDATE_ID_AND_COMPANY_ID,
                     candidateId, companyId)
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
         boolean likeExist = match.getId() != null
         return likeExist
@@ -61,7 +59,7 @@ class CompanyMatchDAO implements ICompanyMatchDAO {
                 }
             }
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
 
         boolean existCandidateLike = this.isExistentCompanyLike(companyId, candidateId)
@@ -77,7 +75,7 @@ class CompanyMatchDAO implements ICompanyMatchDAO {
         try {
             matches = matchDAO.populateMatches(CompanyMatchQueries.GET_ALL_MATCHES_BY_COMPANY_ID, companyId)
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
         return matches
     }

@@ -22,6 +22,12 @@ class CompanyQueries {
             WHERE company_id=?;
     """
 
+    static final String GET_STATE_ID_BY_TITLE = """
+        SELECT id 
+            FROM states 
+            WHERE acronym=?;
+    """
+
     static final String INSERT_COMPANY = """
         INSERT INTO companies (name, email, city, state_id, country, cep, description, cnpj) 
             VALUES (?,?,?,?,?,?,?,?);

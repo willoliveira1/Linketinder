@@ -1,18 +1,12 @@
 package com.linketinder.dao.companydao
 
-
-import com.linketinder.dao.companydao.interfaces.IJobVacancyDAO
-import com.linketinder.dao.companydao.interfaces.IRequiredSkillDAO
+import com.linketinder.dao.companydao.interfaces.*
 import com.linketinder.dao.companydao.queries.JobVacancyQueries
 import com.linketinder.database.PostgreSqlConnection
-import com.linketinder.database.interfaces.IDBService
-import com.linketinder.database.interfaces.IConnection
-import com.linketinder.model.jobvacancy.JobVacancy
-import com.linketinder.model.jobvacancy.ContractType
-import com.linketinder.model.jobvacancy.LocationType
+import com.linketinder.database.interfaces.*
+import com.linketinder.model.jobvacancy.*
 import com.linketinder.model.shared.Skill
-import com.linketinder.util.ErrorMessages
-import com.linketinder.util.NotFoundMessages
+import com.linketinder.util.*
 import groovy.sql.Sql
 import java.sql.PreparedStatement
 import java.sql.ResultSet
@@ -23,13 +17,11 @@ import java.util.logging.Logger
 
 class JobVacancyDAO implements IJobVacancyDAO {
 
-    IDBService dbService
     IConnection connection
     IRequiredSkillDAO requiredSkillDAO
     Sql sql = connection.instance()
 
-    JobVacancyDAO(IDBService dbService, IConnection connection, IRequiredSkillDAO requiredSkillDAO) {
-        this.dbService = dbService
+    JobVacancyDAO(IConnection connection, IRequiredSkillDAO requiredSkillDAO) {
         this.connection = connection
         this.requiredSkillDAO = requiredSkillDAO
     }
@@ -76,7 +68,7 @@ class JobVacancyDAO implements IJobVacancyDAO {
         try {
             jobVacancies = this.populateJobVacancies(JobVacancyQueries.GET_ALL_JOB_VACANCIES)
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
         return jobVacancies
     }
@@ -86,7 +78,7 @@ class JobVacancyDAO implements IJobVacancyDAO {
         try {
             jobVacancies = this.populateJobVacancies(JobVacancyQueries.GET_JOB_VACANCY_BY_COMPANY_ID, companyId)
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
         return jobVacancies
     }
@@ -96,7 +88,7 @@ class JobVacancyDAO implements IJobVacancyDAO {
         try {
             jobVacancy = this.populateJobVacancy(JobVacancyQueries.GET_JOB_VACANCY_BY_ID, id)
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
         return jobVacancy
     }
@@ -107,11 +99,21 @@ class JobVacancyDAO implements IJobVacancyDAO {
         }
     }
 
+    private int getContractTypeIdByTitle(String contractTypeTitle) {
+        PreparedStatement stmt = sql.connection.prepareStatement(JobVacancyQueries.GET_CONTRACT_TYPE_ID_BY_TITLE)
+        stmt.setString(1, contractTypeTitle)
+        return QueryHelper.idFinder(stmt)
+    }
+
+    private int getLocationTypeIdByTitle(String locationTypeTitle) {
+        PreparedStatement stmt = sql.connection.prepareStatement(JobVacancyQueries.GET_LOCATION_TYPE_ID_BY_TITLE)
+        stmt.setString(1, locationTypeTitle)
+        return QueryHelper.idFinder(stmt)
+    }
+
     private PreparedStatement setJobVancancyStatement(PreparedStatement stmt, JobVacancy jobVacancy, int companyId ) {
-        int contractTypeId = dbService.idFinder("contract_types", "title",
-                jobVacancy.getContractType().toString())
-        int locationTypeId = dbService.idFinder("location_types", "title",
-                jobVacancy.getLocationType().toString())
+        int contractTypeId = this.getContractTypeIdByTitle(jobVacancy.getContractType().toString())
+        int locationTypeId = this.getLocationTypeIdByTitle(jobVacancy.getLocationType().toString())
         stmt.setInt(1, companyId)
         stmt.setString(2, jobVacancy.title)
         stmt.setString(3, jobVacancy.description)
@@ -135,7 +137,7 @@ class JobVacancyDAO implements IJobVacancyDAO {
 
             this.insertRequiredSkills(jobVacancy)
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
     }
 
@@ -152,9 +154,9 @@ class JobVacancyDAO implements IJobVacancyDAO {
 
         jobVacancy.requiredSkills.each {skill ->
             if (persistedSkills.contains(skill.id)) {
-                requiredSkillDAO.updateSkill(skill, jobVacancy.id)
+                requiredSkillDAO.updateSkill(skill as Skill, jobVacancy.id)
             } else {
-                requiredSkillDAO.insertSkill(skill, jobVacancy.id)
+                requiredSkillDAO.insertSkill(skill as Skill, jobVacancy.id)
             }
         }
     }
@@ -168,7 +170,8 @@ class JobVacancyDAO implements IJobVacancyDAO {
         }
     }
 
-    void updateJobVacancy(JobVacancy jobVacancy) {
+    void updateJobVacancy(int id, JobVacancy jobVacancy) {
+        jobVacancy.id = id
         int companyId = getCompanyId(jobVacancy)
         try {
             PreparedStatement stmt = sql.connection.prepareStatement(JobVacancyQueries.UPDATE_JOB_VACANCY)
@@ -178,7 +181,7 @@ class JobVacancyDAO implements IJobVacancyDAO {
 
             this.updateRequiredSkills(jobVacancy)
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
     }
 
@@ -199,7 +202,7 @@ class JobVacancyDAO implements IJobVacancyDAO {
                 return
             }
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
         println NotFoundMessages.JOB_VACANCY
     }

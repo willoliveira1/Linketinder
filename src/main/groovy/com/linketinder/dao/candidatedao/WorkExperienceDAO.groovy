@@ -3,14 +3,11 @@ package com.linketinder.dao.candidatedao
 import com.linketinder.dao.candidatedao.interfaces.IWorkExperienceDAO
 import com.linketinder.dao.candidatedao.queries.WorkExperienceQueries
 import com.linketinder.database.PostgreSqlConnection
-import com.linketinder.database.interfaces.IDBService
-import com.linketinder.database.interfaces.IConnection
+import com.linketinder.database.interfaces.*
 import com.linketinder.model.candidate.WorkExperience
-import com.linketinder.model.jobvacancy.ContractType
-import com.linketinder.model.jobvacancy.LocationType
+import com.linketinder.model.jobvacancy.*
 import com.linketinder.model.shared.State
-import com.linketinder.util.ErrorMessages
-import com.linketinder.util.NotFoundMessages
+import com.linketinder.util.*
 import groovy.sql.Sql
 import java.sql.PreparedStatement
 import java.sql.ResultSet
@@ -22,11 +19,9 @@ import java.util.logging.Logger
 class WorkExperienceDAO implements IWorkExperienceDAO {
 
     IConnection connection
-    IDBService dbService
     Sql sql = connection.instance()
 
-    WorkExperienceDAO(IDBService dbService, IConnection connection) {
-        this.dbService = dbService
+    WorkExperienceDAO(IConnection connection) {
         this.connection = connection
     }
 
@@ -57,16 +52,34 @@ class WorkExperienceDAO implements IWorkExperienceDAO {
             workExperiences = populateWorkExperiences(WorkExperienceQueries.GET_WORK_EXPERIENCES_BY_CANDIDATE_ID,
                     candidateId)
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
         return workExperiences
     }
 
+    private int getStateIdByTitle(String stateTitle) {
+        PreparedStatement stmt = sql.connection.prepareStatement(WorkExperienceQueries.GET_STATE_ID_BY_TITLE)
+        stmt.setString(1, stateTitle)
+        return QueryHelper.idFinder(stmt)
+    }
+
+    private int getContractTypeIdByTitle(String contractTypeTitle) {
+        PreparedStatement stmt = sql.connection.prepareStatement(WorkExperienceQueries.GET_CONTRACT_TYPE_ID_BY_TITLE)
+        stmt.setString(1, contractTypeTitle)
+        return QueryHelper.idFinder(stmt)
+    }
+
+    private int getLocationTypeIdByTitle(String locationTypeTitle) {
+        PreparedStatement stmt = sql.connection.prepareStatement(WorkExperienceQueries.GET_LOCATION_TYPE_ID_BY_TITLE)
+        stmt.setString(1, locationTypeTitle)
+        return QueryHelper.idFinder(stmt)
+    }
+
     private PreparedStatement setWorkExperienceStatement(PreparedStatement stmt, WorkExperience workExperience,
                                                          int candidateId) {
-        int workStateId = dbService.idFinder("states", "acronym", workExperience.getState().toString())
-        int contractTypeId = dbService.idFinder("contract_types", "title", workExperience.getContractType().toString())
-        int locationTypeId = dbService.idFinder("location_types", "title", workExperience.getLocationType().toString())
+        int workStateId = this.getStateIdByTitle(workExperience.getState().toString())
+        int contractTypeId = this.getContractTypeIdByTitle(workExperience.getContractType().toString())
+        int locationTypeId = this.getLocationTypeIdByTitle(workExperience.getLocationType().toString())
         stmt.setInt(1, candidateId)
         stmt.setString(2, workExperience.title)
         stmt.setString(3, workExperience.companyName)
@@ -86,7 +99,7 @@ class WorkExperienceDAO implements IWorkExperienceDAO {
             stmt = this.setWorkExperienceStatement(stmt, workExperience, candidateId)
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
     }
 
@@ -97,7 +110,7 @@ class WorkExperienceDAO implements IWorkExperienceDAO {
             stmt.setInt(10, workExperience.id)
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
     }
 
@@ -118,7 +131,7 @@ class WorkExperienceDAO implements IWorkExperienceDAO {
                 return
             }
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
         println NotFoundMessages.WORK_EXPERIENCE
     }

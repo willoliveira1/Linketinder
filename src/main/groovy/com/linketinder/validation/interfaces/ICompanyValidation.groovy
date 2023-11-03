@@ -1,7 +1,9 @@
 package com.linketinder.validation.interfaces
 
-interface ICompanyValidation extends IPersonValidation {
+import com.linketinder.model.company.Company
 
-    String validateCnpj()
+interface ICompanyValidation extends IPersonValidation<Company> {
+
+    void validateCnpj(String cnpj)
 
 }

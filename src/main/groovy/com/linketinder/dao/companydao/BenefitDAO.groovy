@@ -3,11 +3,9 @@ package com.linketinder.dao.companydao
 import com.linketinder.dao.companydao.interfaces.IBenefitDAO
 import com.linketinder.dao.companydao.queries.BenefitQueries
 import com.linketinder.database.PostgreSqlConnection
-import com.linketinder.database.interfaces.IDBService
-import com.linketinder.database.interfaces.IConnection
+import com.linketinder.database.interfaces.*
 import com.linketinder.model.company.Benefit
-import com.linketinder.util.ErrorMessages
-import com.linketinder.util.NotFoundMessages
+import com.linketinder.util.*
 import groovy.sql.Sql
 import java.sql.PreparedStatement
 import java.sql.ResultSet
@@ -19,11 +17,9 @@ import java.util.logging.Logger
 class BenefitDAO implements IBenefitDAO {
 
     IConnection connection
-    IDBService dbService
     Sql sql = connection.instance()
 
-    BenefitDAO(IDBService dbService, IConnection connection) {
-        this.dbService = dbService
+    BenefitDAO(IConnection connection) {
         this.connection = connection
     }
 
@@ -46,13 +42,19 @@ class BenefitDAO implements IBenefitDAO {
         try {
             benefits = this.populateBenefits(BenefitQueries.GET_BENEFITS_BY_COMPANY_ID, companyId)
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
         return benefits
     }
 
+    private int getBenefitIdByTitle(String benefitTitle) {
+        PreparedStatement stmt = sql.connection.prepareStatement(BenefitQueries.GET_BENEFIT_ID_BY_TITLE)
+        stmt.setString(1, benefitTitle)
+        return QueryHelper.idFinder(stmt)
+    }
+
     private PreparedStatement setBenefitStatement(PreparedStatement stmt, Benefit benefit, int companyId) {
-        int benefitId = dbService.idFinder("benefits", "title", benefit.getTitle())
+        int benefitId = this.getBenefitIdByTitle(benefit.getTitle())
         stmt.setInt(1, companyId)
         stmt.setInt(2, benefitId)
         return stmt
@@ -80,7 +82,7 @@ class BenefitDAO implements IBenefitDAO {
             stmt = this.setBenefitStatement(stmt, benefit, companyId)
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
     }
 
@@ -94,7 +96,7 @@ class BenefitDAO implements IBenefitDAO {
             stmt.setInt(3, benefit.id)
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
     }
 
@@ -114,7 +116,7 @@ class BenefitDAO implements IBenefitDAO {
                 return
             }
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
         println NotFoundMessages.BENEFIT
     }

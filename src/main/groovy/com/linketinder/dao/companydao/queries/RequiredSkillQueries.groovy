@@ -22,6 +22,12 @@ class RequiredSkillQueries {
             WHERE title=?;
     """
 
+    static final String GET_SKILL_ID_BY_TITLE = """
+        SELECT id 
+            FROM skills 
+            WHERE title=?;
+    """
+
     static final String INSERT_JOB_VACANCY_SKILL = """
         INSERT INTO job_vacancy_skills (job_vacancy_id, skill_id) 
             VALUES (?,?);

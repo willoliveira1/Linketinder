@@ -1,13 +1,14 @@
 package com.linketinder.service.interfaces
 
-import com.linketinder.model.match.Match
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 
 interface IMatchService {
 
-    List<Match> getAllMatches()
-    List<Match> getAllMatchesByCandidateId(int candidateId)
-    List<Match> getAllMatchesByCompanyId(int companyId)
-    void likeJobVacancy(int candidateId, int jobVacancyId)
-    void likeCandidate(int companyId, int candidateId)
+    void getAllMatches(HttpServletRequest req, HttpServletResponse resp)
+    void getAllMatchesByCandidateId(HttpServletRequest req, HttpServletResponse resp)
+    void getAllMatchesByCompanyId(HttpServletRequest req, HttpServletResponse resp)
+    void likeJobVacancy(HttpServletRequest req, HttpServletResponse resp)
+    void likeCandidate(HttpServletRequest req, HttpServletResponse resp)
 
 }

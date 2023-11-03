@@ -18,6 +18,24 @@ class WorkExperienceQueries {
             WHERE id=?;
     """
 
+    static final String GET_STATE_ID_BY_TITLE = """
+        SELECT id 
+            FROM states 
+            WHERE acronym=?;
+    """
+
+    static final String GET_CONTRACT_TYPE_ID_BY_TITLE = """
+        SELECT id 
+            FROM contract_types 
+            WHERE title=?;
+    """
+
+    static final String GET_LOCATION_TYPE_ID_BY_TITLE = """
+        SELECT id 
+            FROM location_types 
+            WHERE title=?;
+    """
+
     static final String INSERT_WORK_EXPERIENCE = """
         INSERT INTO work_experiences (candidate_id, title, company_name, city, currently_work, description, state_id, contract_type_id, location_id) 
             VALUES (?,?,?,?,?,?,?,?,?);

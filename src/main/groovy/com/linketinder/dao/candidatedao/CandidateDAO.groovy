@@ -1,25 +1,12 @@
 package com.linketinder.dao.candidatedao
 
-import com.linketinder.dao.candidatedao.interfaces.IAcademicExperienceDAO
-import com.linketinder.dao.candidatedao.interfaces.ICandidateDAO
-import com.linketinder.dao.candidatedao.interfaces.ICandidateSkillDAO
-import com.linketinder.dao.candidatedao.interfaces.ICertificateDAO
-import com.linketinder.dao.candidatedao.interfaces.ILanguageDAO
-import com.linketinder.dao.candidatedao.interfaces.IWorkExperienceDAO
+import com.linketinder.dao.candidatedao.interfaces.*
 import com.linketinder.dao.candidatedao.queries.CandidateQueries
 import com.linketinder.database.PostgreSqlConnection
-import com.linketinder.database.interfaces.IDBService
-import com.linketinder.database.interfaces.IConnection
-import com.linketinder.model.candidate.AcademicExperience
-import com.linketinder.model.candidate.Candidate
-import com.linketinder.model.candidate.Certificate
-import com.linketinder.model.candidate.WorkExperience
-import com.linketinder.model.candidate.Language
-import com.linketinder.model.shared.Person
-import com.linketinder.model.shared.Skill
-import com.linketinder.model.shared.State
-import com.linketinder.util.ErrorMessages
-import com.linketinder.util.NotFoundMessages
+import com.linketinder.database.interfaces.*
+import com.linketinder.model.candidate.*
+import com.linketinder.model.shared.*
+import com.linketinder.util.*
 import groovy.sql.Sql
 import java.sql.PreparedStatement
 import java.sql.ResultSet
@@ -30,7 +17,6 @@ import java.util.logging.Logger
 
 class CandidateDAO implements ICandidateDAO {
 
-    IDBService dbService
     IConnection connection
     ICertificateDAO certificateDAO
     ILanguageDAO languageDAO
@@ -39,10 +25,9 @@ class CandidateDAO implements ICandidateDAO {
     IWorkExperienceDAO workExperienceDAO
     Sql sql = connection.instance()
 
-    CandidateDAO(IDBService dbService, IConnection connection, ICertificateDAO certificateDAO,
+    CandidateDAO(IConnection connection, ICertificateDAO certificateDAO,
                  ILanguageDAO languageDAO, ICandidateSkillDAO skillDAO, IAcademicExperienceDAO academicExperienceDAO,
                  IWorkExperienceDAO workExperienceDAO) {
-        this.dbService = dbService
         this.connection = connection
         this.certificateDAO = certificateDAO
         this.languageDAO = languageDAO
@@ -97,7 +82,7 @@ class CandidateDAO implements ICandidateDAO {
         try {
             candidates = this.populateCandidates(CandidateQueries.GET_ALL_CANDIDATES)
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
         return candidates
     }
@@ -107,13 +92,19 @@ class CandidateDAO implements ICandidateDAO {
         try {
             candidate = this.populateCandidate(CandidateQueries.GET_CANDIDATE_BY_ID, id)
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
         return candidate
     }
 
+    private int getStateIdByTitle(String stateTitle) {
+        PreparedStatement stmt = sql.connection.prepareStatement(CandidateQueries.GET_STATE_ID_BY_TITLE)
+        stmt.setString(1, stateTitle)
+        return QueryHelper.idFinder(stmt)
+    }
+
     private PreparedStatement setCandidateStatement(PreparedStatement stmt, Candidate candidate) {
-        int stateId = dbService.idFinder("states", "acronym", candidate.getState().toString())
+        int stateId = this.getStateIdByTitle(candidate.getState().toString())
         stmt.setString(1, candidate.name)
         stmt.setString(2, candidate.getEmail())
         stmt.setString(3, candidate.getCity())
@@ -173,7 +164,7 @@ class CandidateDAO implements ICandidateDAO {
             this.insertAcademicExperiences(candidate)
             this.insertWorkExperiences(candidate)
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
     }
 
@@ -190,9 +181,9 @@ class CandidateDAO implements ICandidateDAO {
 
         candidate.certificates.each {certificate ->
             if (persistedCertificates.contains(certificate.id)) {
-                certificateDAO.updateCertificate(certificate, id)
+                certificateDAO.updateCertificate(certificate as Certificate, id)
             } else {
-                certificateDAO.insertCertificate(certificate, id)
+                certificateDAO.insertCertificate(certificate as Certificate, id)
             }
         }
     }
@@ -210,9 +201,9 @@ class CandidateDAO implements ICandidateDAO {
 
         candidate.languages.each {language ->
             if (persistedLanguages.contains(language.id)) {
-                languageDAO.updateLanguage(language, id)
+                languageDAO.updateLanguage(language as Language, id)
             } else {
-                languageDAO.insertLanguage(language, id)
+                languageDAO.insertLanguage(language as Language, id)
             }
         }
     }
@@ -230,9 +221,9 @@ class CandidateDAO implements ICandidateDAO {
 
         candidate.skills.each {skill ->
             if (persistedSkills.contains(skill.id)) {
-                skillDAO.updateSkill(skill, id)
+                skillDAO.updateSkill(skill as Skill, id)
             } else {
-                skillDAO.insertSkill(skill, id)
+                skillDAO.insertSkill(skill as Skill, id)
             }
         }
     }
@@ -251,9 +242,9 @@ class CandidateDAO implements ICandidateDAO {
 
         candidate.academicExperiences.each {academicExperience ->
             if (persistedAcademicExperiences.contains(academicExperience.id)) {
-                academicExperienceDAO.updateAcademicExperience(academicExperience, id)
+                academicExperienceDAO.updateAcademicExperience(academicExperience as AcademicExperience, id)
             } else {
-                academicExperienceDAO.insertAcademicExperience(academicExperience, id)
+                academicExperienceDAO.insertAcademicExperience(academicExperience as AcademicExperience, id)
             }
         }
     }
@@ -271,9 +262,9 @@ class CandidateDAO implements ICandidateDAO {
 
         candidate.workExperiences.each {workExperience ->
             if (persistedWorkExperiences.contains(workExperience.id)) {
-                workExperienceDAO.updateWorkExperience(workExperience, id)
+                workExperienceDAO.updateWorkExperience(workExperience as WorkExperience, id)
             } else {
-                workExperienceDAO.insertWorkExperience(workExperience, id)
+                workExperienceDAO.insertWorkExperience(workExperience as WorkExperience, id)
             }
         }
     }
@@ -282,6 +273,7 @@ class CandidateDAO implements ICandidateDAO {
         try {
             PreparedStatement stmt = sql.connection.prepareStatement(CandidateQueries.UPDATE_CANDIDATE)
             stmt = this.setCandidateStatement(stmt, candidate)
+            stmt.setInt(9, id)
             stmt.executeUpdate()
 
             this.updateCandidateCertificates(id, candidate)
@@ -290,7 +282,7 @@ class CandidateDAO implements ICandidateDAO {
             this.updateCandidateAcademicExperiences(id, candidate)
             this.updateCandidateWorkExperiences(id, candidate)
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
     }
 
@@ -312,7 +304,7 @@ class CandidateDAO implements ICandidateDAO {
                 return
             }
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
         println NotFoundMessages.CANDIDATE
     }
