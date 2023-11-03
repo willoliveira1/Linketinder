@@ -43,7 +43,7 @@ class CertificateDAO implements ICertificateDAO {
         try {
             certificates = populateCertificates(CertificateQueries.GET_CERTIFICATES_BY_CANDIDATE_ID, candidateId)
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
         return certificates
     }
@@ -62,7 +62,7 @@ class CertificateDAO implements ICertificateDAO {
             stmt = this.setCertificateStatement(stmt, certificate, candidateId)
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
     }
 
@@ -73,7 +73,7 @@ class CertificateDAO implements ICertificateDAO {
             stmt.setInt(4, certificate.id)
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
     }
 
@@ -94,7 +94,7 @@ class CertificateDAO implements ICertificateDAO {
                 return
             }
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
         println NotFoundMessages.CERTIFICATE
     }
