@@ -1,6 +1,5 @@
 plugins {
     id 'groovy'
-    id 'application'
     id 'war'
 }
 
@@ -24,12 +23,4 @@ dependencies {
 
 test {
     useJUnitPlatform()
-}
-
-application {
-    mainClass = 'com.linketinder.Main'
-}
-
-run {
-    standardInput = System.in
 }
