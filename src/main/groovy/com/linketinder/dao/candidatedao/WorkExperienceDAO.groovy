@@ -52,7 +52,7 @@ class WorkExperienceDAO implements IWorkExperienceDAO {
             workExperiences = populateWorkExperiences(WorkExperienceQueries.GET_WORK_EXPERIENCES_BY_CANDIDATE_ID,
                     candidateId)
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
         return workExperiences
     }
@@ -99,7 +99,7 @@ class WorkExperienceDAO implements IWorkExperienceDAO {
             stmt = this.setWorkExperienceStatement(stmt, workExperience, candidateId)
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
     }
 
@@ -110,7 +110,7 @@ class WorkExperienceDAO implements IWorkExperienceDAO {
             stmt.setInt(10, workExperience.id)
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
     }
 
@@ -131,7 +131,7 @@ class WorkExperienceDAO implements IWorkExperienceDAO {
                 return
             }
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
         println NotFoundMessages.WORK_EXPERIENCE
     }

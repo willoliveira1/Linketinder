@@ -42,7 +42,7 @@ class RequiredSkillDAO implements IRequiredSkillDAO {
         try {
             skills = this.populateSkills(RequiredSkillQueries.GET_SKILLS_BY_JOB_VACANCY_ID, jobVacancyId)
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
         return skills
     }
@@ -82,7 +82,7 @@ class RequiredSkillDAO implements IRequiredSkillDAO {
             stmt = this.setSkillStatement(stmt, skill, jobVacancyId)
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
     }
 
@@ -95,7 +95,7 @@ class RequiredSkillDAO implements IRequiredSkillDAO {
             stmt.setInt(3, skill.id)
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
     }
 
@@ -116,7 +116,7 @@ class RequiredSkillDAO implements IRequiredSkillDAO {
                 return
             }
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
         println NotFoundMessages.SKILL
     }

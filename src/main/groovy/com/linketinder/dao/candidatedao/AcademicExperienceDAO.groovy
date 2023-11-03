@@ -46,7 +46,7 @@ class AcademicExperienceDAO implements IAcademicExperienceDAO {
             academicExperiences = this.populateAcademicExperiences(
                     AcademicExperienceQueries.GET_ACADEMIC_EXPERIENCES_BY_CANDIDATE_ID, candidateId)
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
         return academicExperiences
     }
@@ -75,7 +75,7 @@ class AcademicExperienceDAO implements IAcademicExperienceDAO {
             stmt = this.setAcademicExperienceStatement(stmt, academicExperience, candidateId)
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
     }
 
@@ -86,7 +86,7 @@ class AcademicExperienceDAO implements IAcademicExperienceDAO {
             stmt.setInt(6, academicExperience.id)
             stmt.executeUpdate()
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
     }
 
@@ -108,7 +108,7 @@ class AcademicExperienceDAO implements IAcademicExperienceDAO {
                 return
             }
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
         println NotFoundMessages.ACADEMIC_EXPERIENCE
     }

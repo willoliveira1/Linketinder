@@ -1,6 +1,7 @@
 package com.linketinder.service.factories
 
-import com.linketinder.context.builders.company.*
+import com.linketinder.builders.company.JobVacancyDAOBuilder
+import com.linketinder.builders.company.RequiredSkillDAOBuilder
 import com.linketinder.dao.companydao.interfaces.*
 import com.linketinder.database.*
 import com.linketinder.database.interfaces.*

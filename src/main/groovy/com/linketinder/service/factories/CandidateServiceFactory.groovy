@@ -1,6 +1,11 @@
 package com.linketinder.service.factories
 
-import com.linketinder.context.builders.candidate.*
+import com.linketinder.builders.candidate.AcademicExperienceDAOBuilder
+import com.linketinder.builders.candidate.CandidateDAOBuilder
+import com.linketinder.builders.candidate.CandidateSkillDAOBuilder
+import com.linketinder.builders.candidate.CertificateDAOBuilder
+import com.linketinder.builders.candidate.LanguageDAOBuilder
+import com.linketinder.builders.candidate.WorkExperienceDAOBuilder
 import com.linketinder.dao.candidatedao.interfaces.*
 import com.linketinder.database.*
 import com.linketinder.database.interfaces.*

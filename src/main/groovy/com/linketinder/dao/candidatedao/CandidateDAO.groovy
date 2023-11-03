@@ -82,7 +82,7 @@ class CandidateDAO implements ICandidateDAO {
         try {
             candidates = this.populateCandidates(CandidateQueries.GET_ALL_CANDIDATES)
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
         return candidates
     }
@@ -92,7 +92,7 @@ class CandidateDAO implements ICandidateDAO {
         try {
             candidate = this.populateCandidate(CandidateQueries.GET_CANDIDATE_BY_ID, id)
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
         return candidate
     }
@@ -164,7 +164,7 @@ class CandidateDAO implements ICandidateDAO {
             this.insertAcademicExperiences(candidate)
             this.insertWorkExperiences(candidate)
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
     }
 
@@ -282,7 +282,7 @@ class CandidateDAO implements ICandidateDAO {
             this.updateCandidateAcademicExperiences(id, candidate)
             this.updateCandidateWorkExperiences(id, candidate)
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
     }
 
@@ -304,7 +304,7 @@ class CandidateDAO implements ICandidateDAO {
                 return
             }
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
         println NotFoundMessages.CANDIDATE
     }

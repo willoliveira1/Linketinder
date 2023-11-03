@@ -73,7 +73,7 @@ class CompanyDAO implements ICompanyDAO {
         try {
             companies = this.populateCompanies(CompanyQueries.GET_ALL_COMPANIES)
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
         return companies
     }
@@ -83,7 +83,7 @@ class CompanyDAO implements ICompanyDAO {
         try {
             company = this.populateCompany(CompanyQueries.GET_COMPANY_BY_ID, id)
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
         return company
     }
@@ -137,7 +137,7 @@ class CompanyDAO implements ICompanyDAO {
             this.insertJobVacancies(company)
             this.insertBenefits(company)
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
     }
 
@@ -170,7 +170,7 @@ class CompanyDAO implements ICompanyDAO {
 
             this.updateCompanyBenefits(id, company)
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
     }
 
@@ -191,7 +191,7 @@ class CompanyDAO implements ICompanyDAO {
                 return
             }
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
         println NotFoundMessages.COMPANY
     }

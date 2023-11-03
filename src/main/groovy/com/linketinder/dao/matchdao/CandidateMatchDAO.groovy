@@ -41,7 +41,7 @@ class CandidateMatchDAO implements ICandidateMatchDAO {
         try {
             companyId = this.populateCompanyId(CandidateMatchQueries.GET_COMPANY_ID_BY_JOB_VACANCY_ID, jobVacancyId)
         } catch (SQLException e) {
-            Logger.getLogger(IConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(IConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
         return companyId
     }
@@ -55,7 +55,7 @@ class CandidateMatchDAO implements ICandidateMatchDAO {
             stmt.executeUpdate()
         } catch (SQLException e) {
             Logger.getLogger(PostgreSqlConnection.class.getName())
-                    .log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+                    .log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
     }
 
@@ -65,7 +65,7 @@ class CandidateMatchDAO implements ICandidateMatchDAO {
             match = matchDAO.populateMatch(CandidateMatchQueries.GET_MATCH_BY_CANDIDATE_ID_AND_JOB_VACANCY_ID,
                     candidateId, jobVacancyId)
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
         boolean likeExist = match.getId() != null
         return likeExist
@@ -83,7 +83,7 @@ class CandidateMatchDAO implements ICandidateMatchDAO {
                 }
             }
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
 
         boolean existentCandidateLike = this.isExistentCandidateLike(candidateId, jobVacancyId)
@@ -99,7 +99,7 @@ class CandidateMatchDAO implements ICandidateMatchDAO {
         try {
             matches = matchDAO.populateMatches(CandidateMatchQueries.GET_ALL_MATCHES_BY_CANDIDATE_ID, candidateId)
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
         return matches
     }

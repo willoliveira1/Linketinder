@@ -68,7 +68,7 @@ class JobVacancyDAO implements IJobVacancyDAO {
         try {
             jobVacancies = this.populateJobVacancies(JobVacancyQueries.GET_ALL_JOB_VACANCIES)
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
         return jobVacancies
     }
@@ -78,7 +78,7 @@ class JobVacancyDAO implements IJobVacancyDAO {
         try {
             jobVacancies = this.populateJobVacancies(JobVacancyQueries.GET_JOB_VACANCY_BY_COMPANY_ID, companyId)
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
         return jobVacancies
     }
@@ -88,7 +88,7 @@ class JobVacancyDAO implements IJobVacancyDAO {
         try {
             jobVacancy = this.populateJobVacancy(JobVacancyQueries.GET_JOB_VACANCY_BY_ID, id)
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
         return jobVacancy
     }
@@ -137,7 +137,7 @@ class JobVacancyDAO implements IJobVacancyDAO {
 
             this.insertRequiredSkills(jobVacancy)
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
     }
 
@@ -181,7 +181,7 @@ class JobVacancyDAO implements IJobVacancyDAO {
 
             this.updateRequiredSkills(jobVacancy)
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
     }
 
@@ -202,7 +202,7 @@ class JobVacancyDAO implements IJobVacancyDAO {
                 return
             }
         } catch (SQLException e) {
-            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_MSG, e)
+            Logger.getLogger(PostgreSqlConnection.class.getName()).log(Level.SEVERE, ErrorMessages.DB_TEXT, e)
         }
         println NotFoundMessages.JOB_VACANCY
     }
